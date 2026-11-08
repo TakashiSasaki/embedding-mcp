@@ -1,0 +1,7 @@
+/.assets/
+/.venv/
+/runs/
+__pycache__/
+*.gguf
+*.safetensors
+*.pt

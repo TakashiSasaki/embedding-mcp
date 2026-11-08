@@ -1,0 +1,31 @@
+[project]
+name = "cpu-embedding-experiments"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "model2vec==0.10.0",
+    "numpy==2.5.4",
+    "sacremoses==0.1.0",
+    "safetensors==0.8.0",
+    "sentencepiece==0.2.3",
+    "torch==2.15.0+cpu",
+    "transformers==5.14.0",
+    "unicategories==0.1.2",
+]
+
+[tool.uv]
+package = false
+environments = ["sys_platform == 'linux' and platform_machine == 'aarch64'"]
+constraint-dependencies = [
+    "filelock==4.2.4",
+    "markupsafe==3.0.3",
+    "setuptools==78.1.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

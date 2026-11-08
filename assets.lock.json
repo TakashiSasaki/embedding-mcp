@@ -1,0 +1,231 @@
+{
+  "runtime": {
+    "platform": "Linux-aarch64",
+    "release": "b12110",
+    "commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8"
+  },
+  "groups": {
+    "runtime": [
+      {
+        "path": "llama-arm64.tar.gz",
+        "url": "https://github.com/ggml-org/llama.cpp/releases/download/b12110/llama-b12110-bin-ubuntu-arm64.tar.gz",
+        "bytes": 18723578,
+        "sha256": "4758b51335e37b4346251f2687d64841ff1c07ecb27fc46323945bb2ec9c44d2"
+      }
+    ],
+    "gemma2": [
+      {
+        "path": "embeddinggemma-2-Q8_0.gguf",
+        "url": "https://huggingface.co/ggml-org/embeddinggemma-2-GGUF/resolve/6ea3e3a309d12a4779cfda98b8c19800d2d5da71/embeddinggemma-2-Q8_0.gguf",
+        "bytes": 309855456,
+        "sha256": "2188ac1deca4b77dffefd603c2776a9d76d9d74ec01841392982ebb840b09135"
+      }
+    ],
+    "gemma2-media": [
+      {
+        "path": "mmproj-embeddinggemma-2-Q8_0.gguf",
+        "url": "https://huggingface.co/ggml-org/embeddinggemma-2-GGUF/resolve/6ea3e3a309d12a4779cfda98b8c19800d2d5da71/mmproj-embeddinggemma-2-Q8_0.gguf",
+        "bytes": 554821056,
+        "sha256": "0531309472a6bc6f4b146c3736eee7795ec9db1903c25490d3c937490cef6dd8"
+      }
+    ],
+    "e5": [
+      {
+        "path": "multilingual-e5-small-f16.gguf",
+        "url": "https://huggingface.co/hdrrayan/multilingual-e5-small-gguf/resolve/7cdbf977cc0d1b5091a9dc41cd62405e6d0ca9f8/multilingual-e5-small-f16.gguf",
+        "bytes": 242360000,
+        "sha256": "6a5b2dfb958f98c851028f8c08424458249359ea921314be378f8b82088dcac1"
+      }
+    ],
+    "minilm": [
+      {
+        "path": "paraphrase-multilingual-MiniLM-L12-118M-v2-F16.gguf",
+        "url": "https://huggingface.co/mykor/paraphrase-multilingual-MiniLM-L12-v2.gguf/resolve/a964c09982b6e28b13646d5f9860b8a04f4182c4/paraphrase-multilingual-MiniLM-L12-118M-v2-F16.gguf",
+        "bytes": 242358176,
+        "sha256": "fa47907f8732d52ba31796d74bc87c4642b76da465d7d1f74df04ca89f3a9aab"
+      }
+    ],
+    "labse": [
+      {
+        "path": "labse.Q8_0.gguf",
+        "url": "https://huggingface.co/ChristianAzinn/labse-gguf/resolve/f81be33da2690b2a98960c295c57c7409c9a0e95/labse.Q8_0.gguf",
+        "bytes": 514881920,
+        "sha256": "89ec00269f2d30015194e49f0b6b1a2b9affe6d14c46762c4a0edd425f41a171"
+      }
+    ],
+    "qwen3": [
+      {
+        "path": "Qwen3-Embedding-0.6B-Q8_0.gguf",
+        "url": "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/370f27d7550e0def9b39c1f16d3fbaa13aa67728/Qwen3-Embedding-0.6B-Q8_0.gguf",
+        "bytes": 639150592,
+        "sha256": "06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439"
+      }
+    ],
+    "ref-e5": [
+      {
+        "path": "ref-e5/config.json",
+        "url": "https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/config.json",
+        "bytes": 655,
+        "sha256": "69137736cab8b8903a07fe8afaafdda25aac55415a12a55d1bffa9f581abf959"
+      },
+      {
+        "path": "ref-e5/model.safetensors",
+        "url": "https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/model.safetensors",
+        "bytes": 470641600,
+        "sha256": "1a55775f53449dac10a2bcbc312469fac40b96d53198c407081a831f81c98477"
+      },
+      {
+        "path": "ref-e5/sentencepiece.bpe.model",
+        "url": "https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/sentencepiece.bpe.model",
+        "bytes": 5069051,
+        "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+      },
+      {
+        "path": "ref-e5/special_tokens_map.json",
+        "url": "https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/special_tokens_map.json",
+        "bytes": 167,
+        "sha256": "d05497f1da52c5e09554c0cd874037a083e1dc1b9cfd48034d1c717f1afc07a7"
+      },
+      {
+        "path": "ref-e5/tokenizer.json",
+        "url": "https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/tokenizer.json",
+        "bytes": 17082730,
+        "sha256": "0b44a9d7b51c3c62626640cda0e2c2f70fdacdc25bbbd68038369d14ebdf4c39"
+      },
+      {
+        "path": "ref-e5/tokenizer_config.json",
+        "url": "https://huggingface.co/intfloat/multilingual-e5-small/resolve/614241f622f53c4eeff9890bdc4f31cfecc418b3/tokenizer_config.json",
+        "bytes": 443,
+        "sha256": "a1d6bc8734a6f635dc158508bef000f8e2e5a759c7d92f984b2c86e5ff53425b"
+      }
+    ],
+    "ref-minilm": [
+      {
+        "path": "ref-minilm/config.json",
+        "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json",
+        "bytes": 645,
+        "sha256": "6300193cb75e01cf80c96decef7187dfb33094d97cc1490b7ead6ff134476e4e"
+      },
+      {
+        "path": "ref-minilm/model.safetensors",
+        "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/model.safetensors",
+        "bytes": 470641600,
+        "sha256": "eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b"
+      },
+      {
+        "path": "ref-minilm/sentencepiece.bpe.model",
+        "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentencepiece.bpe.model",
+        "bytes": 5069051,
+        "sha256": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+      },
+      {
+        "path": "ref-minilm/special_tokens_map.json",
+        "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/special_tokens_map.json",
+        "bytes": 239,
+        "sha256": "378eb3bf733eb16e65792d7e3fda5b8a4631387ca04d2015199c4d4f22ae554d"
+      },
+      {
+        "path": "ref-minilm/tokenizer.json",
+        "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer.json",
+        "bytes": 9081518,
+        "sha256": "2c3387be76557bd40970cec13153b3bbf80407865484b209e655e5e4729076b8"
+      },
+      {
+        "path": "ref-minilm/tokenizer_config.json",
+        "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json",
+        "bytes": 526,
+        "sha256": "5036ea374ffedd706e3bef33e2e0d6953cb868ef8a490e76e32ba0faa37a6b9b"
+      }
+    ],
+    "ref-labse": [
+      {
+        "path": "ref-labse/2_Dense/model.safetensors",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/2_Dense/model.safetensors",
+        "bytes": 2362528,
+        "sha256": "f866c945fa2147ce4940c8ead0b4b20af4217e0f4664bd35f41c2a0967c4fe77"
+      },
+      {
+        "path": "ref-labse/config.json",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/config.json",
+        "bytes": 804,
+        "sha256": "b6bd83d561db8d2ccb7f44dafcd945e39bea16dc2819072ffb10adb45608b029"
+      },
+      {
+        "path": "ref-labse/model.safetensors",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/model.safetensors",
+        "bytes": 1883734344,
+        "sha256": "77d8e1f2dbab6eb5d3c261ce9d3dbf1e3c69e02938c95f934f94f42c22dfa31f"
+      },
+      {
+        "path": "ref-labse/special_tokens_map.json",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/special_tokens_map.json",
+        "bytes": 112,
+        "sha256": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3"
+      },
+      {
+        "path": "ref-labse/tokenizer.json",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/tokenizer.json",
+        "bytes": 9621556,
+        "sha256": "d09046654dc5151fc313613f16768b6ecc1e5e3bddbc9c8aca209a5f23fe3cd3"
+      },
+      {
+        "path": "ref-labse/tokenizer_config.json",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/tokenizer_config.json",
+        "bytes": 397,
+        "sha256": "9c5867ec63310dc2958daae8ccfabb226a2b6d317f407ade84d50315e7f9e80b"
+      },
+      {
+        "path": "ref-labse/vocab.txt",
+        "url": "https://huggingface.co/sentence-transformers/LaBSE/resolve/836121a0533e5664b21c7aacc5d22951f2b8b25b/vocab.txt",
+        "bytes": 5220781,
+        "sha256": "7453247caa2cf23116c1da332bec0cc1c9ef896b7803591a62ad2007b7a33c33"
+      }
+    ],
+    "ref-potion": [
+      {
+        "path": "ref-potion/config.json",
+        "url": "https://huggingface.co/minishlab/potion-multilingual-128M/resolve/73908c3438cf03b6a01bcb9611d62b23d0726f08/config.json",
+        "bytes": 271,
+        "sha256": "595e4cab2093732efd5dbe084fd5c1826b5eea693b73b4c1fd971672867d2e54"
+      },
+      {
+        "path": "ref-potion/model.safetensors",
+        "url": "https://huggingface.co/minishlab/potion-multilingual-128M/resolve/73908c3438cf03b6a01bcb9611d62b23d0726f08/model.safetensors",
+        "bytes": 512361560,
+        "sha256": "14b5eb39cb4ce5666da8ad1f3dc6be4346e9b2d601c073302fa0a31bf7943397"
+      },
+      {
+        "path": "ref-potion/tokenizer.json",
+        "url": "https://huggingface.co/minishlab/potion-multilingual-128M/resolve/73908c3438cf03b6a01bcb9611d62b23d0726f08/tokenizer.json",
+        "bytes": 18616131,
+        "sha256": "19f1909063da3cfe3bd83a782381f040dccea475f4816de11116444a73e1b6a1"
+      }
+    ],
+    "ref-laser": [
+      {
+        "path": "ref-laser/laser2.pt",
+        "url": "https://dl.fbaipublicfiles.com/nllb/laser/laser2.pt",
+        "bytes": 179440027,
+        "sha256": "4f82476d54ff92ea13ca74858a741b9ef17d52f0905615ce45ea9621ea7f7cc2"
+      },
+      {
+        "path": "ref-laser/laser2.spm",
+        "url": "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm",
+        "bytes": 1008139,
+        "sha256": "1f7ef5da4408b94a096ff72d31d90f8ba438b4ab772764eb50c3db5e201fb384"
+      },
+      {
+        "path": "ref-laser/models.py",
+        "url": "https://raw.githubusercontent.com/facebookresearch/LASER/d7e2544234c1d2a7076280944bdc2637f98ef3c2/laser_encoders/models.py",
+        "bytes": 15125,
+        "sha256": "d40bd2a5c8e7fa85d730238818317eeb0b5f9f88563c38badf0f6d033a857407"
+      },
+      {
+        "path": "ref-laser/laser_tokenizer.py",
+        "url": "https://raw.githubusercontent.com/facebookresearch/LASER/d7e2544234c1d2a7076280944bdc2637f98ef3c2/laser_encoders/laser_tokenizer.py",
+        "bytes": 6400,
+        "sha256": "71ccf595a3d7d6a6e58284e86f71a8f6adc35bd0521a72c12f2508bd05257c3a"
+      }
+    ]
+  }
+}

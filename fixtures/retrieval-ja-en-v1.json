@@ -1,0 +1,112 @@
+[
+  {
+    "id": "tire",
+    "query": {
+      "ja": "自転車のタイヤがすぐしぼむ。どこを直せばいい？",
+      "en": "How do I fix a bicycle tire that keeps losing air?"
+    },
+    "document": {
+      "ja": "自転車のパンク修理では、チューブの穴を探してパッチを貼る。",
+      "en": "To repair a bicycle puncture, find the hole in the inner tube and apply a patch."
+    }
+  },
+  {
+    "id": "brake",
+    "query": {
+      "ja": "自転車のブレーキレバーを引いても止まりにくい",
+      "en": "My bike barely stops when I squeeze the brake lever."
+    },
+    "document": {
+      "ja": "自転車の制動力が弱いときは、ブレーキシューの摩耗やワイヤーの緩みを確認する。",
+      "en": "If bicycle stopping power is weak, check for worn brake pads or a loose cable."
+    }
+  },
+  {
+    "id": "kyoto-weather",
+    "query": {
+      "ja": "明日の京都では傘を持っていくべき？",
+      "en": "Should I bring an umbrella to Kyoto tomorrow?"
+    },
+    "document": {
+      "ja": "京都市の天気予報では明日の午後に雨が降る見込み。",
+      "en": "The forecast for Kyoto calls for rain tomorrow afternoon."
+    }
+  },
+  {
+    "id": "kyoto-bus",
+    "query": {
+      "ja": "京都駅から金閣寺へ公共交通で行きたい",
+      "en": "How do I reach the Golden Pavilion by public transport from Kyoto Station?"
+    },
+    "document": {
+      "ja": "京都駅前から市バスに乗り、金閣寺道の停留所で降りる。",
+      "en": "Take a city bus from Kyoto Station and get off at the Kinkakuji-michi stop."
+    }
+  },
+  {
+    "id": "disk",
+    "query": {
+      "ja": "Linuxで容量を食っているディレクトリを見つけたい",
+      "en": "How can I identify directories taking up disk space on Linux?"
+    },
+    "document": {
+      "ja": "Linuxではduコマンドでディレクトリごとのディスク使用量を調べられる。",
+      "en": "On Linux, the du command reports disk usage for each directory."
+    }
+  },
+  {
+    "id": "memory",
+    "query": {
+      "ja": "LinuxでどのプロセスがRAMを多く使っているか知りたい",
+      "en": "Which Linux processes are consuming the most RAM?"
+    },
+    "document": {
+      "ja": "topのメモリ順ソートで常駐メモリ使用量が大きいプロセスを確認できる。",
+      "en": "Sort top by memory to identify processes with high resident memory usage."
+    }
+  },
+  {
+    "id": "cook-rice",
+    "query": {
+      "ja": "玄米をふっくら炊くコツは？",
+      "en": "What makes cooked brown rice turn out tender?"
+    },
+    "document": {
+      "ja": "玄米は炊飯前に水に浸し、白米より長めに加熱すると柔らかくなる。",
+      "en": "Soak brown rice before cooking and allow more time than for white rice."
+    }
+  },
+  {
+    "id": "store-rice",
+    "query": {
+      "ja": "未開封の玄米はどんな場所に保存すればいい？",
+      "en": "Where should I store unopened uncooked brown rice?"
+    },
+    "document": {
+      "ja": "生の玄米は湿気や直射日光を避け、涼しい場所で保存する。",
+      "en": "Keep uncooked brown rice in a cool place away from moisture and direct sunlight."
+    }
+  },
+  {
+    "id": "camera",
+    "query": {
+      "ja": "暗い部屋で撮ると被写体がぶれる",
+      "en": "How can I reduce motion blur in photos taken in a dim room?"
+    },
+    "document": {
+      "ja": "屋内での撮影では、シャッター速度を上げると被写体ぶれを抑えられる。",
+      "en": "A faster shutter speed reduces subject motion blur in indoor photography."
+    }
+  },
+  {
+    "id": "coffee",
+    "query": {
+      "ja": "夜も飲めるようにカフェインを減らしたい",
+      "en": "I want a low-caffeine drink to have in the evening."
+    },
+    "document": {
+      "ja": "デカフェのコーヒーは通常のコーヒーよりカフェイン含有量が少ない。",
+      "en": "Decaffeinated coffee contains less caffeine than regular coffee."
+    }
+  }
+]
