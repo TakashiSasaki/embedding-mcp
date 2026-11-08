@@ -1,0 +1,1343 @@
+{
+  "baseline": "2026-11-08-baseline.json",
+  "verified_code": "71532ce869b8661050b64e2db7cae67040cab1a5",
+  "checks": [
+    "Retrieval rankings matched the historical baseline for every tested model and backend.",
+    "The MiniLM blocked edge remained zero and the LaBSE projection diagnosis matched.",
+    "All five multimodal embedding pairs matched historical cosine within 0.00001.",
+    "Timings were recorded again, without asserting that timings would be identical."
+  ],
+  "runs": {
+    "text": {
+      "metadata": {
+        "started_at": "2026-11-08T13:00:18.806430+00:00",
+        "command": "experiments/run.py --out runs/verified-text text",
+        "git_commit": "71532ce869b8661050b64e2db7cae67040cab1a5",
+        "git_dirty": false,
+        "asset_lock_sha256": "2f9e582560c374814c1e1d07cf15c192d6b8f92ea803cc8deab9321e2f4f71b4",
+        "python_lock_sha256": null,
+        "asset_groups": [
+          "runtime",
+          "e5",
+          "minilm",
+          "labse",
+          "gemma2",
+          "qwen3"
+        ],
+        "fixture": "retrieval-ja-en-v1.json",
+        "fixture_sha256": "cbad6f126acffb0e133e93aef717e858b6f704b80e2618c6adc79b190b069346",
+        "platform": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+        "python": "3.12.3",
+        "dependencies": {},
+        "threads": 4,
+        "llama_cpp": "version: 0.9.0-dev (build 12110, commit cd959bae9)\nbuilt with GNU 14.2.0 for Linux aarch64",
+        "finished_at": "2026-11-08T13:00:37.177008+00:00"
+      },
+      "summary": {
+        "e5-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "store-rice",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 13.2,
+          "max_tokens": 31,
+          "peak_rss_mib": 381
+        },
+        "minilm-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "ja->en": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 11.1,
+          "max_tokens": 29,
+          "peak_rss_mib": 379
+        },
+        "labse-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 6,
+              "mrr": 0.745,
+              "misses": [
+                [
+                  "brake",
+                  "tire",
+                  4
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "disk",
+                  5
+                ],
+                [
+                  "coffee",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 6,
+              "mrr": 0.8,
+              "misses": [
+                [
+                  "brake",
+                  "camera",
+                  2
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "memory",
+                  2
+                ],
+                [
+                  "coffee",
+                  "kyoto-weather",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 8,
+              "mrr": 0.8833,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "disk",
+                  3
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "coffee",
+                  "kyoto-weather",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 18.5,
+          "max_tokens": 32,
+          "peak_rss_mib": 692
+        },
+        "gemma2-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "ja->en": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->en": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 93.0,
+          "max_tokens": 31,
+          "peak_rss_mib": 563
+        },
+        "qwen3-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->en": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 105.3,
+          "max_tokens": 40,
+          "peak_rss_mib": 1150
+        }
+      }
+    },
+    "reference": {
+      "metadata": {
+        "started_at": "2026-11-08T13:01:08.300274+00:00",
+        "command": "experiments/run.py --out runs/verified-reference reference",
+        "git_commit": "71532ce869b8661050b64e2db7cae67040cab1a5",
+        "git_dirty": false,
+        "asset_lock_sha256": "2f9e582560c374814c1e1d07cf15c192d6b8f92ea803cc8deab9321e2f4f71b4",
+        "python_lock_sha256": "169750e3e36631f95b3237fe6d97aa3cea4aa88794be75c79938ece578203f8c",
+        "asset_groups": [
+          "runtime",
+          "e5",
+          "minilm",
+          "labse",
+          "ref-e5",
+          "ref-minilm",
+          "ref-labse"
+        ],
+        "fixture": "retrieval-ja-en-v1.json",
+        "fixture_sha256": "cbad6f126acffb0e133e93aef717e858b6f704b80e2618c6adc79b190b069346",
+        "platform": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+        "python": "3.12.3",
+        "dependencies": {
+          "torch": "2.15.0+cpu",
+          "transformers": "5.14.0",
+          "safetensors": "0.8.0"
+        },
+        "threads": 4,
+        "llama_cpp": "version: 0.9.0-dev (build 12110, commit cd959bae9)\nbuilt with GNU 14.2.0 for Linux aarch64",
+        "finished_at": "2026-11-08T13:01:39.379382+00:00"
+      },
+      "summary": {
+        "e5-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "store-rice",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 13.0,
+          "max_tokens": 31,
+          "peak_rss_mib": 381
+        },
+        "e5-reference": {
+          "architecture": "BertModel",
+          "ranking": {
+            "ja->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "store-rice",
+                  2
+                ]
+              ]
+            }
+          },
+          "token_mismatch_count": 0,
+          "token_mismatch_examples": [],
+          "cosine_min": 0.998531,
+          "cosine_median": 0.999599
+        },
+        "minilm-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "ja->en": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 11.8,
+          "max_tokens": 29,
+          "peak_rss_mib": 379
+        },
+        "minilm-reference": {
+          "architecture": "BertModel",
+          "ranking": {
+            "ja->ja": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "ja->en": {
+              "top1": 10,
+              "mrr": 1.0,
+              "misses": []
+            },
+            "en->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ]
+              ]
+            }
+          },
+          "token_mismatch_count": 0,
+          "token_mismatch_examples": [],
+          "cosine_min": 0.996663,
+          "cosine_median": 0.99885,
+          "mask_experiment": {
+            "tokens": [
+              "<s>",
+              "▁",
+              "自転車",
+              "の",
+              "タ",
+              "イヤ",
+              "が",
+              "すぐ",
+              "し",
+              "ぼ",
+              "む",
+              "。",
+              "</s>"
+            ],
+            "query_position": 1,
+            "key_position": 2,
+            "layers": 12,
+            "native_edge_weight_mean": 0.17739339172840118,
+            "blocked_edge_weight_max": 0.0,
+            "pooled_cosine": 0.9985040426254272
+          }
+        },
+        "labse-gguf": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 6,
+              "mrr": 0.745,
+              "misses": [
+                [
+                  "brake",
+                  "tire",
+                  4
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "disk",
+                  5
+                ],
+                [
+                  "coffee",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 6,
+              "mrr": 0.8,
+              "misses": [
+                [
+                  "brake",
+                  "camera",
+                  2
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "memory",
+                  2
+                ],
+                [
+                  "coffee",
+                  "kyoto-weather",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 8,
+              "mrr": 0.8833,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "cook-rice",
+                  "disk",
+                  3
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "coffee",
+                  "kyoto-weather",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 17.0,
+          "max_tokens": 32,
+          "peak_rss_mib": 692
+        },
+        "labse-reference": {
+          "architecture": "BertModel",
+          "ranking": {
+            "ja->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 9,
+              "mrr": 0.95,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            }
+          },
+          "token_mismatch_count": 37,
+          "token_mismatch_examples": [
+            [
+              "q:ja:tire",
+              [
+                101,
+                9358,
+                10539,
+                10533,
+                3714,
+                85363,
+                399058,
+                16776,
+                171445,
+                25770,
+                488783,
+                488785,
+                3641,
+                3709,
+                88763,
+                17159,
+                8310,
+                360075,
+                78336,
+                14235,
+                102
+              ],
+              [
+                101,
+                9358,
+                10539,
+                10533,
+                3714,
+                85363,
+                399058,
+                19956,
+                478706,
+                25770,
+                488782,
+                488785,
+                3641,
+                3708,
+                88763,
+                17159,
+                8310,
+                3696,
+                17539,
+                78336,
+                14235,
+                102
+              ]
+            ],
+            [
+              "q:ja:brake",
+              [
+                101,
+                9358,
+                10539,
+                10533,
+                3714,
+                87953,
+                146899,
+                99199,
+                66152,
+                120610,
+                17159,
+                5875,
+                302849,
+                7152,
+                96968,
+                17449,
+                202485,
+                102
+              ],
+              [
+                101,
+                9358,
+                10539,
+                10533,
+                3714,
+                399599,
+                309575,
+                66152,
+                488807,
+                330772,
+                5875,
+                302849,
+                7152,
+                96968,
+                17449,
+                202485,
+                102
+              ]
+            ]
+          ],
+          "cosine_min": -0.086764,
+          "cosine_median": -0.043224
+        },
+        "labse-diagnosis": {
+          "first_raw_cls_l2": 20.150251780776372,
+          "variants": {
+            "stock": {
+              "min_cosine": -0.086764,
+              "median_cosine": -0.043224,
+              "ranking": {
+                "ja->ja": {
+                  "top1": 6,
+                  "mrr": 0.745,
+                  "misses": [
+                    [
+                      "brake",
+                      "tire",
+                      4
+                    ],
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ],
+                    [
+                      "cook-rice",
+                      "disk",
+                      5
+                    ],
+                    [
+                      "coffee",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "ja->en": {
+                  "top1": 6,
+                  "mrr": 0.8,
+                  "misses": [
+                    [
+                      "brake",
+                      "camera",
+                      2
+                    ],
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ],
+                    [
+                      "cook-rice",
+                      "memory",
+                      2
+                    ],
+                    [
+                      "coffee",
+                      "kyoto-weather",
+                      2
+                    ]
+                  ]
+                },
+                "en->ja": {
+                  "top1": 8,
+                  "mrr": 0.8833,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ],
+                    [
+                      "cook-rice",
+                      "disk",
+                      3
+                    ]
+                  ]
+                },
+                "en->en": {
+                  "top1": 8,
+                  "mrr": 0.9,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ],
+                    [
+                      "coffee",
+                      "kyoto-weather",
+                      2
+                    ]
+                  ]
+                }
+              }
+            },
+            "HF-tokenizer-only": {
+              "min_cosine": -0.090536,
+              "median_cosine": -0.045615,
+              "ranking": {
+                "ja->ja": {
+                  "top1": 8,
+                  "mrr": 0.9,
+                  "misses": [
+                    [
+                      "brake",
+                      "tire",
+                      2
+                    ],
+                    [
+                      "cook-rice",
+                      "memory",
+                      2
+                    ]
+                  ]
+                },
+                "ja->en": {
+                  "top1": 7,
+                  "mrr": 0.85,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ],
+                    [
+                      "cook-rice",
+                      "memory",
+                      2
+                    ],
+                    [
+                      "coffee",
+                      "kyoto-weather",
+                      2
+                    ]
+                  ]
+                },
+                "en->ja": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "cook-rice",
+                      "memory",
+                      2
+                    ]
+                  ]
+                },
+                "en->en": {
+                  "top1": 8,
+                  "mrr": 0.9,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ],
+                    [
+                      "coffee",
+                      "kyoto-weather",
+                      2
+                    ]
+                  ]
+                }
+              }
+            },
+            "official-Dense-Tanh-only": {
+              "min_cosine": 0.765498,
+              "median_cosine": 0.971169,
+              "ranking": {
+                "ja->ja": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "ja->en": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "en->ja": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "en->en": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                }
+              }
+            },
+            "HF-tokenizer-plus-official-Dense-Tanh": {
+              "min_cosine": 0.999669,
+              "median_cosine": 0.999818,
+              "ranking": {
+                "ja->ja": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "ja->en": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "en->ja": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                },
+                "en->en": {
+                  "top1": 9,
+                  "mrr": 0.95,
+                  "misses": [
+                    [
+                      "memory",
+                      "disk",
+                      2
+                    ]
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "laser2": {
+      "metadata": {
+        "started_at": "2026-11-08T13:01:44.658767+00:00",
+        "command": "experiments/run.py --out runs/verified-laser2 nonbert laser2",
+        "git_commit": "71532ce869b8661050b64e2db7cae67040cab1a5",
+        "git_dirty": false,
+        "asset_lock_sha256": "2f9e582560c374814c1e1d07cf15c192d6b8f92ea803cc8deab9321e2f4f71b4",
+        "python_lock_sha256": "169750e3e36631f95b3237fe6d97aa3cea4aa88794be75c79938ece578203f8c",
+        "asset_groups": [
+          "ref-laser"
+        ],
+        "fixture": "retrieval-ja-en-v1.json",
+        "fixture_sha256": "cbad6f126acffb0e133e93aef717e858b6f704b80e2618c6adc79b190b069346",
+        "platform": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+        "python": "3.12.3",
+        "dependencies": {
+          "torch": "2.15.0+cpu",
+          "sentencepiece": "0.2.3",
+          "sacremoses": "0.1.0",
+          "unicategories": "0.1.2"
+        },
+        "threads": 4,
+        "llama_cpp": null,
+        "finished_at": "2026-11-08T13:01:53.027472+00:00"
+      },
+      "summary": {
+        "laser2": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "brake",
+                  "tire",
+                  2
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 8,
+              "mrr": 0.875,
+              "misses": [
+                [
+                  "disk",
+                  "tire",
+                  4
+                ],
+                [
+                  "camera",
+                  "tire",
+                  2
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "camera",
+                  "store-rice",
+                  2
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "disk",
+                  "tire",
+                  2
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 10,
+            "en->ja": 10
+          },
+          "median_ms": 99.3677,
+          "peak_process_rss_mib": 726,
+          "order_reversal_cosine": 0.9434767
+        }
+      }
+    },
+    "potion": {
+      "metadata": {
+        "started_at": "2026-11-08T13:02:05.676564+00:00",
+        "command": "experiments/run.py --out runs/verified-potion nonbert potion",
+        "git_commit": "71532ce869b8661050b64e2db7cae67040cab1a5",
+        "git_dirty": false,
+        "asset_lock_sha256": "2f9e582560c374814c1e1d07cf15c192d6b8f92ea803cc8deab9321e2f4f71b4",
+        "python_lock_sha256": "169750e3e36631f95b3237fe6d97aa3cea4aa88794be75c79938ece578203f8c",
+        "asset_groups": [
+          "ref-potion"
+        ],
+        "fixture": "retrieval-ja-en-v1.json",
+        "fixture_sha256": "cbad6f126acffb0e133e93aef717e858b6f704b80e2618c6adc79b190b069346",
+        "platform": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+        "python": "3.12.3",
+        "dependencies": {
+          "model2vec": "0.10.0",
+          "numpy": "2.5.4"
+        },
+        "threads": 4,
+        "llama_cpp": null,
+        "finished_at": "2026-11-08T13:02:12.823372+00:00"
+      },
+      "summary": {
+        "potion": {
+          "ranking": {
+            "ja->ja": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "tire",
+                  "brake",
+                  2
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ]
+              ]
+            },
+            "ja->en": {
+              "top1": 6,
+              "mrr": 0.7667,
+              "misses": [
+                [
+                  "brake",
+                  "kyoto-bus",
+                  2
+                ],
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "store-rice",
+                  "tire",
+                  3
+                ],
+                [
+                  "camera",
+                  "tire",
+                  3
+                ]
+              ]
+            },
+            "en->ja": {
+              "top1": 8,
+              "mrr": 0.86,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "store-rice",
+                  "cook-rice",
+                  10
+                ]
+              ]
+            },
+            "en->en": {
+              "top1": 8,
+              "mrr": 0.9,
+              "misses": [
+                [
+                  "memory",
+                  "disk",
+                  2
+                ],
+                [
+                  "store-rice",
+                  "cook-rice",
+                  2
+                ]
+              ]
+            }
+          },
+          "translation_top1": {
+            "ja->en": 9,
+            "en->ja": 9
+          },
+          "median_ms": 0.2696,
+          "peak_process_rss_mib": 1872,
+          "order_reversal_cosine": 1.0
+        }
+      }
+    },
+    "multimodal": {
+      "metadata": {
+        "started_at": "2026-11-08T13:02:20.605781+00:00",
+        "command": "experiments/run.py --out runs/verified-multimodal multimodal",
+        "git_commit": "71532ce869b8661050b64e2db7cae67040cab1a5",
+        "git_dirty": false,
+        "asset_lock_sha256": "2f9e582560c374814c1e1d07cf15c192d6b8f92ea803cc8deab9321e2f4f71b4",
+        "python_lock_sha256": null,
+        "asset_groups": [
+          "runtime",
+          "gemma2",
+          "gemma2-media"
+        ],
+        "fixture": null,
+        "fixture_sha256": null,
+        "platform": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+        "python": "3.12.3",
+        "dependencies": {},
+        "threads": 4,
+        "llama_cpp": "version: 0.9.0-dev (build 12110, commit cd959bae9)\nbuilt with GNU 14.2.0 for Linux aarch64",
+        "ffmpeg": "ffmpeg version 6.1.1-3ubuntu5 Copyright (c) 2000-2023 the FFmpeg developers",
+        "finished_at": "2026-11-08T13:02:45.796000+00:00"
+      },
+      "summary": {
+        "multimodal": {
+          "cases": {
+            "text_ja": {
+              "dimensions": 768,
+              "elapsed_ms": [
+                58.78,
+                57.31
+              ],
+              "cosine": 0.906655
+            },
+            "image": {
+              "dimensions": 768,
+              "elapsed_ms": [
+                2747.11,
+                2658.85
+              ],
+              "cosine": 0.891018
+            },
+            "audio": {
+              "dimensions": 768,
+              "elapsed_ms": [
+                300.95,
+                255.65
+              ],
+              "cosine": 0.945909
+            },
+            "video": {
+              "dimensions": 768,
+              "elapsed_ms": [
+                5493.92,
+                5579.73
+              ],
+              "cosine": 0.949569
+            },
+            "mixed_vs_image": {
+              "dimensions": 768,
+              "elapsed_ms": [
+                2951.42,
+                2705.09
+              ],
+              "cosine": 0.818672
+            }
+          },
+          "peak_rss_mib": 1237
+        }
+      }
+    }
+  }
+}

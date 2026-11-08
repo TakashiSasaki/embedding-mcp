@@ -29,7 +29,7 @@ python3 experiments/run.py text e5
 
 ## 結果の記録
 
-- [初回の実測](results/2026-11-08-baseline.json) には、このリポジトリを作る前の計測値を保存しています。[日英の入力セット](fixtures/retrieval-ja-en-v1.json) は10トピックの小規模な比較用です。
+- [初回の実測](results/2026-11-08-baseline.json) と [再実行の検証結果](results/2026-11-08-reproduction.json) を保存しています。[日英の入力セット](fixtures/retrieval-ja-en-v1.json) は10トピックの小規模な比較用です。テキスト比較では128トークンの上限を指定しているので、新しい入力も短文から試せます。
 - 実行ごとに `runs/` に新しいディレクトリを作ります。`metadata.json` にGitコミット、作業ツリーの変更有無、実行コマンド、アセットと入力セットのハッシュ、スレッド数を記録します。`summary.json` は比較用、各実験のJSONとログは詳細確認用です。
 - 実験を追加するときは、コード、入力セット、アセットの固定情報と、共有したい計測の `metadata.json` および `summary.json` を `results/<日付>-<実験名>/` に保存してGitにコミットします。入力を変えた比較では、既存の入力セットを残し、同じ形式で別のJSONを作って `EMBED_FIXTURE=fixtures/retrieval-ja-en-v2.json` を指定します。
 
