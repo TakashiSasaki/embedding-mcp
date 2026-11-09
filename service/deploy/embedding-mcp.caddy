@@ -29,6 +29,20 @@ embedding-mcp.moukaeritai.work {
 	handle /mcp {
 		respond 403
 	}
+	@landing {
+		method GET HEAD
+		path / /landing.css /landing.js /favicon.svg
+	}
+	handle @landing {
+		root * /data/cpu-embedding-experiments/main/service/web
+		header {
+			Cache-Control no-cache
+			Content-Security-Policy "default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+			Referrer-Policy no-referrer
+			X-Content-Type-Options nosniff
+		}
+		file_server
+	}
 	handle {
 		respond 404
 	}

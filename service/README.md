@@ -103,4 +103,6 @@ systemctl --user enable --now tunnel-client@embedding-mcp.service
 
 Caddy の `/mcp` には、Gemini の POST を観測した `66.249.82.128/27` と、HEAD・GET を観測した `108.177.69.32/29` を追加しています。後者は Google が案内する `108.177.64.0/20` の一部です。[Google のフェッチャー IP 範囲](https://developers.google.com/static/crawling/ipranges/user-triggered-fetchers-google.json) · [Connected Apps の接続要件](https://developers.google.com/connected-apps/gpc/prerequisites)
 
+Caddy は公開ルート `/` で [ランディングページ](web/index.html) を配信します。ページとアセットは `service/web/` にあり、配信前のビルドは不要です。
+
 Caddy とトンネルの利用者は同じジョブとメディアの保管領域を共有します。
