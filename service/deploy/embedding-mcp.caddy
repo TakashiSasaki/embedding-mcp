@@ -1,10 +1,13 @@
 embedding-mcp.moukaeritai.work {
-	@allowed {
+	@trusted_mcp {
 		path /mcp
-		remote_ip {$EMBED_MCP_ALLOWED_CIDRS:127.0.0.1/32}
+		client_ip {args[:]}
 	}
-	handle @allowed {
-		reverse_proxy 127.0.0.1:18765
+	handle @trusted_mcp {
+		reverse_proxy 127.0.0.1:18765 {
+			flush_interval -1
+			header_up Host {upstream_hostport}
+		}
 	}
 	handle /mcp {
 		respond 403

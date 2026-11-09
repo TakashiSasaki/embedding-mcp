@@ -86,8 +86,8 @@ curl --fail http://127.0.0.1:18765/health
 
 ### 外部の接続経路
 
-- **Caddy** — `embedding-mcp.moukaeritai.work` の専用 DNS レコードを Caddy ホストに向けます。[Caddy のサイト設定](deploy/embedding-mcp.caddy) を import し、Caddy サービスの環境に `EMBED_MCP_ALLOWED_CIDRS` を空白区切りで設定します。Caddyfile を検証してから Caddy を reload します。判定には Caddy と直接接続した送信元を使います。環境変数が未設定のときはループバックのみ通ります。
-- **ChatGPT Secure MCP Tunnel** — 専用トンネルの ID とランタイムキー参照を用意し、既存の `tunnel-client@.service` を使います。トンネルの転送先は `http://127.0.0.1:18765/mcp` です。インストール済みの CLI では次の形で専用プロファイルを作成できます。
+- **Caddy** — このホストでは `embedding-mcp.moukaeritai.work` から `oci.moukaeritai.work` への CNAME を用意します。[Caddy のサイト設定](deploy/embedding-mcp.caddy) を import するときに、既存 MCP の `@trusted_mcp` にある許可リストを引数として渡します。ホストのインポート行は `~/.config/embedding-mcp/caddy-import.caddy` に置けます。DNS が反映されたら、そのファイルを稼働中の Caddyfile に import し、検証して reload します。送信元の判定は Caddy の `client_ip` に任せます。
+- **ChatGPT Secure MCP Tunnel** — 専用トンネルの ID を用意します。このホストの既存プロファイルが共有するランタイムキー参照は `file:$HOME/.config/tunnel-client/secrets/runtime-api-key` です。既存の `tunnel-client@.service` を使います。トンネルの転送先は `http://127.0.0.1:18765/mcp` です。インストール済みの CLI では次の形で専用プロファイルを作成できます。
 
 ```bash
 tunnel-client init --profile embedding-mcp --tunnel-id "$EMBED_MCP_TUNNEL_ID" \
@@ -96,6 +96,8 @@ tunnel-client init --profile embedding-mcp --tunnel-id "$EMBED_MCP_TUNNEL_ID" \
   --health-listen-addr 127.0.0.1:0
 systemctl --user enable --now tunnel-client@embedding-mcp.service
 ```
+
+トンネル ID の作成に使う管理鍵はランタイムキーと別です。作成後は、ChatGPT のアプリ設定で同じ専用トンネルを選びます。
 
 任意の Bearer 認証を有効にするには、サービスユーザーだけが読めるファイルにトークンを置き、`~/.config/embedding-mcp/service.env` の `EMBED_MCP_BEARER_FILE` に絶対パスを指定します。Caddy 経由のクライアントは `Authorization: Bearer …` を送り、トンネルはランタイムと発見用の両方に同じ Authorization ヘッダーの秘密参照を設定します。トンネル用参照ファイルには `Bearer ` を含む値を入れます。
 

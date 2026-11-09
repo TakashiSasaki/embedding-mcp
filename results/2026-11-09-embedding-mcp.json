@@ -352,5 +352,33 @@
     "missing_token_status": 401,
     "valid_token_status": 200,
     "valid_token_disallowed_origin_status": 403
+  },
+  "installed_default_idle_eviction": {
+    "version": "0.1.0+local.6a9045a9e9b2",
+    "idle_limit_seconds": 300,
+    "phase": "unloaded",
+    "unload_reason": "idle"
+  },
+  "existing_caddy_allowlist_verification": {
+    "matching_existing_mcp_sites": 4,
+    "source_ranges": 4,
+    "combined_configuration_valid": true,
+    "caddy_loopback_http_allowed": {
+      "version": "0.1.0+local.6a9045a9e9b2",
+      "dimension": 384
+    },
+    "caddy_other_source_status": 403,
+    "caddy_unrouted_path_status": 404,
+    "tunnel_local_dev_proxy": {
+      "version": "0.1.0+local.6a9045a9e9b2",
+      "dimension": 384
+    },
+    "public_dns_cname_at_test": "takashisasaki.github.io"
+  },
+  "existing_tunnel_configuration": {
+    "same_workspace_confirmed": true,
+    "isolated_http_profile_generation_valid": true,
+    "local_runtime_key_reference_available": true,
+    "configured_admin_environment_available": false
   }
 }
