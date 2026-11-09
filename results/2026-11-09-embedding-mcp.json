@@ -1,0 +1,356 @@
+{
+  "recorded_at": "2026-11-09T02:15:51+00:00",
+  "machine": "aarch64",
+  "upstream_release": "b12110",
+  "source_revision": "6a9045a9e9b242dbcf1446c04644106c1b625446",
+  "patch_sha256": "d337a95507f046e31fcdb6d439b06ddd4cb78ba055058d5d1171f7d7a0f59df4",
+  "release_verification": {
+    "engine": {
+      "version": "0.9.0-dev+local.6a9045a9e9b2",
+      "artifact_id": "f0e07667d8513b72d31c90a17327952b60a7f7535f6f8b34df2e42931be82bd4",
+      "upstream_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8"
+    },
+    "native": {
+      "e5": {
+        "dimension": 384,
+        "tokens": 17,
+        "stock_max_abs_error": 0.0,
+        "native_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 16,
+          "allowed": true,
+          "probability": 0.7940188050270081
+        },
+        "edited_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 16,
+          "allowed": false,
+          "probability": 0.0
+        },
+        "edited_vector_max_delta": 0.00017380714416503906
+      },
+      "minilm": {
+        "dimension": 384,
+        "tokens": 17,
+        "stock_max_abs_error": 0.0,
+        "native_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 16,
+          "allowed": true,
+          "probability": 0.011179057881236076
+        },
+        "edited_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 16,
+          "allowed": false,
+          "probability": 0.0
+        },
+        "edited_vector_max_delta": 0.0001909397542476654
+      },
+      "qwen3": {
+        "dimension": 1024,
+        "tokens": 13,
+        "stock_max_abs_error": 0.0,
+        "native_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 12,
+          "allowed": false,
+          "probability": 0.0
+        },
+        "edited_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 12,
+          "allowed": true,
+          "probability": 0.034087326377630234
+        },
+        "edited_vector_max_delta": 0.002926349639892578
+      },
+      "gemma2": {
+        "dimension": 768,
+        "tokens": 13,
+        "stock_max_abs_error": 1.4901161193847656e-08,
+        "native_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 12,
+          "allowed": true,
+          "probability": 0.935488760471344
+        },
+        "edited_target": {
+          "layer": 0,
+          "head": 0,
+          "query": 0,
+          "key": 12,
+          "allowed": false,
+          "probability": 0.0
+        },
+        "edited_vector_max_delta": 0.002603008411824703
+      },
+      "gemma2_mixed": {
+        "tokens": 307,
+        "modality_targets": {
+          "image": 13,
+          "audio": 96,
+          "video": 125
+        },
+        "text_query": 299,
+        "stock_max_abs_error": 0.0,
+        "edited_vector_max_delta": 0.0013452880084514618,
+        "native": [
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 13,
+            "allowed": true,
+            "probability": 5.313924339134246e-05
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 13,
+            "allowed": true,
+            "probability": 1.8887444639403839e-06
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 13,
+            "allowed": true,
+            "probability": 0.005751852877438068
+          },
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 96,
+            "allowed": true,
+            "probability": 0.0008532727952115238
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 96,
+            "allowed": true,
+            "probability": 0.00010714175732573494
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 96,
+            "allowed": true,
+            "probability": 0.0010445991065353155
+          },
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 125,
+            "allowed": true,
+            "probability": 0.0009643486700952053
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 125,
+            "allowed": true,
+            "probability": 1.0722755177994259e-05
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 125,
+            "allowed": true,
+            "probability": 0.00224638101644814
+          }
+        ],
+        "edited": [
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 13,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 13,
+            "allowed": true,
+            "probability": 1.8887444639403839e-06
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 13,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 96,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 96,
+            "allowed": true,
+            "probability": 0.00010714175732573494
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 96,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 125,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 125,
+            "allowed": true,
+            "probability": 1.0722755177994259e-05
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 125,
+            "allowed": false,
+            "probability": 0.0
+          }
+        ],
+        "all_layers": [
+          {
+            "layer": 0,
+            "head": 0,
+            "query": 299,
+            "key": 13,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 0,
+            "head": 1,
+            "query": 299,
+            "key": 13,
+            "allowed": false,
+            "probability": 0.0
+          },
+          {
+            "layer": 5,
+            "head": 0,
+            "query": 299,
+            "key": 13,
+            "allowed": false,
+            "probability": 0.0
+          }
+        ]
+      }
+    },
+    "service": {
+      "mcp_version": "0.1.0+local.6a9045a9e9b2",
+      "items": 32,
+      "done_at_crash_lower_bound": 6,
+      "replayed_page_sha256": "50b456eb44e800681793ec673b289c585d50bcf078b23d52d8a094b6c6f19b32",
+      "result_sha256": "ef883d8b51d1eb146df23da368f820a3574708c3559e17885671cbdc4a90a666",
+      "default_ttl_seconds": 86400,
+      "verified_short_ttl_seconds": 2,
+      "canceled_job": true,
+      "idle_seconds_in_test": 2,
+      "gemma2_media_tokens": 294
+    },
+    "memory_pressure": {
+      "injected_available_mib": [
+        8192,
+        2048,
+        8192
+      ],
+      "unload_reason": "memory_pressure",
+      "job_resumed": true
+    }
+  },
+  "pre_release_1000_item_recovery": {
+    "mcp_version": "0.1.0+local.b438d145bd9a.dirty",
+    "items": 1000,
+    "snapshot_done": 920,
+    "result_sha256": "7c42ebb297a374e91e85da6ca6ae64ec337260cc0a3f59a09efaa2497605a968",
+    "replayed_page_sha256": "ff877e876a9cf6500abefe9061db19475f91a89db2dfc3383f7082e12faf57fe",
+    "default_ttl_seconds": 86400,
+    "verification_note": "Resumed from a SQLite backup after the initial verification client reached its polling deadline.",
+    "elapsed_with_restarts_seconds": 677.62
+  },
+  "mask_memory_budget": {
+    "token_count": 1653,
+    "limit_mib": 256,
+    "rejected_status": 400,
+    "subsequent_embedding_dimension": 768
+  },
+  "installed_systemd_service": {
+    "mcp_version": "0.1.0+local.6a9045a9e9b2",
+    "engine_id": "f0e07667d8513b72d31c90a17327952b60a7f7535f6f8b34df2e42931be82bd4",
+    "engine_version": "0.9.0-dev+local.6a9045a9e9b2",
+    "tools": 10,
+    "starts_unloaded": true,
+    "first_worker_load_seconds": 2.523,
+    "loaded_model_rss_mib": 374.8,
+    "idle_limit_seconds": 300,
+    "admission_memory_mib": 3072,
+    "masked_dimension": 384
+  },
+  "transport": {
+    "caddy_loopback_http_allowed": {
+      "version": "0.1.0+local.6a9045a9e9b2",
+      "dimension": 384
+    },
+    "caddy_other_source_status": 403,
+    "caddy_unrouted_path_status": 404,
+    "tunnel_local_dev_proxy": {
+      "version": "0.1.0+local.6a9045a9e9b2",
+      "dimension": 384
+    },
+    "public_dns_cname_at_test": "takashisasaki.github.io"
+  },
+  "optional_bearer_isolated_http": {
+    "missing_token_status": 401,
+    "valid_token_status": 200,
+    "valid_token_disallowed_origin_status": 403
+  }
+}

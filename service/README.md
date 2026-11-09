@@ -82,6 +82,8 @@ curl --fail http://127.0.0.1:18765/health
 
 `python3 experiments/fetch.py runtime` で比較用の上流実行ファイルを用意します。`service/.venv/bin/python service/verify.py all --out runs/mcp-verification.json` で、固定した 4 モデルの出力比較、マスクの適用、1,000 件の再開、保持期限、アイドルとメモリ閾値を検証します。`native` と `service` で範囲を分けられます。
 
+[初回の検証結果](../results/2026-11-09-embedding-mcp.json) に、配備版の比較と再起動試験、および先行ビルドでの 1,000 件の復旧を記録しています。
+
 ### 外部の接続経路
 
 - **Caddy** — `embedding-mcp.moukaeritai.work` の専用 DNS レコードを Caddy ホストに向けます。[Caddy のサイト設定](deploy/embedding-mcp.caddy) を import し、Caddy サービスの環境に `EMBED_MCP_ALLOWED_CIDRS` を空白区切りで設定します。Caddyfile を検証してから Caddy を reload します。判定には Caddy と直接接続した送信元を使います。環境変数が未設定のときはループバックのみ通ります。
