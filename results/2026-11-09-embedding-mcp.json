@@ -380,5 +380,14 @@
     "isolated_http_profile_generation_valid": true,
     "local_runtime_key_reference_available": true,
     "configured_admin_environment_available": false
+  },
+  "public_caddy_deployment": {
+    "checked_at": "2026-11-09T03:35:59+00:00",
+    "url": "https://embedding-mcp.moukaeritai.work/mcp",
+    "dns_cname": "oci.moukaeritai.work",
+    "mcp_version": "0.1.0+local.6a9045a9e9b2",
+    "tool_count": 10,
+    "minilm_embedding_dimension": 384,
+    "unlisted_source_status": 403
   }
 }
