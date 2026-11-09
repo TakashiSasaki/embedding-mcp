@@ -1,0 +1,754 @@
+diff --git a/tools/mtmd/mtmd-helper.cpp b/tools/mtmd/mtmd-helper.cpp
+--- a/tools/mtmd/mtmd-helper.cpp
++++ b/tools/mtmd/mtmd-helper.cpp
+@@ -813,6 +813,7 @@
+         std::vector<const char *> cmd = {
+             ffprobe_bin.c_str(),
+             "-v", "quiet",
++            "-protocol_whitelist", "cache,pipe,file",
+             "-show_entries", "stream=width,height,r_frame_rate,nb_frames,duration,start_time",
+             "-select_streams", "v:0",
+             "-of", "default=noprint_wrappers=1",
+@@ -891,7 +892,7 @@
+             return;
+         }
+         const std::string rate_str = std::to_string(rate);
+-        std::vector<const char *> cmd = {ffmpeg_bin.c_str(), "-nostdin"};
++        std::vector<const char *> cmd = {ffmpeg_bin.c_str(), "-nostdin", "-protocol_whitelist", "cache,pipe,file"};
+         cmd.reserve(20); // GCC 11 -Wstringop-overflow false positive on the inserts below otherwise
+         if (is_buf_input()) {
+             cmd.insert(cmd.end(), {"-read_ahead_limit", "-1"});
+@@ -941,7 +942,7 @@
+             cmd.push_back(seek_buf);
+         }
+ 
+-        cmd.push_back("-nostdin");
++        cmd.insert(cmd.end(), {"-nostdin", "-protocol_whitelist", "cache,pipe,file"});
+         if (is_buf_input()) {
+             // remove the 64KB read-ahead limit of cache:, or else ffmpeg cannot reach a moov atom at end of file
+             cmd.push_back("-read_ahead_limit");
+diff --git a/tools/mtmd/mtmd-internal.h b/tools/mtmd/mtmd-internal.h
+--- a/tools/mtmd/mtmd-internal.h
++++ b/tools/mtmd/mtmd-internal.h
+@@ -15,6 +15,7 @@
+     const mtmd_bitmap * bitmap;
+     // only used for text parts
+     bool parse_special = false;
++    int32_t origin = -1;
+ };
+ 
+ // [QWEN_VIDEO] merged parts are erased from `parts`, so one group always maps to one part
+diff --git a/tools/mtmd/mtmd.cpp b/tools/mtmd/mtmd.cpp
+--- a/tools/mtmd/mtmd.cpp
++++ b/tools/mtmd/mtmd.cpp
+@@ -422,6 +422,7 @@
+     std::vector<llama_token> tokens_text;
+     mtmd_image_tokens_ptr tokens_image;
+     mtmd_audio_tokens_ptr tokens_audio;
++    int32_t origin = -1; // transient layout metadata, deliberately outside the cache serialization
+ 
+     bool can_batch_with(const mtmd_input_chunk & other) const {
+         if (type != other.type) {
+@@ -1314,7 +1315,7 @@
+             continue; // text part
+         }
+         const bool has_next = n_merge > 1 && i + 1 < parts.size() && parts[i + 1].bitmap != nullptr;
+-        if (has_next && parts[i].bitmap->can_merge_with(*parts[i + 1].bitmap)) {
++        if (has_next && parts[i].origin == parts[i + 1].origin && parts[i].bitmap->can_merge_with(*parts[i + 1].bitmap)) {
+             LOG_DBG("%s: merging 2 frames at part index %zu and %zu\n", __func__, i, i + 1);
+             output.push_back({parts[i].bitmap, parts[i + 1].bitmap});
+             parts.erase(parts.begin() + i + 1);
+@@ -1351,6 +1352,8 @@
+     std::map<const mtmd_bitmap *, size_t> soundtrack_of; // piece -> index in soundtracks
+ 
+     mtmd_input_chunks cur;
++    bool track_origins = false;
++    int32_t active_origin = -1;
+     uint32_t n_images_added = 0; // 0-based index assigned to the next image chunk
+ 
+     ~mtmd_tokenizer() {
+@@ -1400,17 +1403,18 @@
+     mtmd_tokenizer(const mtmd_context * ctx,
+             const mtmd_input_part * const * input_parts,
+             size_t n_parts,
+-            bool add_special) : ctx(ctx) {
++            bool add_special, bool track_origins) : ctx(ctx), track_origins(track_origins) {
+         this->add_special = add_special;
+         parse_special = true; // only used for text returned by lazy bitmaps
+         vocab         = ctx->vocab;
+ 
+         for (size_t i = 0; i < n_parts; i++) {
+             const mtmd_input_part * p = input_parts[i];
++            const int32_t origin = track_origins ? int32_t(i) : -1;
+             if (p->text != nullptr) {
+-                parts.push_back({std::string(p->text->text, p->text->text_len), nullptr, p->text->parse_special});
++                parts.push_back({std::string(p->text->text, p->text->text_len), nullptr, p->text->parse_special, origin});
+             } else {
+-                parts.push_back({"", p->bitmap});
++                parts.push_back({"", p->bitmap, false, origin});
+             }
+         }
+ 
+@@ -1425,7 +1429,7 @@
+                 LOG_DBG("%s: expanding lazy bitmap\n", __func__);
+                 const bool is_video = p.bitmap->is_video;
+                 if (is_video && !ctx->vid_beg.empty()) {
+-                    expanded.push_back({ctx->vid_beg, nullptr, true});
++                    expanded.push_back({ctx->vid_beg, nullptr, true, p.origin});
+                 }
+                 soundtrack st;
+                 for (size_t i = 0;; i++) {
+@@ -1442,20 +1446,20 @@
+                         // OK, append the returned chunk; lazy part is not yet added
+                         if (out_bm) {
+                             auto & ptr = bm_from_lazy.emplace_back(out_bm); // remember to free it later
+-                            expanded.push_back({"", ptr.ptr.get()});
++                            expanded.push_back({"", ptr.ptr.get(), false, p.origin});
+                             if (is_video && out_bm->is_audio && ctx->video_has_soundtrack()) {
+                                 st.pieces.push_back(out_bm);
+                             }
+                             LOG_DBG("%s: lazy callback returned bitmap with dimensions %d x %d\n", __func__, out_bm->nx, out_bm->ny);
+                         } else if (out_str) {
+                             auto & ptr = text_from_lazy.emplace_back(out_str); // remember to free it later
+-                            expanded.push_back({ptr, nullptr, parse_special});
++                            expanded.push_back({ptr, nullptr, parse_special, p.origin});
+                             LOG_DBG("%s: lazy callback returned text: %s\n", __func__, out_str);
+                         }
+                     } else if (res == -1) {
+                         // EOF: lazy part removes itself (not added to expanded)
+                         if (is_video && !ctx->vid_end.empty()) {
+-                            expanded.push_back({ctx->vid_end, nullptr, true});
++                            expanded.push_back({ctx->vid_end, nullptr, true, p.origin});
+                         }
+                         break;
+                     } else if (res == -2) {
+@@ -1490,6 +1494,7 @@
+ 
+         size_t i_bm = 0;
+         for (const auto & p : parts) {
++            active_origin = p.origin;
+             if (p.bitmap != nullptr) {
+                 if (i_bm >= merged_bitmaps.size()) {
+                     LOG_ERR("%s: error: number of bitmaps (%zu) does not match number of markers (%zu)\n",
+@@ -1497,20 +1502,25 @@
+                     return 1;
+                 }
+                 auto bmps = merged_bitmaps[i_bm++];
++                const size_t first = cur.entries.size();
+                 int32_t res = add_media(bmps);
+                 if (res != 0) {
+                     return res;
+                 }
++                for (size_t i = first; i < cur.entries.size(); ++i) {
++                    cur.entries[i].origin = active_origin;
++                }
+             } else {
+                 add_text(p.text, p.parse_special);
+             }
+         }
+ 
++        active_origin = -1;
+         if (vocab != nullptr) {
+             if (add_special && llama_vocab_get_add_bos(vocab)) {
+                 // if first chunk is text, we add BOS token to first text chunk
+                 // otherwise, create a new text chunk with BOS token
+-                if (!cur.entries.empty() && cur.entries[0].type == MTMD_INPUT_CHUNK_TYPE_TEXT) {
++                if (!track_origins && !cur.entries.empty() && cur.entries[0].type == MTMD_INPUT_CHUNK_TYPE_TEXT) {
+                     // add BOS token to the beginning of first text chunk
+                     cur.entries[0].tokens_text.insert(cur.entries[0].tokens_text.begin(), llama_vocab_bos(vocab));
+                 } else {
+@@ -1556,7 +1566,8 @@
+             return;
+         }
+         // if last entry is also a text chunk, add tokens to it instead of creating new chunk
+-        if (!cur.entries.empty() && cur.entries.back().type == MTMD_INPUT_CHUNK_TYPE_TEXT) {
++        if (!cur.entries.empty() && cur.entries.back().type == MTMD_INPUT_CHUNK_TYPE_TEXT &&
++                cur.entries.back().origin == active_origin) {
+             cur.entries.back().tokens_text.insert(
+                                             cur.entries.back().tokens_text.end(),
+                                             tokens.begin(),
+@@ -1567,6 +1578,7 @@
+                 tokens,
+                 nullptr, // image tokens
+                 nullptr, // audio tokens
++                active_origin,
+             };
+             cur.entries.emplace_back(std::move(chunk));
+         }
+@@ -2180,11 +2192,11 @@
+     }
+ }
+ 
+-int32_t mtmd_tokenize_from_parts(const mtmd_context * ctx,
++static int32_t mtmd_tokenize_parts(const mtmd_context * ctx,
+             mtmd_input_chunks * output,
+             const mtmd_input_part * const * parts,
+             size_t n_parts,
+-            bool add_special) {
++            bool add_special, bool track_origins) {
+     for (size_t i = 0; i < n_parts; i++) {
+         if ((parts[i]->text == nullptr) == (parts[i]->bitmap == nullptr)) {
+             LOG_ERR("%s: part %zu must have either text or bitmap set, not both\n", __func__, i);
+@@ -2196,12 +2208,22 @@
+         }
+     }
+     try {
+-        mtmd_tokenizer tokenizer(ctx, parts, n_parts, add_special);
++        mtmd_tokenizer tokenizer(ctx, parts, n_parts, add_special, track_origins);
+         return tokenizer.tokenize(output);
+     } catch (const std::exception & e) {
+         LOG_ERR("%s: error: %s\n", __func__, e.what());
+         return 2;
+     }
++}
++
++int32_t mtmd_tokenize_from_parts(const mtmd_context * ctx, mtmd_input_chunks * output,
++            const mtmd_input_part * const * parts, size_t n_parts, bool add_special) {
++    return mtmd_tokenize_parts(ctx, output, parts, n_parts, add_special, false);
++}
++
++int32_t mtmd_tokenize_with_origins(const mtmd_context * ctx, mtmd_input_chunks * output,
++            const mtmd_input_part * const * parts, size_t n_parts, bool add_special) {
++    return mtmd_tokenize_parts(ctx, output, parts, n_parts, add_special, true);
+ }
+ 
+ static int32_t mtmd_encode_impl(mtmd_context * ctx, const mtmd_image_tokens * image_tokens, std::vector<float> & out_embd) {
+@@ -3448,6 +3470,10 @@
+         return chunk->tokens_image.get();
+     }
+     return nullptr;
++}
++
++int32_t mtmd_input_chunk_get_origin(const mtmd_input_chunk * chunk) {
++    return chunk->origin;
+ }
+ 
+ size_t mtmd_input_chunk_get_n_tokens(const mtmd_input_chunk * chunk) {
+diff --git a/tools/mtmd/mtmd.h b/tools/mtmd/mtmd.h
+--- a/tools/mtmd/mtmd.h
++++ b/tools/mtmd/mtmd.h
+@@ -264,6 +264,8 @@
+ MTMD_API enum mtmd_input_chunk_type mtmd_input_chunk_get_type        (const mtmd_input_chunk * chunk);
+ MTMD_API const llama_token *        mtmd_input_chunk_get_tokens_text (const mtmd_input_chunk * chunk, size_t * n_tokens_output);
+ MTMD_API const mtmd_image_tokens *  mtmd_input_chunk_get_tokens_image(const mtmd_input_chunk * chunk);
++// Source part index for tracked tokenization, or -1 for added BOS/EOS.
++MTMD_API int32_t                    mtmd_input_chunk_get_origin      (const mtmd_input_chunk * chunk);
+ MTMD_API size_t                     mtmd_input_chunk_get_n_tokens    (const mtmd_input_chunk * chunk);
+ // returns nullptr for ID on text chunk
+ MTMD_API const char *               mtmd_input_chunk_get_id          (const mtmd_input_chunk * chunk);
+@@ -349,6 +351,15 @@
+                                           size_t n_parts,
+                                           bool add_special);
+ 
++// Like mtmd_tokenize_from_parts, with a source index on each resulting chunk.
++// Text chunks with different sources are kept separate.
++MTMD_API int32_t mtmd_tokenize_with_origins(
++            const mtmd_context * ctx,
++            mtmd_input_chunks * output,
++            const mtmd_input_part * const * parts,
++            size_t n_parts,
++            bool add_special);
++
+ DEPRECATED(MTMD_API int32_t mtmd_encode(mtmd_context * ctx, const mtmd_image_tokens * image_tokens),
+            "use mtmd_encode_chunk() instead");
+ 
+diff --git a/tools/server/CMakeLists.txt b/tools/server/CMakeLists.txt
+--- a/tools/server/CMakeLists.txt
++++ b/tools/server/CMakeLists.txt
+@@ -17,6 +17,8 @@
+     server-decision.h
+     server-context.cpp
+     server-context.h
++    server-embedding-local.cpp
++    server-embedding-local.h
+     server-realtime.cpp
+     server-realtime.h
+     server-stream.cpp
+@@ -35,7 +37,7 @@
+ 
+ target_include_directories(${TARGET} PRIVATE ../mtmd)
+ target_include_directories(${TARGET} PRIVATE ${PROJECT_SOURCE_DIR})
+-target_link_libraries(${TARGET} PUBLIC llama-common mtmd ${CMAKE_THREAD_LIBS_INIT})
++target_link_libraries(${TARGET} PUBLIC llama-common mtmd ${CMAKE_THREAD_LIBS_INIT} PRIVATE vendor::hash)
+ 
+ # llama-server-impl: server logic, reusable by app
+ 
+diff --git a/tools/server/server-common.cpp b/tools/server/server-common.cpp
+--- a/tools/server/server-common.cpp
++++ b/tools/server/server-common.cpp
+@@ -349,7 +349,7 @@
+     return (isalnum(c) || (c == '+') || (c == '/'));
+ }
+ 
+-static inline raw_buffer base64_decode(const std::string & encoded_string) {
++raw_buffer base64_decode(const std::string & encoded_string) {
+     int i = 0;
+     int j = 0;
+     int in_ = 0;
+diff --git a/tools/server/server-common.h b/tools/server/server-common.h
+--- a/tools/server/server-common.h
++++ b/tools/server/server-common.h
+@@ -306,6 +306,8 @@
+                                         const std::vector<raw_buffer> & files,
+                                          const mtmd_helper_init_opt & init_opt,
+                                           bool is_placeholder = false);
++
++raw_buffer base64_decode(const std::string & encoded_string);
+ 
+ // decode one media url (http/file/data-uri) into out_files; throws on failure
+ void handle_media(std::vector<raw_buffer> & out_files, const std::string & url, const std::string & media_path);
+diff --git a/tools/server/server-context.cpp b/tools/server/server-context.cpp
+--- a/tools/server/server-context.cpp
++++ b/tools/server/server-context.cpp
+@@ -1,4 +1,5 @@
+ #include "server-context.h"
++#include "server-embedding-local.h"
+ #include <atomic>
+ #include <thread>
+ #include "base64.hpp"
+@@ -498,6 +499,9 @@
+ 
+     bool can_split() const {
+         GGML_ASSERT(task);
++        if (task->local_embedding) {
++            return false;
++        }
+         // a decision over a non-causal context reads the whole prompt in one batch
+         if (task->type == SERVER_TASK_TYPE_DECISION && !llama_get_causal_attn(ctx_tgt)) {
+             return false;
+@@ -4689,12 +4693,28 @@
+         // yield to the queue, so we can still handle metrics tasks while decoding
+         // note: the sync is done here too, so that the wait is also covered by the yield
+         int ret = 0;
++        const char * attention_error = nullptr;
++        auto * local_slot = slots.size() == 1 && slots.front().is_processing() &&
++                slots.front().task->local_embedding ? &slots.front() : nullptr;
+         queue_tasks.yield_to_queue([&]() {
+-            ret = llama_process(ctx_tgt, LLAMA_PROCESS_TYPE_DECODE, batch.view.get());
++            if (local_slot && local_slot->task->attention) {
++                auto & attention = *local_slot->task->attention;
++                ret = llama_process_with_attention(ctx_tgt, batch.view.get(), attention.rules.data(), attention.rules.size(),
++                        attention.probes.data(), attention.probes.size(), &attention_error);
++            } else {
++                ret = llama_process(ctx_tgt, LLAMA_PROCESS_TYPE_DECODE, batch.view.get());
++            }
+             if (ret == 0 && has_output) {
+                 llama_synchronize(ctx_tgt);
+             }
+         });
++
++        if (ret != 0 && local_slot) {
++            send_error(*local_slot, attention_error ? attention_error : "Embedding compute failed",
++                       attention_error ? ERROR_TYPE_INVALID_REQUEST : ERROR_TYPE_SERVER);
++            local_slot->release();
++            return true;
++        }
+ 
+         if (ret != 0) {
+             {
+@@ -6439,6 +6459,9 @@
+         return handle_embeddings_impl(req, TASK_RESPONSE_TYPE_OAI_EMBD);
+     };
+ 
++    this->post_local_layout = [this](const server_http_req & req) { return handle_local_embedding(req, true); };
++    this->post_local_embedding = [this](const server_http_req & req) { return handle_local_embedding(req, false); };
++
+     this->post_rerank = [this](const server_http_req & req) {
+         return handle_rerank_impl(req);
+     };
+@@ -6885,6 +6908,50 @@
+     return res;
+ }
+ 
++std::unique_ptr<server_res_generator> server_routes::handle_local_embedding(const server_http_req & req, bool layout_only) {
++    auto res = create_response();
++    if (!params.embedding || params.n_parallel != 1 || meta->pooling_type == LLAMA_POOLING_TYPE_NONE) {
++        throw std::invalid_argument("This endpoint requires one pooled embedding slot");
++    }
++    const auto body = json::parse(req.body);
++    const int limit = std::min({meta->slot_n_ctx, int(params.n_ubatch), body.at("max_tokens").get<int>()});
++    auto input = server_embedding_tokenize(ctx_server.vocab, ctx_server.mctx, ctx_server.init_opt, body, limit);
++    if (layout_only) {
++        res->ok(input.layout);
++        return res;
++    }
++
++    auto attention = server_embedding_parse_attention(body, input.layout, ctx_server.model_tgt);
++    auto & rd = res->rd;
++    server_task task(SERVER_TASK_TYPE_EMBEDDING);
++    task.id = rd.get_new_id();
++    task.tokens = std::move(input.tokens);
++    task.local_embedding = true;
++    task.attention = attention;
++    task.params.embd_normalize = params.embd_normalize;
++    std::vector<server_task> tasks;
++    tasks.push_back(std::move(task));
++    rd.post_tasks(std::move(tasks));
++
++    auto completed = rd.wait_for_all(req.should_stop);
++    if (completed.is_terminated) {
++        return res;
++    }
++    if (completed.error) {
++        res->error(completed.error->to_json());
++        return res;
++    }
++    const auto & embedding = dynamic_cast<const server_task_result_embd &>(*completed.results.at(0));
++    auto & out = input.layout;
++    out["embedding"] = embedding.embedding.at(0);
++    out["engine_version"] = llama_version();
++    if (attention && !attention->probes.empty()) {
++        out["probes"] = server_embedding_probes(*attention);
++    }
++    res->ok(out);
++    return res;
++}
++
+ std::unique_ptr<server_res_generator> server_routes::handle_embeddings_impl(const server_http_req & req, task_response_type res_type) {
+     auto res = create_response();
+     if (!params.embedding) {
+diff --git a/tools/server/server-context.h b/tools/server/server-context.h
+--- a/tools/server/server-context.h
++++ b/tools/server/server-context.h
+@@ -132,6 +132,8 @@
+     server_http_context::handler_t post_detokenize;
+     server_http_context::handler_t post_embeddings;
+     server_http_context::handler_t post_embeddings_oai;
++    server_http_context::handler_t post_local_layout;
++    server_http_context::handler_t post_local_embedding;
+     server_http_context::handler_t post_rerank;
+     server_http_context::handler_t post_tts;
+     server_http_context::handler_t post_systemone;
+@@ -152,6 +154,7 @@
+     std::unique_ptr<server_res_generator> handle_slots_save(const server_http_req & req, int id_slot);
+     std::unique_ptr<server_res_generator> handle_slots_restore(const server_http_req & req, int id_slot);
+     std::unique_ptr<server_res_generator> handle_slots_erase(const server_http_req &, int id_slot);
++    std::unique_ptr<server_res_generator> handle_local_embedding(const server_http_req & req, bool layout_only);
+     std::unique_ptr<server_res_generator> handle_embeddings_impl(const server_http_req & req, task_response_type res_type);
+     std::unique_ptr<server_res_generator> handle_rerank_impl(const server_http_req & req);
+     std::unique_ptr<server_res_generator> handle_count_tokens(const server_http_req & req, task_response_type res_type);
+diff --git a/tools/server/server-embedding-local.cpp b/tools/server/server-embedding-local.cpp
+new file mode 100644
+--- /dev/null
++++ b/tools/server/server-embedding-local.cpp
+@@ -0,0 +1,252 @@
++#include "server-embedding-local.h"
++
++#include "hash/hash.h"
++
++#include <algorithm>
++#include <cmath>
++#include <stdexcept>
++
++namespace {
++
++struct input_group {
++    std::string type;
++    std::string text;
++    std::vector<int> parts;
++    const mtmd_bitmap * bitmap = nullptr;
++};
++
++bool control_token(const llama_vocab * vocab, llama_token token) {
++    return llama_vocab_is_control(vocab, token) || token == llama_vocab_bos(vocab) ||
++           token == llama_vocab_eos(vocab) || token == llama_vocab_sep(vocab);
++}
++
++void add_span(json & spans, size_t start, size_t end, const std::string & modality, const std::vector<int> & parts) {
++    if (start == end) {
++        return;
++    }
++    if (!spans.empty() && spans.back()["modality"] == modality && spans.back()["parts"] == parts) {
++        spans.back()["end"] = end;
++    } else {
++        spans.push_back({{"start", start}, {"end", end}, {"modality", modality}, {"parts", parts}});
++    }
++}
++
++uint64_t select_bits(const json & value, int count) {
++    if (count < 1 || count > 64) {
++        throw std::invalid_argument("Unsupported layer or query head count");
++    }
++    if (value == "all") {
++        return count == 64 ? UINT64_MAX : (uint64_t{1} << count) - 1;
++    }
++    if (!value.is_array() || value.empty()) {
++        throw std::invalid_argument("Expected all or a nonempty index list");
++    }
++    uint64_t bits = 0;
++    for (const auto & index : value) {
++        const int i = index.get<int>();
++        if (i < 0 || i >= count) {
++            throw std::invalid_argument("Layer or query head index is out of range");
++        }
++        bits |= uint64_t{1} << i;
++    }
++    return bits;
++}
++
++std::vector<llama_attention_span> select_tokens(const json & selector, const json & layout) {
++    const int n = layout.at("token_count").get<int>();
++    const std::string kind = selector.at("kind");
++    if (kind == "all") {
++        return {{0, n}};
++    }
++    if (kind == "range") {
++        const int start = selector.at("start").get<int>(), end = selector.at("end").get<int>();
++        if (start < 0 || end > n || end <= start) {
++            throw std::invalid_argument("Invalid token range for this input layout");
++        }
++        return {{start, end}};
++    }
++
++    std::vector<llama_attention_span> ranges;
++    for (const auto & span : layout.at("spans")) {
++        const auto & parts = span.at("parts");
++        const bool match = kind == "modality" ? span.at("modality") == selector.at("modality") :
++                kind == "part" && std::find(parts.begin(), parts.end(), selector.at("part")) != parts.end();
++        if (match) {
++            const int start = span.at("start").get<int>(), end = span.at("end").get<int>();
++            if (!ranges.empty() && ranges.back().end == start) {
++                ranges.back().end = end;
++            } else {
++                ranges.push_back({start, end});
++            }
++        }
++    }
++    if (ranges.empty()) {
++        throw std::invalid_argument("An attention selector matches no tokens");
++    }
++    return ranges;
++}
++
++} // namespace
++
++server_embedding_input server_embedding_tokenize(const llama_vocab * vocab, mtmd_context * mctx,
++        const mtmd_helper_init_opt & opt, const json & body, int max_tokens) {
++    const auto & parts = body.at("parts");
++    if (!parts.is_array() || parts.empty() || parts.size() > 32) {
++        throw std::invalid_argument("Expected 1–32 input parts");
++    }
++    // The video context outlives the lazy bitmaps and their tokenization.
++    std::vector<mtmd_helper::video_ptr> videos;
++    mtmd::bitmaps bitmaps;
++    std::vector<input_group> groups;
++    json identities = json::array();
++    for (size_t i = 0; i < parts.size(); ++i) {
++        const auto & p = parts[i];
++        const std::string type = p.at("type");
++        if (type == "text") {
++            if (groups.empty() || groups.back().type != "text") {
++                groups.push_back({"text", {}, {}, nullptr});
++            }
++            const std::string text = p.at("text");
++            groups.back().text += text;
++            groups.back().parts.push_back(i);
++            identities.push_back(json::array({"text", text}));
++            continue;
++        }
++        if (!mctx || (type != "image" && type != "audio" && type != "video")) {
++            throw std::invalid_argument("Unsupported media part");
++        }
++        auto bytes = base64_decode(p.at("data").get<std::string>());
++        auto bitmap = mtmd_helper_bitmap_init_from_buf(mctx, bytes.data(), bytes.size(), false, opt);
++        if (bitmap.video_ctx) {
++            videos.emplace_back(bitmap.video_ctx);
++        }
++        if (!bitmap.bitmap) {
++            throw std::invalid_argument("Unable to decode a registered media item");
++        }
++        bitmaps.entries.emplace_back(bitmap.bitmap);
++        groups.push_back({type, {}, {int(i)}, bitmap.bitmap});
++        identities.push_back(json::array({type, p.at("media_id")}));
++    }
++
++    json spans = json::array();
++    json media_positions = json::array();
++    const auto emit_text = [&](const llama_token * tokens, size_t count, size_t offset, const input_group * group) {
++        const std::vector<int> empty;
++        for (size_t i = 0; i < count; ++i) {
++            const bool special = !group || group->type != "text" || control_token(vocab, tokens[i]);
++            add_span(spans, offset + i, offset + i + 1, special ? "control" : "text", group ? group->parts : empty);
++        }
++    };
++
++    server_embedding_input result;
++    if (bitmaps.entries.empty()) {
++        const auto tokens = common_tokenize(vocab, groups.front().text, true, true);
++        for (size_t i = 0; i < tokens.size(); ++i) {
++            const bool added = (i == 0 && llama_vocab_get_add_bos(vocab) && tokens[i] == llama_vocab_bos(vocab)) ||
++                    (i + 1 == tokens.size() && llama_vocab_get_add_eos(vocab) && tokens[i] == llama_vocab_eos(vocab));
++            emit_text(tokens.data() + i, 1, i, added ? nullptr : &groups.front());
++        }
++        result.tokens = server_tokens(tokens, false);
++    } else {
++        std::vector<mtmd_input_text> texts(groups.size());
++        std::vector<mtmd_input_part> input(groups.size());
++        std::vector<const mtmd_input_part *> pointers;
++        for (size_t i = 0; i < groups.size(); ++i) {
++            const auto & group = groups[i];
++            texts[i] = {group.text.data(), group.text.size(), false, true};
++            input[i] = {group.bitmap ? nullptr : &texts[i], group.bitmap};
++            pointers.push_back(&input[i]);
++        }
++
++        mtmd::input_chunks chunks(mtmd_input_chunks_init());
++        if (mtmd_tokenize_with_origins(mctx, chunks.ptr.get(), pointers.data(), pointers.size(), true) != 0) {
++            throw std::invalid_argument("Unable to tokenize the multimodal input");
++        }
++        size_t position = 0;
++        for (size_t i = 0; i < chunks.size(); ++i) {
++            const auto * chunk = chunks[i];
++            const size_t count = mtmd_input_chunk_get_n_tokens(chunk);
++            const int index = mtmd_input_chunk_get_origin(chunk);
++            const auto * group = index < 0 ? nullptr : &groups.at(index);
++            if (mtmd_input_chunk_get_type(chunk) == MTMD_INPUT_CHUNK_TYPE_TEXT) {
++                size_t text_count;
++                const auto * text = mtmd_input_chunk_get_tokens_text(chunk, &text_count);
++                emit_text(text, text_count, position, group);
++            } else {
++                if (!group) {
++                    throw std::runtime_error("Missing source part for a media token");
++                }
++                add_span(spans, position, position + count, group->type, group->parts);
++                media_positions.push_back(json::array({position, count, mtmd_input_chunk_get_n_pos(chunk)}));
++            }
++            position += count;
++        }
++        if (position > size_t(max_tokens)) {
++            throw std::invalid_argument("Input exceeds the model token limit after media expansion");
++        }
++        result.tokens = server_tokens(chunks, true);
++    }
++    if (result.tokens.empty() || result.tokens.size() > size_t(max_tokens) || result.tokens.pos_next() > max_tokens) {
++        throw std::invalid_argument("Input is empty or exceeds the model token limit");
++    }
++    llama_tokens token_ids;
++    token_ids.reserve(result.tokens.size());
++    for (size_t i = 0; i < result.tokens.size(); ++i) {
++        token_ids.push_back(result.tokens[i]);
++    }
++    const auto key = json::array({1, body.at("layout_namespace"), identities, token_ids, spans, media_positions}).dump();
++    result.layout = {{"layout_id", hash_sha256_hex(key.data(), key.size())},
++                     {"token_count", result.tokens.size()}, {"spans", std::move(spans)}};
++    return result;
++}
++
++std::shared_ptr<server_embedding_attention> server_embedding_parse_attention(
++        const json & body, const json & layout, const llama_model * model) {
++    const auto rules = body.value("rules", json::array());
++    const auto probes = body.value("probes", json::array());
++    if (!rules.is_array() || rules.size() > 64 || !probes.is_array() || probes.size() > 16) {
++        throw std::invalid_argument("Attention rule or probe limit exceeded");
++    }
++    const auto supplied = body.value("layout_id", std::string{});
++    if (!supplied.empty() && supplied != layout.at("layout_id").get<std::string>()) {
++        throw std::invalid_argument("layout_id does not match this tokenized input");
++    }
++    if (rules.empty() && probes.empty()) {
++        return nullptr;
++    }
++    auto result = std::make_shared<server_embedding_attention>();
++    result->selections.reserve(rules.size());
++    for (const auto & r : rules) {
++        const auto & q = r.at("query");
++        const auto & k = r.at("key");
++        if (supplied.empty() && (q.at("kind") == "range" || k.at("kind") == "range")) {
++            throw std::invalid_argument("A layout_id is required for raw token ranges");
++        }
++        const std::string action = r.at("action");
++        if (action != "allow" && action != "block") {
++            throw std::invalid_argument("Attention action must be allow or block");
++        }
++        auto & selection = result->selections.emplace_back(
++                server_embedding_attention::selection{select_tokens(q, layout), select_tokens(k, layout)});
++        result->rules.push_back({select_bits(r.at("layers"), llama_model_n_layer(model)),
++                                 select_bits(r.at("heads"), llama_model_n_head(model)),
++                                 selection.queries.data(), selection.queries.size(),
++                                 selection.keys.data(), selection.keys.size(), action == "allow"});
++    }
++    for (const auto & p : probes) {
++        result->probes.push_back({p.at("layer").get<int>(), p.at("head").get<int>(), p.at("query").get<int>(), p.at("key").get<int>(), false, false, 0});
++    }
++    return result;
++}
++
++json server_embedding_probes(const server_embedding_attention & attention) {
++    json probes = json::array();
++    for (const auto & p : attention.probes) {
++        if (!p.observed || !std::isfinite(p.probability)) {
++            throw std::runtime_error("Attention probe was not observed");
++        }
++        probes.push_back({{"layer", p.layer}, {"head", p.head}, {"query", p.query}, {"key", p.key},
++                          {"allowed", p.allowed}, {"probability", p.probability}});
++    }
++    return probes;
++}
+diff --git a/tools/server/server-embedding-local.h b/tools/server/server-embedding-local.h
+new file mode 100644
+--- /dev/null
++++ b/tools/server/server-embedding-local.h
+@@ -0,0 +1,27 @@
++#pragma once
++
++#include "server-common.h"
++
++struct server_embedding_attention {
++    struct selection {
++        std::vector<llama_attention_span> queries;
++        std::vector<llama_attention_span> keys;
++    };
++
++    std::vector<selection> selections;
++    std::vector<llama_attention_rule> rules;
++    std::vector<llama_attention_probe> probes;
++};
++
++struct server_embedding_input {
++    server_tokens tokens;
++    json layout;
++};
++
++server_embedding_input server_embedding_tokenize(const llama_vocab * vocab, mtmd_context * mctx,
++        const mtmd_helper_init_opt & opt, const json & body, int max_tokens);
++
++std::shared_ptr<server_embedding_attention> server_embedding_parse_attention(const json & body,
++        const json & layout, const llama_model * model);
++
++json server_embedding_probes(const server_embedding_attention & attention);
+diff --git a/tools/server/server-task.h b/tools/server/server-task.h
+--- a/tools/server/server-task.h
++++ b/tools/server/server-task.h
+@@ -161,6 +161,8 @@
+         bool filter_tool_calls = false);
+ };
+ 
++struct server_embedding_attention;
++
+ struct server_task {
+     int id = -1; // to be filled by server_queue
+ 
+@@ -182,6 +184,8 @@
+     // used by SERVER_TASK_TYPE_INFERENCE
+     task_params   params;
+     server_tokens tokens;
++    bool local_embedding = false;
++    std::shared_ptr<server_embedding_attention> attention;
+ 
+     // only used by CLI, this allow tokenizing CLI inputs on server side
+     // we need this because mtmd_context and vocab are not accessible outside of server_context
+diff --git a/tools/server/server.cpp b/tools/server/server.cpp
+--- a/tools/server/server.cpp
++++ b/tools/server/server.cpp
+@@ -635,6 +635,11 @@
+     }
+ 
+     server_register_routes(ctx_http, routes);
++    if (params.hostnames.size() == 1 && string_ends_with(params.hostnames.front(), ".sock")) {
++        ctx_http.post("/local/layout", ex_wrapper(routes.post_local_layout));
++        ctx_http.post("/local/embedding", ex_wrapper(routes.post_local_embedding));
++        SRV_INF("local embedding engine %s\n", llama_version());
++    }
+     server_register_stream_routes(ctx_http,
+         server_stream_make_get_handler(),
+         server_stream_make_lookup_handler(),

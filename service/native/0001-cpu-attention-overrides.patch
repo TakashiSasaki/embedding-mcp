@@ -1,0 +1,518 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,6 +18,10 @@
+ else()
+     # TODO: check that the current commit is tagged correctly according to the version specified above
+     set(LLAMA_VERSION "${LLAMA_VERSION_BASE}")
++endif()
++
++if (DEFINED LLAMA_LOCAL_BUILD)
++    string(APPEND LLAMA_VERSION "+local.${LLAMA_LOCAL_BUILD}")
+ endif()
+ 
+ message(STATUS "llama.cpp version: ${LLAMA_VERSION}")
+diff --git a/include/llama.h b/include/llama.h
+--- a/include/llama.h
++++ b/include/llama.h
+@@ -1106,6 +1106,37 @@
+     // Get the number of threads used for prompt and batch processing (multiple token).
+     LLAMA_API int32_t llama_n_threads_batch(struct llama_context * ctx);
+ 
++    // Local CPU embedding experiments. Indices are zero-based in the one complete sequence.
++    struct llama_attention_span {
++        int32_t start;
++        int32_t end;
++    };
++    struct llama_attention_rule {
++        uint64_t layers;
++        uint64_t heads;
++        const struct llama_attention_span * queries;
++        size_t n_queries;
++        const struct llama_attention_span * keys;
++        size_t n_keys;
++        bool allow;
++    };
++    struct llama_attention_probe {
++        int32_t layer;
++        int32_t head;
++        int32_t query;
++        int32_t key;
++        bool observed;
++        bool allowed;
++        float probability;
++    };
++
++    // The caller owns the rules and probes for the duration of this synchronous call.
++    // Returns a static error string for invalid attention settings, if supplied.
++    LLAMA_API int32_t llama_process_with_attention(
++            struct llama_context * ctx, struct llama_batch_ext * batch,
++            const struct llama_attention_rule * rules, size_t n_rules,
++            struct llama_attention_probe * probes, size_t n_probes, const char ** error);
++
+     // Set whether the context outputs embeddings or not
+     // TODO: rename to avoid confusion with llama_get_embeddings()
+     LLAMA_API void llama_set_embeddings(struct llama_context * ctx, bool embeddings);
+diff --git a/src/llama-context.cpp b/src/llama-context.cpp
+--- a/src/llama-context.cpp
++++ b/src/llama-context.cpp
+@@ -1674,7 +1674,41 @@
+     return res;
+ }
+ 
++static bool local_attention_eval(ggml_tensor * tensor, bool ask, void * user_data) {
++    auto & request = *static_cast<llama_attention_request *>(user_data);
++    const auto it = std::find_if(request.captures.begin(), request.captures.end(),
++                                [tensor](const auto & c) { return c.probabilities == tensor; });
++    if (ask || it == request.captures.end()) {
++        return it != request.captures.end();
++    }
++    for (size_t i = 0; i < request.n_probes; ++i) {
++        auto & p = request.probes[i];
++        if (p.layer != it->layer) {
++            continue;
++        }
++        int64_t key = p.key;
++        if (it->key_indices) {
++            ggml_backend_tensor_get(it->key_indices, &key, p.key * sizeof(key), sizeof(key));
++        }
++        const size_t head = it->mask->ne[2] == 1 ? 0 : p.head;
++        float value;
++        ggml_backend_tensor_get(it->mask, &value, key * it->mask->nb[0] + p.query * it->mask->nb[1] +
++                                head * it->mask->nb[2], sizeof(value));
++        ggml_backend_tensor_get(tensor, &p.probability, key * tensor->nb[0] + p.query * tensor->nb[1] +
++                                p.head * tensor->nb[2], sizeof(p.probability));
++        p.allowed = std::isfinite(value);
++        p.observed = true;
++    }
++    return true;
++}
++
+ llm_graph_result * llama_context::process_ubatch(const llama_ubatch & ubatch, llm_graph_type gtype, llama_memory_context_i * mctx, ggml_status & ret) {
++    if (attention && (ubatch.n_tokens != attention->n_tokens || ubatch.n_seqs_unq != 1)) {
++        attention->error = "Attention overrides require one complete sequence per microbatch";
++        ret = GGML_STATUS_FAILED;
++        return nullptr;
++    }
++
+     if (mctx && !mctx->apply()) {
+         LLAMA_LOG_ERROR("%s: failed to apply memory context\n", __func__);
+         ret = GGML_STATUS_FAILED;
+@@ -1704,11 +1738,21 @@
+         res->reset();
+ 
+         ggml_backend_sched_reset(sched.get());
+-        ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
++        if (attention && attention->n_probes) {
++            ggml_backend_sched_set_eval_callback(sched.get(), local_attention_eval, attention);
++        } else {
++            ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
++        }
+ 
+         //const auto t_start_us = ggml_time_us();
+ 
+-        gf = model.build_graph(gparams);
++        try {
++            gf = model.build_graph(gparams);
++        } catch (const llama_attention_error & error) {
++            attention->error = error.message;
++            ret = GGML_STATUS_FAILED;
++            return nullptr;
++        }
+ 
+         //LLAMA_LOG_INFO("graph build time: %.3f ms\n", (ggml_time_us() - t_start_us)/1000.0);
+ 
+@@ -1732,7 +1776,13 @@
+         //const auto t_start_us = ggml_time_us();
+ 
+         // FIXME this call causes a crash if any model inputs were not used in the graph and were therefore not allocated
+-        res->set_inputs(&ubatch);
++        try {
++            res->set_inputs(&ubatch);
++        } catch (const llama_attention_error & error) {
++            attention->error = error.message;
++            ret = GGML_STATUS_FAILED;
++            return nullptr;
++        }
+ 
+         //LLAMA_LOG_INFO("graph set inputs time: %.3f ms\n", (ggml_time_us() - t_start_us)/1000.0);
+     }
+@@ -2929,6 +2979,7 @@
+         /*.n_outputs   =*/ n_outputs,
+         /*.cb          =*/ graph_get_cb(),
+         /*.res         =*/ res,
++        /*.attention   =*/ attention,
+     };
+ }
+ 
+@@ -4982,6 +5033,92 @@
+     return -1;
+ }
+ 
++int llama_context::decode_with_attention(const llama_batch_ext & batch, llama_attention_request & request) {
++    if (cparams.flash_attn || cparams.pipeline_parallel || !cparams.embeddings || model.hparams.use_alibi ||
++            (model.arch != LLM_ARCH_BERT && model.arch != LLM_ARCH_QWEN3 && model.arch != LLM_ARCH_GEMMA_EMBEDDING2)) {
++        request.error = "Attention overrides require a supported CPU embedding model with flash attention disabled";
++        return -1;
++    }
++    if (attention || batch.tokens.empty() || batch.tokens.size() > cparams.n_ubatch || request.n_rules > 64 || request.n_probes > 16) {
++        request.error = "Invalid attention request size";
++        return -1;
++    }
++    const auto & seq_ids = batch.tokens.front().seq_ids;
++    const auto max_seq = cparams.kv_unified ? LLAMA_MAX_SEQ : cparams.n_seq_max;
++    if (seq_ids.size() != 1 || seq_ids.front() < 0 || uint32_t(seq_ids.front()) >= max_seq ||
++            (memory && memory->seq_pos_max(seq_ids.front()) >= 0)) {
++        request.error = "Attention overrides require one sequence with an empty cache";
++        return -1;
++    }
++    request.n_tokens = batch.tokens.size();
++    const int layers = model.hparams.n_layer();
++    const int heads = model.hparams.n_head();
++    if (layers < 1 || layers > 64 || heads < 1 || heads > 64) {
++        request.error = "Unsupported layer or query head count";
++        return -1;
++    }
++    const auto valid_ranges = [&](const llama_attention_span * spans, size_t n) {
++        if (!spans || !n || n > request.n_tokens) {
++            return false;
++        }
++        int end = 0;
++        for (size_t i = 0; i < n; ++i) {
++            if (spans[i].start < end || spans[i].end <= spans[i].start || uint64_t(spans[i].end) > request.n_tokens) {
++                return false;
++            }
++            end = spans[i].end;
++        }
++        return true;
++    };
++    for (size_t i = 0; i < request.n_rules; ++i) {
++        const auto & r = request.rules[i];
++        if (!r.layers || (layers < 64 && r.layers >> layers) || !r.heads || (heads < 64 && r.heads >> heads) ||
++                !valid_ranges(r.queries, r.n_queries) || !valid_ranges(r.keys, r.n_keys)) {
++            request.error = "Invalid attention rule coordinates";
++            return -1;
++        }
++    }
++    for (size_t i = 0; i < request.n_probes; ++i) {
++        const auto & p = request.probes[i];
++        if (p.layer < 0 || p.layer >= layers || p.head < 0 || p.head >= heads || p.query < 0 || p.key < 0 ||
++                uint64_t(p.query) >= request.n_tokens || uint64_t(p.key) >= request.n_tokens) {
++            request.error = "Invalid attention probe coordinates";
++            return -1;
++        }
++    }
++
++    // Reserve the ordinary graph before setting the request pointer. Its reserve
++    // batches may have a different sequence count and token positions.
++    sched_reserve();
++    attention = &request;
++    const auto reset = [&]() {
++        attention = nullptr;
++        gf_res_prev_active = nullptr;
++        ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
++    };
++    try {
++        const int ret = decode(batch);
++        synchronize();
++        reset();
++        return ret;
++    } catch (...) {
++        reset();
++        throw;
++    }
++}
++
++int32_t llama_process_with_attention(
++        llama_context * ctx, llama_batch_ext * batch,
++        const llama_attention_rule * rules, size_t n_rules,
++        llama_attention_probe * probes, size_t n_probes, const char ** error) {
++    llama_attention_request request{rules, n_rules, probes, n_probes, 0, nullptr, {}};
++    const int32_t ret = ctx->decode_with_attention(*batch, request);
++    if (error) {
++        *error = request.error;
++    }
++    return ret;
++}
++
+ //
+ // ext
+ //
+diff --git a/src/llama-context.h b/src/llama-context.h
+--- a/src/llama-context.h
++++ b/src/llama-context.h
+@@ -153,6 +153,7 @@
+ 
+     int encode(const llama_batch_ext & batch_inp);
+     int decode(const llama_batch_ext & batch_inp);
++    int decode_with_attention(const llama_batch_ext & batch, llama_attention_request & request);
+ 
+     // compat version
+     int encode(const llama_batch & batch_inp);
+@@ -452,6 +453,7 @@
+ 
+     // env: LLAMA_GRAPH_REUSE_DISABLE
+     bool graph_reuse_disable = false;
++    llama_attention_request * attention = nullptr;
+ 
+     // true after the prism.hadamard coverage check passes on a reserved graph
+     bool hadamard_verified = false;
+diff --git a/src/llama-graph.cpp b/src/llama-graph.cpp
+--- a/src/llama-graph.cpp
++++ b/src/llama-graph.cpp
+@@ -1608,6 +1608,7 @@
+     samplers         (params.samplers),
+     cb_func          (params.cb),
+     res              (params.res),
++    attention        (params.attention),
+     ctx0             (res->get_ctx()),
+     gf               (res->get_gf()) {
+         res->set_params(params);
+@@ -2987,6 +2988,142 @@
+     return pos_bias;
+ }
+ 
++// The stock input writes the native plane first. Copy it per distinct head
++// selection, then edit only the cells for keys owned by this complete sequence.
++class llm_graph_input_attention_override : public llm_graph_input_i {
++public:
++    const llama_attention_request & request;
++    const ggml_tensor * native;
++    const ggml_tensor * key_indices;
++    std::vector<std::vector<size_t>> selected;
++    ggml_tensor * effective;
++
++    llm_graph_input_attention_override(const llama_attention_request & request, const ggml_tensor * native,
++            const ggml_tensor * key_indices, std::vector<std::vector<size_t>> selected, ggml_tensor * effective)
++        : request(request), native(native), key_indices(key_indices), selected(std::move(selected)), effective(effective) {}
++
++    void set_input(const llama_ubatch * ubatch) override {
++        if (!native->buffer || !ggml_backend_buffer_is_host(native->buffer) ||
++                !ggml_backend_buffer_is_host(effective->buffer) ||
++                (key_indices && (!key_indices->buffer || !ggml_backend_buffer_is_host(key_indices->buffer)))) {
++            throw llama_attention_error{"Attention overrides require host mask and key tensors"};
++        }
++
++        const size_t n_keys = native->ne[0];
++        const size_t n_queries = ubatch->n_tokens;
++        const auto * kv_indices = key_indices ? static_cast<const int64_t *>(key_indices->data) : nullptr;
++        std::vector<size_t> keys(n_queries);
++        std::vector<bool> occupied(n_keys);
++        for (size_t i = 0; i < n_queries; ++i) {
++            const auto index = kv_indices ? kv_indices[i] : int64_t(i);
++            if (index < 0 || uint64_t(index) >= n_keys || occupied[index]) {
++                throw llama_attention_error{"Invalid key placement for the complete sequence"};
++            }
++            keys[i] = index;
++            occupied[index] = true;
++        }
++
++        const auto * original = static_cast<const float *>(native->data);
++        auto * plane = static_cast<float *>(effective->data);
++        for (const auto & head_rules : selected) {
++            std::copy_n(original, n_queries * n_keys, plane);
++            for (size_t rule_index : head_rules) {
++                const auto & rule = request.rules[rule_index];
++                for (size_t q = 0; q < rule.n_queries; ++q) {
++                    for (int query = rule.queries[q].start; query < rule.queries[q].end; ++query) {
++                        auto * row = plane + query * n_keys;
++                        for (size_t k = 0; k < rule.n_keys; ++k) {
++                            for (int key = rule.keys[k].start; key < rule.keys[k].end; ++key) {
++                                auto & cell = row[keys[key]];
++                                if (!rule.allow) {
++                                    cell = -INFINITY;
++                                } else if (cell == -INFINITY) {
++                                    cell = 0.0f;
++                                }
++                            }
++                        }
++                    }
++                }
++            }
++            for (size_t query = 0; query < n_queries; ++query) {
++                const auto * row = plane + query * n_keys;
++                if (std::none_of(keys.begin(), keys.end(), [&](size_t key) { return std::isfinite(row[key]); })) {
++                    throw llama_attention_error{"An attention rule leaves a query with no visible key"};
++                }
++            }
++            plane += n_queries * n_keys;
++        }
++    }
++};
++
++ggml_tensor * llm_graph_context::ctx_attention_mask(
++        ggml_tensor * native, const ggml_tensor * key_indices, int layer, int heads) const {
++    if (!attention || !attention->n_rules) {
++        return native;
++    }
++    if (!native || native->type != GGML_TYPE_F32 || native->ne[1] != n_tokens ||
++            native->ne[2] != 1 || native->ne[3] != 1 || heads < 1 || heads > 64 || layer < 0 || layer >= 64) {
++        throw llama_attention_error{"Unsupported attention mask shape"};
++    }
++
++    std::vector<std::vector<size_t>> selected(heads);
++    bool any = false;
++    for (size_t i = 0; i < attention->n_rules; ++i) {
++        const auto & rule = attention->rules[i];
++        if (!(rule.layers & (uint64_t{1} << layer))) {
++            continue;
++        }
++        for (int h = 0; h < heads; ++h) {
++            if (rule.heads & (uint64_t{1} << h)) {
++                selected[h].push_back(i);
++                any = true;
++            }
++        }
++    }
++    if (!any) {
++        return native;
++    }
++    if (std::all_of(selected.begin() + 1, selected.end(), [&](const auto & h) { return h == selected.front(); })) {
++        selected.resize(1);
++    }
++    for (const auto * mask : attention_masks) {
++        if (mask->native == native && mask->key_indices == key_indices && mask->selected == selected) {
++            return mask->effective;
++        }
++    }
++
++    attention_mask_bytes += ggml_nbytes(native) * selected.size();
++    if (attention_mask_bytes > 256 * 1024 * 1024) {
++        throw llama_attention_error{"Padded attention masks exceed the 256 MiB limit"};
++    }
++    for (const auto & head_rules : selected) {
++        for (size_t i : head_rules) {
++            const auto & r = attention->rules[i];
++            uint64_t queries = 0;
++            uint64_t keys = 0;
++            for (size_t q = 0; q < r.n_queries; ++q) {
++                queries += r.queries[q].end - r.queries[q].start;
++            }
++            for (size_t k = 0; k < r.n_keys; ++k) {
++                keys += r.keys[k].end - r.keys[k].start;
++            }
++            attention_mask_writes += queries * keys;
++            if (attention_mask_writes > 256 * 1024 * 1024) {
++                throw llama_attention_error{"Attention rule coverage exceeds the edit limit"};
++            }
++        }
++    }
++    // Retain the native input even when every layer uses an override.
++    ggml_build_forward_expand(gf, native);
++    auto * effective = ggml_new_tensor_4d(ctx0, GGML_TYPE_F32, native->ne[0], n_tokens, selected.size(), 1);
++    ggml_set_input(effective);
++    cb(effective, "local_kq_mask", layer);
++    auto input = std::make_unique<llm_graph_input_attention_override>(*attention, native, key_indices, std::move(selected), effective);
++    attention_masks.push_back(input.get());
++    res->add_input(std::move(input));
++    return effective;
++}
++
+ ggml_tensor * llm_graph_context::build_attn_mha(
+          ggml_tensor * q,
+          ggml_tensor * k,
+@@ -2998,7 +3135,8 @@
+          ggml_tensor * v_mla,
+              int64_t   n_kv_max,
+                float   kq_scale,
+-                 int   il) const {
++                 int   il,
++   const ggml_tensor * key_indices) const {
+     const bool v_trans = v->nb[1] > v->nb[2];
+ 
+     // split the batch into streams if needed
+@@ -3100,7 +3238,13 @@
+             cb(kq, "kq_plus_kq_b", il);
+         }
+ 
++        kq_mask = ctx_attention_mask(kq_mask, key_indices, il, q->ne[2]);
+         kq = ggml_soft_max_ext(ctx0, kq, kq_mask, kq_scale, hparams.f_max_alibi_bias);
++        if (attention && attention->n_probes &&
++                std::any_of(attention->probes, attention->probes + attention->n_probes,
++                            [il](const auto & p) { return p.layer == il; })) {
++            attention->captures.push_back({kq, kq_mask, key_indices, il});
++        }
+         ggml_soft_max_add_sinks(kq, sinks);
+         cb(kq, "kq_soft_max", il);
+ 
+@@ -3311,7 +3455,7 @@
+     const auto & kq_mask = inp->self_attn_mask.raw;
+     const auto & kv_rows = inp->self_attn_mask.rows;
+ 
+-    ggml_tensor * cur = build_attn_mha(q, k, v, kq_b, kq_mask, kv_rows, sinks, v_mla, 0, kq_scale, il);
++    ggml_tensor * cur = build_attn_mha(q, k, v, kq_b, kq_mask, kv_rows, sinks, v_mla, 0, kq_scale, il, inp->get_k_idxs());
+     cb(cur, "kqv_out", il);
+ 
+     if (inp->self_v_rot[il]) {
+diff --git a/src/llama-graph.h b/src/llama-graph.h
+--- a/src/llama-graph.h
++++ b/src/llama-graph.h
+@@ -788,6 +788,29 @@
+ using llm_graph_cb = std::function<void(const llama_ubatch & ubatch, ggml_tensor * cur, const char * name, int il)>;
+ 
+ class llm_graph_result;
++
++struct llama_attention_error {
++    const char * message;
++};
++
++struct llama_attention_request {
++    const llama_attention_rule * rules;
++    size_t n_rules;
++    llama_attention_probe * probes;
++    size_t n_probes;
++    size_t n_tokens;
++    const char * error = nullptr;
++
++    struct capture {
++        ggml_tensor * probabilities;
++        const ggml_tensor * mask;
++        const ggml_tensor * key_indices;
++        int layer;
++    };
++    std::vector<capture> captures;
++};
++
++class llm_graph_input_attention_override;
+ 
+ struct llm_graph_params {
+     llm_arch arch = LLM_ARCH_UNKNOWN;
+@@ -837,10 +860,14 @@
+     llm_graph_cb cb;
+ 
+     llm_graph_result * res;
++    llama_attention_request * attention;
+ 
+     // return true if the "other" params would result in a graph with the same topology as with the current params
+     //   having the same topology allows us to reuse the graph in some cases
+     bool allow_reuse(const llm_graph_params & other) const {
++        if (attention || other.attention) {
++            return false;
++        }
+         // first check the ubatch
+         bool can_reuse_ubatch =
+             ubatch.equal_seqs() == other.ubatch.equal_seqs() &&
+@@ -1084,6 +1111,13 @@
+     const llm_graph_cb & cb_func;
+ 
+     llm_graph_result * res;
++
++    llama_attention_request * attention;
++    mutable std::vector<llm_graph_input_attention_override *> attention_masks;
++    mutable size_t attention_mask_bytes = 0;
++    mutable uint64_t attention_mask_writes = 0;
++
++    ggml_tensor * ctx_attention_mask(ggml_tensor * native, const ggml_tensor * key_indices, int layer, int heads) const;
+ 
+     ggml_context * ctx0 = nullptr;
+     ggml_cgraph  * gf   = nullptr;
+@@ -1276,7 +1310,8 @@
+             ggml_tensor * v_mla,   // [n_embd_head_v_mla, n_embd_head_v, n_head_v]
+                 int64_t   n_kv_max,
+                   float   kq_scale,
+-                    int   il) const;
++                    int   il,
++            const ggml_tensor * key_indices = nullptr) const;
+ 
+     llm_graph_input_attn_no_cache * build_attn_inp_no_cache() const;
+ 

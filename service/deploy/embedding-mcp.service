@@ -1,0 +1,24 @@
+[Unit]
+Description=CPU embedding MCP server
+
+[Service]
+Type=exec
+WorkingDirectory=/data/cpu-embedding-experiments/main
+ExecStart=/data/cpu-embedding-experiments/main/service/.venv/bin/python /data/cpu-embedding-experiments/main/service/main.py --state-dir %S/embedding-mcp --runtime-dir %t/embedding-mcp
+EnvironmentFile=-%h/.config/embedding-mcp/service.env
+StateDirectory=embedding-mcp
+StateDirectoryMode=0700
+RuntimeDirectory=embedding-mcp
+RuntimeDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+MemoryHigh=4G
+MemoryMax=5G
+KillMode=control-group
+TimeoutStopSec=15s
+Restart=on-failure
+RestartSec=2s
+
+[Install]
+WantedBy=default.target

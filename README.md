@@ -27,6 +27,10 @@ python3 experiments/run.py text e5
 - Transformersと非BERTの実験には `uv` が必要です。`uv sync --locked --python /usr/bin/python3` で、Python 3.12とCPU版PyTorchを含む依存関係を準備できます。MiniLMのマスク変更は `reference minilm`、LaBSEのトークン化とDense＋Tanhの切り分けは `reference labse` で実行します。
 - 全重みを取得する場合は `python3 experiments/fetch.py all` を使います。ダウンロードは約6.1 GBで、展開後のランタイムとPython環境にも空き容量が要ります。
 
+## MCP サーバー
+
+層・ヘッド別マスク、ローカルメディア、永続ジョブを使う場合は [CPU 埋め込み MCP の手順](service/README.md) を参照してください。
+
 ## 結果の記録
 
 - [初回の実測](results/2026-11-08-baseline.json) と [再実行の検証結果](results/2026-11-08-reproduction.json) を保存しています。[日英の入力セット](fixtures/retrieval-ja-en-v1.json) は10トピックの小規模な比較用です。テキスト比較では128トークンの上限を指定しているので、新しい入力も短文から試せます。

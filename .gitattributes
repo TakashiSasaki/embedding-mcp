@@ -1,1 +1,2 @@
 uv.lock text diff
+service/native/*.patch -whitespace
