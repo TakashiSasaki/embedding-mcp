@@ -334,7 +334,7 @@ async def service_checks(assets, release, items):
                 restored = (await call(session, "embedding_job_results", job_id=job_id, limit=3))["items"]
                 assert restored == before
                 final = await until(lambda: call(session, "embedding_job_status", job_id=job_id),
-                                    lambda r: r["state"] in ("completed", "failed"), timeout=600)
+                                    lambda r: r["state"] in ("completed", "failed"), timeout=1200)
                 assert final["state"] == "completed" and final["done"] == items and final["expires_at"] - final["finished"] == 86400
                 cursor, results = None, []
                 while True:

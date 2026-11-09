@@ -161,8 +161,8 @@ diff --git a/src/llama-context.cpp b/src/llama-context.cpp
 +    }
 +    const auto & seq_ids = batch.tokens.front().seq_ids;
 +    const auto max_seq = cparams.kv_unified ? LLAMA_MAX_SEQ : cparams.n_seq_max;
-+    if (seq_ids.size() != 1 || seq_ids.front() < 0 || uint32_t(seq_ids.front()) >= max_seq ||
-+            (memory && memory->seq_pos_max(seq_ids.front()) >= 0)) {
++    const llama_seq_id seq_id = seq_ids.size() == 1 ? *seq_ids.begin() : -1;
++    if (seq_id < 0 || uint32_t(seq_id) >= max_seq || (memory && memory->seq_pos_max(seq_id) >= 0)) {
 +        request.error = "Attention overrides require one sequence with an empty cache";
 +        return -1;
 +    }
