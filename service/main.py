@@ -12,11 +12,12 @@ from typing import Annotated, Any
 
 from mcp.server.fastmcp import FastMCP
 from mcp.server.fastmcp.exceptions import ToolError
-from mcp.server.transport_security import TransportSecuritySettings
+from mcp.server.transport_security import TransportSecurityMiddleware, TransportSecuritySettings
 from mcp.types import ToolAnnotations
 from pydantic import Field
 from starlette.datastructures import Headers
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
+from starlette.routing import Route
 import uvicorn
 
 from contracts import (
@@ -85,6 +86,10 @@ def version(worker_version):
 
 def create_app(scheduler, port, token):
     worker, store = scheduler.worker, scheduler.storage
+    security = TransportSecuritySettings(
+        allowed_hosts=[f"127.0.0.1:{port}", f"localhost:{port}", PUBLIC_HOST],
+        allowed_origins=[f"http://127.0.0.1:{port}", f"http://localhost:{port}", f"https://{PUBLIC_HOST}"],
+    )
     mcp = FastMCP(
         "CPU Embedding Experiments",
         instructions=(
@@ -92,10 +97,7 @@ def create_app(scheduler, port, token):
             "Register media before passing its ID. Use durable jobs for hundreds of inputs."
         ),
         stateless_http=True, json_response=True, max_request_body_size=8 * 1024 * 1024,
-        transport_security=TransportSecuritySettings(
-            allowed_hosts=[f"127.0.0.1:{port}", f"localhost:{port}", PUBLIC_HOST],
-            allowed_origins=[f"http://127.0.0.1:{port}", f"http://localhost:{port}", f"https://{PUBLIC_HOST}"],
-        ),
+        transport_security=security,
     )
     # FastMCP 1.30 forwards its low-level Server version in the MCP handshake.
     mcp._mcp_server.version = version(worker.version)
@@ -186,6 +188,16 @@ def create_app(scheduler, port, token):
             return call(store.register_media, mime_type, data)
 
     app = mcp.streamable_http_app()
+    transport_security = TransportSecurityMiddleware(security)
+
+    async def no_standalone_stream(request):
+        rejection = await transport_security.validate_request(request)
+        if rejection is not None:
+            return rejection
+        return Response(status_code=405, headers={"Allow": "POST"})
+
+    # All tool responses use POST. Decline optional GET streams before FastMCP opens one.
+    app.router.routes.insert(0, Route(mcp.settings.streamable_http_path, no_standalone_stream, methods=["GET", "HEAD"]))
 
     async def health(_):
         healthy = scheduler.task is not None and not scheduler.task.done()
@@ -264,6 +276,8 @@ def main():
         parser.error("Invalid port, thread count, idle duration, memory threshold or job retention")
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s %(message)s")
     logging.getLogger("httpx").setLevel(logging.WARNING)
+    # Each stateless request ends a transient transport and logs "Terminating session: None".
+    logging.getLogger("mcp.server.streamable_http").setLevel(logging.WARNING)
     asyncio.run(serve(args))
 
 

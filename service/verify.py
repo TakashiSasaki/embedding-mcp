@@ -279,6 +279,12 @@ async def service_checks(assets, release, items):
 
         process = start()
         try:
+            async with httpx.AsyncClient(base_url=url, timeout=2, trust_env=False) as client:
+                for method in ("GET", "HEAD"):
+                    response = await client.request(method, "/mcp", headers={"Accept": "text/event-stream"})
+                    assert response.status_code == 405 and response.headers.get("allow") == "POST"
+                assert (await client.get("/mcp", headers={"Origin": "https://example.invalid"})).status_code == 403
+                assert (await client.get("/mcp", headers={"Host": "example.invalid"})).status_code == 421
             async with mcp_client(url + "/mcp") as (session, version):
                 assert len((await session.list_tools()).tools) == 10
                 assert (await call(session, "runtime_status"))["pid"] is None

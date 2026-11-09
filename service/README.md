@@ -2,6 +2,8 @@
 
 MCP の入口は `127.0.0.1:18765/mcp` の Streamable HTTP です。Python がジョブとメディアを管理し、llama.cpp が埋め込みを計算します。ワーカーとの通信にはサービスユーザー専用の Unix ソケットを使います。
 
+ツールの結果は `POST /mcp` の JSON 応答で返します。独立した SSE 待ち受け用の `GET /mcp` には `405 Method Not Allowed` を返します。
+
 ## 準備
 
 Linux ARM64、Python 3.12、Git、CMake、C/C++ コンパイラ、make、curl、FFmpeg、uv が必要です。リポジトリのルートで実行します。
