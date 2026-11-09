@@ -1,4 +1,20 @@
 embedding-mcp.moukaeritai.work {
+	log embedding_mcp {
+		output file /home/ubuntu/caddy/logs/embedding-mcp-access.log {
+			mode 0600
+			roll_size 2MiB
+			roll_keep 2
+			roll_keep_for 72h
+		}
+		format filter {
+			wrap json
+			fields {
+				request>headers delete
+				request>uri regexp "[?].*$" ""
+				resp_headers delete
+			}
+		}
+	}
 	@trusted_mcp {
 		path /mcp
 		client_ip {args[:]}
