@@ -40,6 +40,8 @@ curl --fail http://127.0.0.1:18765/health
 | `cancel_embedding_job` | 処理中の項目が終わった時点で停止 |
 | `register_media` | PNG、JPEG、PCM WAV、H.264 MP4 を登録し、内容の SHA-256 に基づく ID を取得 |
 
+参照系と同期の入力検査・埋め込みには `readOnlyHint: true` を付けます。同期処理はモデルを一時的にロードし、結果を呼び出し元に返します。ジョブの登録・取消とメディア登録は SQLite の保存状態を変更します。
+
 テキストは文字列で指定します。順序付き入力は `{"parts":[{"type":"text","text":"赤い画像"},{"type":"image","media_id":"media_…"}]}` です。メディアの `type` は `image`、`audio`、`video` のいずれかです。Gemma 2 がメディアに対応します。登録は 1 件 4 MiB、画像の各辺は 2,048 px、WAV は 16-bit PCM で最長 20 秒、MP4 は最大 1,920×1,080・60 fps・10 秒です。1 入力につき最大 4 パート、計 8 MiB までです。登録内容は再起動をまたいで保持し、合計上限は 512 MiB です。
 
 `embed_batch` と `submit_embedding_job` の `inputs` には文字列、`parts` オブジェクト、または項目固有のマスクを含む `{"input":…,"mask":…}` を混在できます。ベクトルは `float` または little-endian float32 の `f32_base64` です。モデルのプーリングと L2 正規化を使います。E5 の `query: ` や `passage: ` などは呼び出し側で付けます。

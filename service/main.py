@@ -122,13 +122,13 @@ def create_app(scheduler, port, token):
         """Read memory availability, the worker profile and PID, last unload reason, and queue state."""
         return scheduler.status()
 
-    @mcp.tool(annotations=WRITE)
+    @mcp.tool(annotations=READ)
     async def inspect_input(model: MODEL_IDS, input: Input) -> dict[str, Any]:
         """Return the layout ID and half-open zero-based token spans for the expanded input."""
         item = call(normalized_item, input)
         return checked((await scheduler.interactive(model, [item], inspect=True))[0])
 
-    @mcp.tool(annotations=WRITE)
+    @mcp.tool(annotations=READ)
     async def embed(model: MODEL_IDS, input: Input, mask: AttentionMask | None = None,
                     encoding: ENCODINGS = "float") -> dict[str, Any]:
         """Embed one text or mixed input using native pooling and optional ordered layer/head rules."""
@@ -136,7 +136,7 @@ def create_app(scheduler, port, token):
         result = checked((await scheduler.interactive(model, [item]))[0])
         return render_embedding(result, encoding)
 
-    @mcp.tool(annotations=WRITE)
+    @mcp.tool(annotations=READ)
     async def embed_batch(model: MODEL_IDS, inputs: Annotated[list[BatchItem], Field(min_length=1, max_length=MAX_BATCH)],
                           encoding: ENCODINGS = "float") -> dict[str, Any]:
         """Embed up to 16 items in input order, returning a vector or an error per item."""
