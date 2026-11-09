@@ -4,6 +4,8 @@ MCP の入口は `127.0.0.1:18765/mcp` の Streamable HTTP です。Python が�
 
 ツールの結果は `POST /mcp` の JSON 応答で返します。独立した SSE 待ち受け用の `GET /mcp` には `405 Method Not Allowed` を返します。
 
+コンポーネントの分担、ワーカーを一つにした理由、再起動時の復旧条件は [設計文書](DESIGN.md) を参照してください。
+
 ## 準備
 
 Linux ARM64、Python 3.12、Git、CMake、C/C++ コンパイラ、make、curl、FFmpeg、uv が必要です。リポジトリのルートで実行します。
@@ -18,7 +20,31 @@ service/.venv/bin/python service/main.py
 
 `build_worker.py` は [b12110 の固定ソース](native/upstream.json) を SHA-256 で検証し、[パッチ](native/) を適用して CPU 向けにビルドします。実行ファイルとライブラリのハッシュをリリースに記録し、`.assets/embedding-worker/current` を更新します。実行中のサービスは起動時に選んだリリースを使います。更新はフロントを再起動して反映します。モデルの置き場所には実験と同じ `EMBED_ASSET_CACHE` を指定できます。
 
-`systemd --user` で常駐させる場合は、手動起動を終了してからユニットを設置します。
+別のシェルから MCP SDK で接続を確認できます。以下はモデル一覧を表示します。この呼び出しではモデルのロードは発生しません。
+
+```bash
+service/.venv/bin/python - <<'PY'
+import asyncio
+
+from mcp import ClientSession
+from mcp.client.streamable_http import streamable_http_client
+
+
+async def main():
+    async with streamable_http_client("http://127.0.0.1:18765/mcp") as (read, write, _):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            result = await session.call_tool("list_models", {})
+            if result.isError:
+                raise RuntimeError(result.content)
+            print([model["id"] for model in result.structuredContent["models"]])
+
+
+asyncio.run(main())
+PY
+```
+
+`systemd --user` で常駐させる場合は、手動起動を終了してからユニットを設置します。同梱のユニットは既存ホストの worktree パスを参照します。別の場所にクローンした場合は、インストール先のユニットで `WorkingDirectory` と `ExecStart` を合わせます。
 
 ```bash
 install -Dm644 service/deploy/embedding-mcp.service ~/.config/systemd/user/embedding-mcp.service
@@ -84,7 +110,7 @@ curl --fail http://127.0.0.1:18765/health
 
 ### 再検証
 
-`python3 experiments/fetch.py runtime` で比較用の上流実行ファイルを用意します。`service/.venv/bin/python service/verify.py all --out runs/mcp-verification.json` で、固定した 4 モデルの出力比較、マスクの適用、1,000 件の再開、保持期限、アイドルとメモリ閾値を検証します。`native` と `service` で範囲を分けられます。
+`python3 experiments/fetch.py runtime` で比較用の上流実行ファイルを用意します。`service/.venv/bin/python service/verify.py all --out runs/mcp-verification.json` で、固定した 4 モデルの出力比較、マスクの適用、1,000 件の再開、保持期限、アイドルとメモリ閾値を検証します。`native` と `service` で範囲を分けられます。フロントやスケジューラーの変更は、隔離されたポートと状態ディレクトリを使う `service/.venv/bin/python service/verify.py service --items 32` から確認できます。
 
 [初回の検証結果](../results/2026-11-09-embedding-mcp.json) に、配備版の比較と再起動試験、および先行ビルドでの 1,000 件の復旧を記録しています。
 
