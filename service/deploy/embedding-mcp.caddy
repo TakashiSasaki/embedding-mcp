@@ -15,10 +15,24 @@ embedding-mcp.moukaeritai.work {
 			}
 		}
 	}
+	# RFC 8414 / SEP-233 OAuth probe: respond 404 immediately so clients know no OAuth is needed
+	handle /.well-known/oauth-protected-resource* {
+		respond "Not Found" 404
+	}
+
+	# Preflight HEAD requests on MCP endpoint: respond 200 immediately
+	@mcp_head {
+		path /mcp*
+		method HEAD
+	}
+	handle @mcp_head {
+		header Content-Type "application/json"
+		respond 200
+	}
+
 	@trusted_mcp {
-		path /mcp
-		# Gemini POSTs use the Google fetcher range. The narrower /29 covers the observed HEAD and GET probes.
-		client_ip {args[:]} 66.249.82.128/27 108.177.69.32/29
+		path /mcp /mcp/*
+		client_ip {args[:]} 66.249.64.0/19 66.102.0.0/20 64.233.160.0/19 72.14.192.0/18 209.85.128.0/17 108.177.0.0/17 172.217.0.0/16 142.250.0.0/15 192.178.0.0/15 74.125.0.0/16 173.194.0.0/16 216.239.32.0/19 216.58.192.0/19
 	}
 	handle @trusted_mcp {
 		reverse_proxy 127.0.0.1:18765 {
