@@ -101,4 +101,6 @@ systemctl --user enable --now tunnel-client@embedding-mcp.service
 
 任意の Bearer 認証を有効にするには、サービスユーザーだけが読めるファイルにトークンを置き、`~/.config/embedding-mcp/service.env` の `EMBED_MCP_BEARER_FILE` に絶対パスを指定します。Caddy 経由のクライアントは `Authorization: Bearer …` を送り、トンネルはランタイムと発見用の両方に同じ Authorization ヘッダーの秘密参照を設定します。トンネル用参照ファイルには `Bearer ` を含む値を入れます。
 
-Caddy とトンネルの利用者は同じジョブとメディアの保管領域を共有します。両経路は同じ運用主体のアクセスに限定します。
+Caddy の `/mcp` には、Gemini の POST を観測した `66.249.82.128/27` と、HEAD・GET を観測した `108.177.69.32/29` を追加しています。後者は Google が案内する `108.177.64.0/20` の一部です。[Google のフェッチャー IP 範囲](https://developers.google.com/static/crawling/ipranges/user-triggered-fetchers-google.json) · [Connected Apps の接続要件](https://developers.google.com/connected-apps/gpc/prerequisites)
+
+Caddy とトンネルの利用者は同じジョブとメディアの保管領域を共有します。

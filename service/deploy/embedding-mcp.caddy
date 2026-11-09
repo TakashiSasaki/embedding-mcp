@@ -17,7 +17,8 @@ embedding-mcp.moukaeritai.work {
 	}
 	@trusted_mcp {
 		path /mcp
-		client_ip {args[:]}
+		# Gemini POSTs use the Google fetcher range. The narrower /29 covers the observed HEAD and GET probes.
+		client_ip {args[:]} 66.249.82.128/27 108.177.69.32/29
 	}
 	handle @trusted_mcp {
 		reverse_proxy 127.0.0.1:18765 {
