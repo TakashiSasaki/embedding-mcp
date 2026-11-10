@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "sense": [
+    {
+      "id": "ja-jaguar", "language": "ja", "target": "ジャガー",
+      "a": {"companions": ["ヒョウ", "チーター"], "reference": "食肉目ネコ科の大型哺乳類"},
+      "b": {"companions": ["BMW", "ベンツ"], "reference": "英国の高級自動車メーカー"}
+    },
+    {
+      "id": "ja-mouse", "language": "ja", "target": "マウス",
+      "a": {"companions": ["ハムスター", "ラット"], "reference": "げっ歯類の小動物"},
+      "b": {"companions": ["キーボード", "トラックパッド"], "reference": "パソコンのポインティング機器"}
+    },
+    {
+      "id": "ja-coat", "language": "ja", "target": "コート",
+      "a": {"companions": ["防寒着", "マフラー"], "reference": "寒さを防ぐために羽織る衣服"},
+      "b": {"companions": ["テニス", "ラケット"], "reference": "球技をするために線で区切られた場所"}
+    },
+    {
+      "id": "ja-kaki", "language": "ja", "target": "カキ",
+      "a": {"companions": ["アサリ", "ホタテ"], "reference": "海で養殖される食用の二枚貝"},
+      "b": {"companions": ["ブドウ", "バナナ"], "reference": "秋に木に実る橙色の果物"}
+    },
+    {
+      "id": "ja-light", "language": "ja", "target": "ライト",
+      "a": {"companions": ["照明", "蛍光灯"], "reference": "暗い場所を明るくする器具"},
+      "b": {"companions": ["センター", "レフト"], "reference": "野球で一塁側の外野を守るポジション"}
+    },
+    {
+      "id": "en-bank", "language": "en", "target": "bank",
+      "a": {"companions": ["river", "stream"], "reference": "sloping land at the water's edge"},
+      "b": {"companions": ["money", "credit"], "reference": "an institution providing financial services"}
+    },
+    {
+      "id": "en-bat", "language": "en", "target": "bat",
+      "a": {"companions": ["cave", "wings"], "reference": "a nocturnal mammal capable of powered flight"},
+      "b": {"companions": ["baseball", "pitcher"], "reference": "a piece of sporting equipment used to strike a ball"}
+    },
+    {
+      "id": "en-seal", "language": "en", "target": "seal",
+      "a": {"companions": ["walrus", "ocean"], "reference": "a marine mammal with flippers"},
+      "b": {"companions": ["wax", "envelope"], "reference": "an impression authenticating a document or keeping it closed"}
+    },
+    {
+      "id": "en-spring", "language": "en", "target": "spring",
+      "a": {"companions": ["tulips", "thaw"], "reference": "the season between winter and summer"},
+      "b": {"companions": ["coil", "suspension"], "reference": "an elastic device that returns to shape after compression"}
+    },
+    {
+      "id": "en-bark", "language": "en", "target": "bark",
+      "a": {"companions": ["dog", "kennel"], "reference": "a short loud sound made by a canine"},
+      "b": {"companions": ["tree", "branch"], "reference": "the protective outer covering of a woody plant"}
+    }
+  ],
+  "binding": [
+    {
+      "id": "ja-color-animal", "language": "ja", "relation": "attribute",
+      "original": ["白い猫", "黒い犬"], "reassigned": ["白い犬", "黒い猫"],
+      "paraphrase": ["白色のネコ", "黒色のイヌ"]
+    },
+    {
+      "id": "ja-color-object", "language": "ja", "relation": "attribute",
+      "original": ["赤い帽子", "青い靴", "白い手袋"], "reassigned": ["赤い靴", "青い手袋", "白い帽子"],
+      "paraphrase": ["赤色のぼうし", "青色のくつ", "白色のてぶくろ"]
+    },
+    {
+      "id": "ja-agent-action", "language": "ja", "relation": "action",
+      "original": ["猫が跳ぶ", "犬が走る"], "reassigned": ["猫が走る", "犬が跳ぶ"],
+      "paraphrase": ["ネコがジャンプする", "イヌが駆ける"]
+    },
+    {
+      "id": "ja-agent-location", "language": "ja", "relation": "location",
+      "original": ["兄は左", "弟は右"], "reassigned": ["兄は右", "弟は左"],
+      "paraphrase": ["兄は左側にいる", "弟は右側にいる"]
+    },
+    {
+      "id": "en-color-animal", "language": "en", "relation": "attribute",
+      "original": ["white cat", "black dog"], "reassigned": ["white dog", "black cat"],
+      "paraphrase": ["cat with white fur", "dog with black fur"]
+    },
+    {
+      "id": "en-color-object", "language": "en", "relation": "attribute",
+      "original": ["red cup", "blue plate", "green bowl"], "reassigned": ["red plate", "blue bowl", "green cup"],
+      "paraphrase": ["cup colored red", "plate colored blue", "bowl colored green"]
+    },
+    {
+      "id": "en-agent-action", "language": "en", "relation": "action",
+      "original": ["cat jumps", "dog runs"], "reassigned": ["cat runs", "dog jumps"],
+      "paraphrase": ["the cat leaps", "the dog is running"]
+    },
+    {
+      "id": "en-agent-location", "language": "en", "relation": "location",
+      "original": ["cat on left", "dog on right"], "reassigned": ["cat on right", "dog on left"],
+      "paraphrase": ["the cat is on the left side", "the dog is on the right side"]
+    }
+  ]
+}

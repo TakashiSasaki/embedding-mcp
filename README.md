@@ -32,11 +32,13 @@ python3 experiments/run.py text e5
 | EmbeddingGemma 2 の画像・音声・動画・混合入力 | `python3 experiments/fetch.py multimodal` | `python3 experiments/run.py multimodal` |
 | E5・MiniLM・LaBSEの元モデルとの比較 | `python3 experiments/fetch.py reference` | `uv run --locked python experiments/run.py reference` |
 | LASER2・Model2Vec | `python3 experiments/fetch.py nonbert` | `uv run --locked python experiments/run.py nonbert laser2` または末尾を `potion` に変更 |
+| MiniLM で日英の語集合を比較し、要素間アテンションを開く層を動かす | `python3 experiments/fetch.py minilm` と [CPU ワーカーの準備](service/README.md#準備)、`g++` | `python3 experiments/set_context.py` |
 
 - テキスト実験のモデルIDは `e5`、`minilm`、`labse`、`gemma2`、`qwen3` です。例えば `text minilm qwen3` で2本に絞れます。取得側は `fetch.py runtime minilm qwen3` を指定します。
 - マルチモーダル実験は `ffmpeg` と `ffprobe` を使います。画像・WAV・MP4はスクリプトで生成します。MP4の生成には `libx264` を含むFFmpegが必要です。
 - Transformersと非BERTの実験には `uv` が必要です。`uv sync --locked --python /usr/bin/python3` で、Python 3.12とCPU版PyTorchを含む依存関係を準備できます。MiniLMのマスク変更は `reference minilm`、LaBSEのトークン化とDense＋Tanhの切り分けは `reference labse` で実行します。
 - 全重みを取得する場合は `python3 experiments/fetch.py all` を使います。ダウンロードは約6.1 GBで、展開後のランタイムとPython環境にも空き容量が要ります。
+- MiniLM の集合実験では、[日英18例](fixtures/set-context-ja-en-v1.json)について、先頭から要素間の参照を遮断する層数を0〜12で変えます。語義の順位とフレーズの組み替えの距離を別々に記録します。グラフも保存する場合は `uv run --no-project --with matplotlib==3.10.7 python experiments/set_context.py --plot` を使います。[測定結果](results/2026-11-10-minilm-set-context/summary.json)
 
 ## 結果の記録
 
