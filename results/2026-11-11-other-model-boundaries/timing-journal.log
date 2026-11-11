@@ -1,0 +1,10 @@
+Nov 11 03:39:09.586386 arm systemd[201082]: Started e5-boundary-1794368349.service - /usr/bin/env PYTHONPATH=/data/cpu-embedding-experiments/main/experiments python3 /data/cpu-embedding-experiments/main/runs/e5-boundary-20261111T033909/set_context.py --out runs/e5-boundary-20261111T033909/output.
+Nov 11 03:39:53.722653 arm systemd[201082]: e5-boundary-1794368349.service: Consumed 2min 17.377s CPU time, 2.6M memory peak, 0B memory swap peak.
+Nov 11 03:43:18.317398 arm systemd[201082]: Started embedding-gemma-set-sweep.service - /data/cpu-embedding-experiments/main/runs/other-models-sweep/gemma2 /data/cpu-embedding-experiments/main/.assets/embeddinggemma-2-Q8_0.gguf /data/cpu-embedding-experiments/main/runs/other-models-sweep/fixture.json.
+Nov 11 03:43:50.530308 arm systemd[201082]: Started qwen3-set-sweep.service - /data/cpu-embedding-experiments/main/runs/other-models-sweep/qwen3 /data/cpu-embedding-experiments/main/.assets/Qwen3-Embedding-0.6B-Q8_0.gguf /data/cpu-embedding-experiments/main/runs/other-models-sweep/fixture.json.
+Nov 11 03:43:51.690534 arm systemd[201082]: qwen3-set-sweep.service: Main process exited, code=exited, status=1/FAILURE
+Nov 11 03:43:51.690989 arm systemd[201082]: qwen3-set-sweep.service: Failed with result 'exit-code'.
+Nov 11 03:43:51.691352 arm systemd[201082]: qwen3-set-sweep.service: Consumed 1.131s CPU time, 1.5M memory peak, 0B memory swap peak.
+Nov 11 03:45:04.717484 arm systemd[201082]: Started qwen3-set-sweep-retry.service - /data/cpu-embedding-experiments/main/runs/other-models-sweep/qwen3 /data/cpu-embedding-experiments/main/.assets/Qwen3-Embedding-0.6B-Q8_0.gguf /data/cpu-embedding-experiments/main/runs/other-models-sweep/fixture.json.
+Nov 11 03:50:51.014094 arm systemd[201082]: embedding-gemma-set-sweep.service: Consumed 22min 2.404s CPU time, 252.7M memory peak, 0B memory swap peak.
+Nov 11 03:57:47.410572 arm systemd[201082]: qwen3-set-sweep-retry.service: Consumed 30min 24.559s CPU time, 551.6M memory peak, 0B memory swap peak.

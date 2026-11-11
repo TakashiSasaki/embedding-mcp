@@ -1,0 +1,76 @@
+{
+  "model_artifacts": {
+    "e5": {
+      "path": "multilingual-e5-small-f16.gguf",
+      "url": "https://huggingface.co/hdrrayan/multilingual-e5-small-gguf/resolve/7cdbf977cc0d1b5091a9dc41cd62405e6d0ca9f8/multilingual-e5-small-f16.gguf",
+      "bytes": 242360000,
+      "sha256": "6a5b2dfb958f98c851028f8c08424458249359ea921314be378f8b82088dcac1"
+    },
+    "gemma2": {
+      "path": "embeddinggemma-2-Q8_0.gguf",
+      "url": "https://huggingface.co/ggml-org/embeddinggemma-2-GGUF/resolve/6ea3e3a309d12a4779cfda98b8c19800d2d5da71/embeddinggemma-2-Q8_0.gguf",
+      "bytes": 309855456,
+      "sha256": "2188ac1deca4b77dffefd603c2776a9d76d9d74ec01841392982ebb840b09135"
+    },
+    "qwen3": {
+      "path": "Qwen3-Embedding-0.6B-Q8_0.gguf",
+      "url": "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/370f27d7550e0def9b39c1f16d3fbaa13aa67728/Qwen3-Embedding-0.6B-Q8_0.gguf",
+      "bytes": 639150592,
+      "sha256": "06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439"
+    }
+  },
+  "worker": {
+    "version": "0.9.0-dev+local.6a9045a9e9b2",
+    "artifact_id": "f0e07667d8513b72d31c90a17327952b60a7f7535f6f8b34df2e42931be82bd4",
+    "upstream_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+    "patch_sha256": "d337a95507f046e31fcdb6d439b06ddd4cb78ba055058d5d1171f7d7a0f59df4"
+  },
+  "shared_binding_cases": 6,
+  "sense_cases": 10,
+  "threads": 4,
+  "e5": {
+    "start_utc": "2026-11-11T03:39:09.586386Z",
+    "end_utc": "2026-11-11T03:39:53.722653Z",
+    "wall_seconds": 44.136,
+    "includes": "compile, model validation, inference and summary",
+    "fixture": "fixtures/set-context-ja-en-v1.json",
+    "prefix": "no task prefix, consistent with MiniLM probe"
+  },
+  "gemma2": {
+    "start_utc": "2026-11-11T03:43:18.317398Z",
+    "end_utc": "2026-11-11T03:50:51.014094Z",
+    "wall_seconds": 452.697,
+    "includes": "model loading, reference vectors and all boundary inference"
+  },
+  "qwen3": {
+    "start_utc": "2026-11-11T03:45:04.717484Z",
+    "end_utc": "2026-11-11T03:57:47.410572Z",
+    "wall_seconds": 762.693,
+    "includes": "model loading, reference vectors and all boundary inference",
+    "initial_cpu_quota_percent": 100,
+    "later_cpu_quota_percent": 400,
+    "reference": "definition precedes target; target suffix tokenization may differ from standalone"
+  },
+  "notes": [
+    "Gemma and Qwen ran simultaneously until Gemma finished; wall times are not a speed comparison.",
+    "Per-boundary and preparation elapsed times were not instrumented.",
+    "Qwen first attempt failed because target tokenization differed in suffix; retry used a space-prefixed suffix."
+  ],
+  "sha256": {
+    "e5-common-summary.json": "fb12bdabe6c71d914a4c89f42754b11d6f02231e0c069a396db260a4d037320a",
+    "e5-metadata.json": "1376178adfaf4088e55e35c92c1bc37c2ebefa783e745cd1f8e44da644f2f1d8",
+    "e5-raw.jsonl": "6517b399b2ecf4ca21cee337295ff707644acb3a19fb5b36c7c05be733ff67df",
+    "e5-summary.json": "d4aee6d156753315e753d0c813afdc05e4781fac0c1d8e7004a31dfb6f5c1172",
+    "fixture.json": "6f1d09e717839743633d9d6707100d84c98f64203b7e1b2659178cb8804b27c3",
+    "gemma2-common-summary.json": "3cb9227cd6821ed3882cd34b04d09f411924e5f0dfa0e96104ffbdb73be0b363",
+    "gemma2-raw.jsonl": "b122b9f9675fa53c4608fa8c93a0dabb0aefd015449d36841e25e34f70134c80",
+    "gemma2-summary.json": "3cb9227cd6821ed3882cd34b04d09f411924e5f0dfa0e96104ffbdb73be0b363",
+    "gemma2.cpp": "57a92db0288fcab76394a45cddb0c27722d7a9c056ed952557a194c601097a0e",
+    "qwen3-common-summary.json": "e88ec40170b036834c5ca30110c7361bc5b4f8f26099ceac327c06852d77396e",
+    "qwen3-raw.jsonl": "0052b78a868130bf4779ef96e040adc85787a43b26862bad178023abe120df0d",
+    "qwen3.cpp": "7449d127d5e083f518112219c0268cc32cdc5698c4fcb4e76b9097457cd79550",
+    "set_context.cpp": "6e5b78aab5b88b06d105d3db77049b0381e5c3105cf00ee5a549e6beed1e5cbc",
+    "set_context.py": "4fe3ff4e5409b2dd565834fded1c882b970df3d9979f19d5e48e15effb9a3ec2",
+    "timing-journal.log": "6bf465d71538f567ff096680c9ce7a68d533d2ba4d0e4a507c3171b86f9377ab"
+  }
+}
