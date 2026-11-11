@@ -1,0 +1,1488 @@
+{
+  "source_commit": "a4f4fd536646582dec9cbe6bae9c6cf475daa5f9",
+  "plan_sha256": "7accc362a579f3f573ee63e49ebb4b8d083bc5524999f776d08154f1fb0aec06",
+  "worker_artifact_id": "f0e07667d8513b72d31c90a17327952b60a7f7535f6f8b34df2e42931be82bd4",
+  "binary_sha256": "3f4a120211ee41507799c198185f725d92048f93434d7684ea6239b69780f898",
+  "batch_wall_seconds": 930.86309,
+  "threads": 4,
+  "context_tokens": 128,
+  "memory_measurement": "Linux getrusage(RUSAGE_CHILDREN).ru_maxrss in KiB, one subprocess tree per split",
+  "local_run": "runs/set-context-phase2-2026-11-11",
+  "labse_tokenizer_check": {
+    "input_count": 381,
+    "mismatched": 44,
+    "mismatch_languages": {
+      "ja": 44
+    },
+    "examples": {
+      "カード": {
+        "gguf": [
+          101,
+          3767,
+          48800,
+          102
+        ],
+        "upstream": [
+          101,
+          114574,
+          102
+        ]
+      },
+      "ガラスでできた瓶": {
+        "gguf": [
+          101,
+          3767,
+          139336,
+          29577,
+          29577,
+          70265,
+          8098,
+          102
+        ],
+        "upstream": [
+          101,
+          359642,
+          18541,
+          394554,
+          8098,
+          102
+        ]
+      },
+      "キーボード": {
+        "gguf": [
+          101,
+          3769,
+          31015,
+          488813,
+          48800,
+          102
+        ],
+        "upstream": [
+          101,
+          3769,
+          31015,
+          413990,
+          102
+        ]
+      },
+      "クラブ": {
+        "gguf": [
+          101,
+          3771,
+          39973,
+          114349,
+          102
+        ],
+        "upstream": [
+          101,
+          479012,
+          102
+        ]
+      }
+    }
+  },
+  "runs": [
+    {
+      "model": "minilm",
+      "split": "development",
+      "boundary_count": 13,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:45:10.703879+00:00",
+        "finished_at": "2026-11-11T04:45:29.780466+00:00",
+        "wall_seconds": 19.076582496985793,
+        "max_rss_kib": 381064,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:45:11.002755+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:45:10.818612+00:00",
+          "seconds": 0.18387868627905846,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:11.578785+00:00",
+          "k": -1,
+          "seconds": 0.570795663,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "minilm",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:11.580953+00:00",
+          "k": -1,
+          "seconds": 0.002198121,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "minilm",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:12.254212+00:00",
+          "k": -1,
+          "seconds": 0.670140048,
+          "stage": "references",
+          "status": "complete",
+          "model": "minilm",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:29.752018+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:45:11.004044+00:00",
+          "seconds": 18.74781389720738,
+          "status": "complete",
+          "model": "minilm",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:29.759170+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:45:29.752104+00:00",
+          "seconds": 0.007009278982877731,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:29.759580+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:45:10.818193+00:00",
+          "seconds": 18.941315304487944,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 7.931876706,
+      "binding_seconds": 9.388957153,
+      "mask_checks": {
+        "allowed": 117,
+        "blocked": 91
+      },
+      "permutation_evaluations": 468,
+      "fixture_sha256": "fa1fb6831084eaaadce6384ed7b6d24a6ee4a3834911247b5a9881a164eb932e",
+      "local_evidence": {
+        "raw.jsonl": "a2773d94d55c75adbb7857b72427feb833e4e31fa8735d311cd7328800413faa",
+        "summary.json": "218e94332696a89808c685bf24e0b0d378411cfa72544e4618b6e04a0777ab48",
+        "stages.jsonl": "8d732e14c537309d0f4570191d3f76e143648a8c8b58d722bbb665f5781ce2db",
+        "worker.log": "86c8245cf13b7d9fe99bed1d5bccac82e7a60467f0cc625f3d9a8cf72726dda1"
+      }
+    },
+    {
+      "model": "minilm",
+      "split": "heldout",
+      "boundary_count": 4,
+      "selected_on_development": {
+        "sense": 1,
+        "binding": 9
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:45:29.816300+00:00",
+        "finished_at": "2026-11-11T04:45:37.604495+00:00",
+        "wall_seconds": 7.788189869374037,
+        "max_rss_kib": 381064,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:45:30.115177+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:45:29.929566+00:00",
+          "seconds": 0.18538448587059975,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:30.696701+00:00",
+          "k": -1,
+          "seconds": 0.575775304,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "minilm",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:30.699206+00:00",
+          "k": -1,
+          "seconds": 0.002197601,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "minilm",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:31.440086+00:00",
+          "k": -1,
+          "seconds": 0.740852105,
+          "stage": "references",
+          "status": "complete",
+          "model": "minilm",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:37.579898+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:45:30.116872+00:00",
+          "seconds": 7.462895387783647,
+          "status": "complete",
+          "model": "minilm",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:37.582834+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:45:37.579964+00:00",
+          "seconds": 0.002829078584909439,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:37.583134+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:45:29.929117+00:00",
+          "seconds": 7.653952796012163,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 2.582782686,
+      "binding_seconds": 3.384589808,
+      "mask_checks": {
+        "allowed": 38,
+        "blocked": 26
+      },
+      "permutation_evaluations": 144,
+      "fixture_sha256": "73a9b0c005c5582c722845078bdcb62113e47927c11d1f2a85fc8675e5ad5f2d",
+      "local_evidence": {
+        "raw.jsonl": "ca1db897b0bde327c2b6c7f1b3b76f6aa8acc313eaf49375439f1f1a5387365b",
+        "summary.json": "b7be103b7f3bcdb7d76cb1c7ab38a663e79f75c43fc4e5994fc0be65f6831287",
+        "stages.jsonl": "45df40b238d8e314bc276af523398b889cf7ae082466ebeca576d42ca18a50d1",
+        "worker.log": "cfbed1268a45872bc589d84273aca071533d0766c362adec63c400dfff0a8026"
+      }
+    },
+    {
+      "model": "e5",
+      "split": "development",
+      "boundary_count": 13,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:45:37.641760+00:00",
+        "finished_at": "2026-11-11T04:45:57.926475+00:00",
+        "wall_seconds": 20.284712193533778,
+        "max_rss_kib": 381060,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:45:37.930735+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:45:37.754404+00:00",
+          "seconds": 0.17612088471651077,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:38.519253+00:00",
+          "k": -1,
+          "seconds": 0.583290866,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "e5",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:38.521521+00:00",
+          "k": -1,
+          "seconds": 0.00231192,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "e5",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:39.118220+00:00",
+          "k": -1,
+          "seconds": 0.596360269,
+          "stage": "references",
+          "status": "complete",
+          "model": "e5",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:57.897844+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:45:37.931998+00:00",
+          "seconds": 19.96571347117424,
+          "status": "complete",
+          "model": "e5",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:57.904873+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:45:57.897912+00:00",
+          "seconds": 0.006912721320986748,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:57.905286+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:45:37.753952+00:00",
+          "seconds": 20.151263240724802,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 9.450757763,
+      "binding_seconds": 9.145623447,
+      "mask_checks": {
+        "allowed": 117,
+        "blocked": 91
+      },
+      "permutation_evaluations": 468,
+      "fixture_sha256": "fa1fb6831084eaaadce6384ed7b6d24a6ee4a3834911247b5a9881a164eb932e",
+      "local_evidence": {
+        "raw.jsonl": "2561ba2d9fcd7ebf8fff38313f90bd7a8f9910633a177c795d1403b1032ce76b",
+        "summary.json": "79f69ca8b45993deb1cfe6f1b40f518c2a9777ccb16e401cf027b7e9ca71e911",
+        "stages.jsonl": "a7d275c9623e449113b7fbae9e17fd96c4a0267112337c27acd9f67d21943059",
+        "worker.log": "4102591d155e2a692df0aae15674ed05c18a9fa82f31a8ebee04eef91883ea73"
+      }
+    },
+    {
+      "model": "e5",
+      "split": "heldout",
+      "boundary_count": 2,
+      "selected_on_development": {
+        "sense": 0,
+        "binding": 12
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:45:57.962812+00:00",
+        "finished_at": "2026-11-11T04:46:02.785130+00:00",
+        "wall_seconds": 4.822313606739044,
+        "max_rss_kib": 381048,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:45:58.252304+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:45:58.076333+00:00",
+          "seconds": 0.17575280368328094,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:58.840086+00:00",
+          "k": -1,
+          "seconds": 0.582104986,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "e5",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:58.842180+00:00",
+          "k": -1,
+          "seconds": 0.00218196,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "e5",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:45:59.550010+00:00",
+          "k": -1,
+          "seconds": 0.707533497,
+          "stage": "references",
+          "status": "complete",
+          "model": "e5",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:46:02.762044+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:45:58.254000+00:00",
+          "seconds": 4.507921528071165,
+          "status": "complete",
+          "model": "e5",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:46:02.764024+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:46:02.762145+00:00",
+          "seconds": 0.0018383599817752838,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:46:02.764278+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:45:58.075897+00:00",
+          "seconds": 4.68831929191947,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 1.3342590140000001,
+      "binding_seconds": 1.701807625,
+      "mask_checks": {
+        "allowed": 18,
+        "blocked": 14
+      },
+      "permutation_evaluations": 72,
+      "fixture_sha256": "85985a115fd4aa36dadd675416d058da9809f5ba5cc6343556952cd6ab20ece3",
+      "local_evidence": {
+        "raw.jsonl": "a22399bf5442ca7b5cdd2c50601f18ea5b78250136fdd98c03c0975870cb537f",
+        "summary.json": "a3c930446b9fabd9cce8d39b6662abac2a7eabcd9839cf4fe6a8a5b3dccfdc7a",
+        "stages.jsonl": "74011e50986b498092c69f993acb8c56e1108085dfe182ce6d4686a36ece689f",
+        "worker.log": "8d586ee67552c378cb03cf5d6a4f5e75985517254cf353af43a3e6e4caaab01c"
+      }
+    },
+    {
+      "model": "qwen3",
+      "split": "development",
+      "boundary_count": 29,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:46:02.822729+00:00",
+        "finished_at": "2026-11-11T04:50:39.004852+00:00",
+        "wall_seconds": 276.1821196042001,
+        "max_rss_kib": 1181244,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:46:03.411113+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:46:02.937077+00:00",
+          "seconds": 0.4738001972436905,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:46:04.364124+00:00",
+          "k": -1,
+          "seconds": 0.947687516,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "qwen3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:46:04.376840+00:00",
+          "k": -1,
+          "seconds": 0.012724604,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "qwen3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:46:09.102804+00:00",
+          "k": -1,
+          "seconds": 4.72589054,
+          "stage": "references",
+          "status": "complete",
+          "model": "qwen3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:50:38.968243+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:46:03.412456+00:00",
+          "seconds": 275.5556604489684,
+          "status": "complete",
+          "model": "qwen3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:50:38.983288+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:50:38.968307+00:00",
+          "seconds": 0.014928244054317474,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:50:38.983876+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:46:02.936649+00:00",
+          "seconds": 276.0471549332142,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 127.016650816,
+      "binding_seconds": 142.738813306,
+      "mask_checks": {
+        "allowed": 203,
+        "blocked": 203,
+        "future_blocked": 58
+      },
+      "permutation_evaluations": 1044,
+      "fixture_sha256": "4b43d9eba24ebccd0870d731c128d542ae9e9576ddee01a35c8c81a57a5709e5",
+      "local_evidence": {
+        "raw.jsonl": "e51f5b62d735f41d1fd1978c13aa5126a56bec505fdc1a6e87a54b31b1591bc8",
+        "summary.json": "ddcc8e348771a44fb0e3002b26385490e047f37c2a21fb77e367de21c412ba69",
+        "stages.jsonl": "faecb5707ff609bae26a4175ca7e6b01373fd5a01be3c9ba22d64e58221c8f4c",
+        "worker.log": "d55de46b68952541dac2755bd8f3b21ac8c9b53bf86ad8a456c085f2ffb4d202"
+      }
+    },
+    {
+      "model": "qwen3",
+      "split": "heldout",
+      "boundary_count": 3,
+      "selected_on_development": {
+        "sense": 0,
+        "binding": 25
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:50:39.041369+00:00",
+        "finished_at": "2026-11-11T04:51:16.459530+00:00",
+        "wall_seconds": 37.41815639287233,
+        "max_rss_kib": 1188132,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:50:39.633559+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:50:39.156350+00:00",
+          "seconds": 0.47700163535773754,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:50:40.585862+00:00",
+          "k": -1,
+          "seconds": 0.946244553,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "qwen3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:50:40.598176+00:00",
+          "k": -1,
+          "seconds": 0.012289483,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "qwen3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:50:45.378775+00:00",
+          "k": -1,
+          "seconds": 4.780435101,
+          "stage": "references",
+          "status": "complete",
+          "model": "qwen3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:51:16.435508+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:50:39.635675+00:00",
+          "seconds": 36.799701599404216,
+          "status": "complete",
+          "model": "qwen3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:51:16.437957+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:51:16.435575+00:00",
+          "seconds": 0.0023406408727169037,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:51:16.438265+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:50:39.155896+00:00",
+          "seconds": 37.282304637134075,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 12.593470306,
+      "binding_seconds": 18.368722652,
+      "mask_checks": {
+        "allowed": 17,
+        "blocked": 25,
+        "future_blocked": 6
+      },
+      "permutation_evaluations": 108,
+      "fixture_sha256": "b111a1c580fc6c7aa48106577739ad111885c8eb1eed43b5263f7b68f8a0fc8b",
+      "local_evidence": {
+        "raw.jsonl": "fd34754f490fe0f5789f03f8492f2833519122dd91e6f30070614e5489a3f92d",
+        "summary.json": "bec6bee8d88dc090d0df8049bd01524a1be5f7f738b2ad069c10d10e770ffdbb",
+        "stages.jsonl": "f405ea6db318905c7738301264f0c02aab1ff204b6d3d63dc183e28c5c6b9e8b",
+        "worker.log": "efc3e822f165c4ec19e507a9cd4be046ac85d2a600b369be549949575135d4ad"
+      }
+    },
+    {
+      "model": "gemma2",
+      "split": "development",
+      "boundary_count": 25,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:51:16.498171+00:00",
+        "finished_at": "2026-11-11T04:54:14.137867+00:00",
+        "wall_seconds": 177.63969077542424,
+        "max_rss_kib": 567268,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:51:16.849987+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:51:16.613637+00:00",
+          "seconds": 0.2361394204199314,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:51:17.639258+00:00",
+          "k": -1,
+          "seconds": 0.784060914,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "gemma2",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:51:17.644794+00:00",
+          "k": -1,
+          "seconds": 0.005540801,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "gemma2",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:51:20.597507+00:00",
+          "k": -1,
+          "seconds": 2.952431928,
+          "stage": "references",
+          "status": "complete",
+          "model": "gemma2",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:14.103350+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:51:16.851289+00:00",
+          "seconds": 177.25192851945758,
+          "status": "complete",
+          "model": "gemma2",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:14.115768+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:54:14.103420+00:00",
+          "seconds": 0.012292364612221718,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:14.116348+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:51:16.613199+00:00",
+          "seconds": 177.50306934304535,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 83.849254626,
+      "binding_seconds": 89.519546259,
+      "mask_checks": {
+        "allowed": 219,
+        "blocked": 181
+      },
+      "permutation_evaluations": 900,
+      "fixture_sha256": "89f0b47c8b90118b0f72e9f2fb2c58f925913e9ab5d2713f129e2020d8db2ad1",
+      "local_evidence": {
+        "raw.jsonl": "a9f97233ff2d3025e69b1e19b6a3c284805fe8bb3d152eb04e60fe68b18d8a75",
+        "summary.json": "1938a1462c25ed210d9ac4139193ca24464b949cd1c032c3087bd26cff594299",
+        "stages.jsonl": "93c8a5d9925ba712553860a6ede3c53bddaede6210a27d90839c3fa9eb5dbb66",
+        "worker.log": "f41385a57913fdbc03046758c0c920d141ff1377f0bad2d5b0dff0daa09e5c9e"
+      }
+    },
+    {
+      "model": "gemma2",
+      "split": "heldout",
+      "boundary_count": 4,
+      "selected_on_development": {
+        "sense": 2,
+        "binding": 4
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:54:14.174452+00:00",
+        "finished_at": "2026-11-11T04:54:50.763632+00:00",
+        "wall_seconds": 36.589180978015065,
+        "max_rss_kib": 567268,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:54:14.521240+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:54:14.286609+00:00",
+          "seconds": 0.23441489785909653,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:15.327443+00:00",
+          "k": -1,
+          "seconds": 0.800199556,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "gemma2",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:15.333178+00:00",
+          "k": -1,
+          "seconds": 0.005749202,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "gemma2",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:19.891953+00:00",
+          "k": -1,
+          "seconds": 4.558580598,
+          "stage": "references",
+          "status": "complete",
+          "model": "gemma2",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:50.739139+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:54:14.523286+00:00",
+          "seconds": 36.215701723471284,
+          "status": "complete",
+          "model": "gemma2",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:50.742043+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:54:50.739208+00:00",
+          "seconds": 0.0027914810925722122,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:50.742381+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:54:14.286185+00:00",
+          "seconds": 36.45613094419241,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 14.274428343,
+      "binding_seconds": 16.438297233,
+      "mask_checks": {
+        "allowed": 45,
+        "blocked": 19
+      },
+      "permutation_evaluations": 144,
+      "fixture_sha256": "c20cd3a16cb7b5e9abd1d7f2bea35698cdb874fc577d48187ebcdd154c86d11c",
+      "local_evidence": {
+        "raw.jsonl": "e6ace635aa8d2e762cd65d1dbd472c749be05acbb5238f173a4213f8539e3ebd",
+        "summary.json": "8d8b15a00697a72e220450715588733ddf2214880b0671ae2e4d580f4b67f26d",
+        "stages.jsonl": "0f8f73023c319cfc5fc1910162eba566be860620521c05ccb0510aac6267710e",
+        "worker.log": "a11aea13fee3e3b890fc09f48c28ff2c918c9f02e24ee99d2b6215e795853d61"
+      }
+    },
+    {
+      "model": "labse",
+      "split": "development",
+      "boundary_count": 13,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:54:50.802330+00:00",
+        "finished_at": "2026-11-11T04:55:25.462917+00:00",
+        "wall_seconds": 34.66058314032853,
+        "max_rss_kib": 701336,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:54:51.271465+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:54:50.914742+00:00",
+          "seconds": 0.356522087007761,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:52.205287+00:00",
+          "k": -1,
+          "seconds": 0.928398188,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "labse",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:52.207358+00:00",
+          "k": -1,
+          "seconds": 0.00220844,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "labse",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:54:53.192294+00:00",
+          "k": -1,
+          "seconds": 0.984711322,
+          "stage": "references",
+          "status": "complete",
+          "model": "labse",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:25.434767+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:54:51.272736+00:00",
+          "seconds": 34.16190365515649,
+          "status": "complete",
+          "model": "labse",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:25.441799+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:55:25.434833+00:00",
+          "seconds": 0.006915600970387459,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:25.442204+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:54:50.914338+00:00",
+          "seconds": 34.52779802493751,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 17.474881884,
+      "binding_seconds": 14.634054747,
+      "mask_checks": {
+        "allowed": 117,
+        "blocked": 91
+      },
+      "permutation_evaluations": 468,
+      "fixture_sha256": "fa1fb6831084eaaadce6384ed7b6d24a6ee4a3834911247b5a9881a164eb932e",
+      "local_evidence": {
+        "raw.jsonl": "4542cf2f06a12747b74b63aa8bedc8c70dd7f5cba06597d9835c16fca08a2cc4",
+        "summary.json": "91499dfd24ff4a827af6f29eecae9585a73137ef7fbdaf8200492f6fb801f01d",
+        "stages.jsonl": "90356c1095c55b32097af1e324fcdf7201aef42aab35ecd18841a1fbd07c214d",
+        "worker.log": "41f58a2e5cebead5c1ffe4f8a3a390bc8e2fa390feaf887eb693b41b9f647f1d"
+      }
+    },
+    {
+      "model": "labse",
+      "split": "heldout",
+      "boundary_count": 3,
+      "selected_on_development": {
+        "sense": 1,
+        "binding": 12
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:55:25.499110+00:00",
+        "finished_at": "2026-11-11T04:55:34.490799+00:00",
+        "wall_seconds": 8.99168760329485,
+        "max_rss_kib": 701356,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:55:25.970945+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:55:25.613108+00:00",
+          "seconds": 0.3576338868588209,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:26.869826+00:00",
+          "k": -1,
+          "seconds": 0.893269259,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "labse",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:26.871994+00:00",
+          "k": -1,
+          "seconds": 0.002190961,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "labse",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:27.828763+00:00",
+          "k": -1,
+          "seconds": 0.956547274,
+          "stage": "references",
+          "status": "complete",
+          "model": "labse",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:34.466699+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:55:25.972672+00:00",
+          "seconds": 8.493905760347843,
+          "status": "complete",
+          "model": "labse",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:34.469207+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:55:34.466761+00:00",
+          "seconds": 0.0024027619510889053,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:34.469491+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:55:25.612667+00:00",
+          "seconds": 8.856762770563364,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 2.759662597,
+      "binding_seconds": 3.741673837,
+      "mask_checks": {
+        "allowed": 32,
+        "blocked": 16
+      },
+      "permutation_evaluations": 108,
+      "fixture_sha256": "c97aca6ab2e20fcaef7113972b000f5f147244c746c6542d0d10263c058f27d4",
+      "local_evidence": {
+        "raw.jsonl": "f062316f36e8b8d9d72d2e4ef89c880cbdfb55d36806a14171508c5bd75fb76e",
+        "summary.json": "f04fb985af80b35406b01fbb71888546333a6420aea1ea5e5c449feb48ee25ee",
+        "stages.jsonl": "723956bdf3eb10368c351a40dfc0f4c4988426931f802ed7bcdc32054b5aa1df",
+        "worker.log": "0fa5b5a6028dc5e396852a6722a94e652117a25e6e26edde14477eb40e5adfd2"
+      }
+    },
+    {
+      "model": "e5-base",
+      "split": "development",
+      "boundary_count": 13,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:55:34.529300+00:00",
+        "finished_at": "2026-11-11T04:56:25.311137+00:00",
+        "wall_seconds": 50.78180587850511,
+        "max_rss_kib": 694028,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:55:35.035982+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:55:34.643091+00:00",
+          "seconds": 0.39268425665795803,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:35.664468+00:00",
+          "k": -1,
+          "seconds": 0.623299113,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "e5-base",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:35.666631+00:00",
+          "k": -1,
+          "seconds": 0.00226432,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "e5-base",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:55:37.225949+00:00",
+          "k": -1,
+          "seconds": 1.559046742,
+          "stage": "references",
+          "status": "complete",
+          "model": "e5-base",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:25.281847+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:55:35.037260+00:00",
+          "seconds": 50.24444982782006,
+          "status": "complete",
+          "model": "e5-base",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:25.288889+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:56:25.281916+00:00",
+          "seconds": 0.006925240159034729,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:25.289299+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:55:34.642648+00:00",
+          "seconds": 50.646580163389444,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 22.643928708,
+      "binding_seconds": 25.215107574,
+      "mask_checks": {
+        "allowed": 117,
+        "blocked": 91
+      },
+      "permutation_evaluations": 468,
+      "fixture_sha256": "fa1fb6831084eaaadce6384ed7b6d24a6ee4a3834911247b5a9881a164eb932e",
+      "local_evidence": {
+        "raw.jsonl": "7da025fd47bc7b6adfd25a140b405434acce324660677b82028c7147a432808e",
+        "summary.json": "148f39572d0ea9eb5acf73784b86821bd627af9386a825f01d9557d929e491ab",
+        "stages.jsonl": "44ba0538f52b79d4dab4630fadff02e6e1d771939d96ca99ad3b7c036eb2160b",
+        "worker.log": "01d1cc6c8703e7b896bcfa4a3aa3502ad737ba53b5008b56b2823ed7a30b96b2"
+      }
+    },
+    {
+      "model": "e5-base",
+      "split": "heldout",
+      "boundary_count": 3,
+      "selected_on_development": {
+        "sense": 3,
+        "binding": 12
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:56:25.349327+00:00",
+        "finished_at": "2026-11-11T04:56:39.285929+00:00",
+        "wall_seconds": 13.936596613377333,
+        "max_rss_kib": 694016,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:56:25.859409+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:56:25.464088+00:00",
+          "seconds": 0.3951071761548519,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:26.487230+00:00",
+          "k": -1,
+          "seconds": 0.622152792,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "e5-base",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:26.489594+00:00",
+          "k": -1,
+          "seconds": 0.002385961,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "e5-base",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:28.216245+00:00",
+          "k": -1,
+          "seconds": 1.726410303,
+          "stage": "references",
+          "status": "complete",
+          "model": "e5-base",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:39.262394+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:56:25.861135+00:00",
+          "seconds": 13.401129802688956,
+          "status": "complete",
+          "model": "e5-base",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:39.264815+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:56:39.262458+00:00",
+          "seconds": 0.0023150015622377396,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:39.265126+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:56:25.463659+00:00",
+          "seconds": 13.801346937194467,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 4.343380223,
+      "binding_seconds": 6.517911916,
+      "mask_checks": {
+        "allowed": 30,
+        "blocked": 18
+      },
+      "permutation_evaluations": 108,
+      "fixture_sha256": "0c439f2da3fa6897bdc2acb636468b15ae469f0537aa6da927a0f3c906b8d307",
+      "local_evidence": {
+        "raw.jsonl": "ba5a7c48493b55acccfc9cf6cbaccd48f5754bf7c9ba82d1172ec0d8dc42923b",
+        "summary.json": "29b0b2dfda1eed26c0b47265df0953dbaed973b86eee51b3d8f29848b0c1f90f",
+        "stages.jsonl": "61b85555fb94421cf36a31b2af76b1385baa2919d25d507434821a56e35f9780",
+        "worker.log": "0dc284be8e5efec4e74bb9950ddf121f28b33e2dfb3ca05ebc0cebe0bb2892a2"
+      }
+    },
+    {
+      "model": "bge-m3",
+      "split": "development",
+      "boundary_count": 25,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T04:56:39.323633+00:00",
+        "finished_at": "2026-11-11T04:59:31.007236+00:00",
+        "wall_seconds": 171.68359948694706,
+        "max_rss_kib": 1077852,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:56:39.866077+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:56:39.436445+00:00",
+          "seconds": 0.4294067844748497,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:40.960392+00:00",
+          "k": -1,
+          "seconds": 1.089087746,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:40.964154+00:00",
+          "k": -1,
+          "seconds": 0.003765401,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:56:43.934439+00:00",
+          "k": -1,
+          "seconds": 2.970087287,
+          "stage": "references",
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:59:30.973342+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:56:39.867367+00:00",
+          "seconds": 171.10582402534783,
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T04:59:30.985557+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T04:59:30.973411+00:00",
+          "seconds": 0.01209588348865509,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:59:30.986120+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:56:39.436016+00:00",
+          "seconds": 171.55000321567059,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 77.942815172,
+      "binding_seconds": 88.868003762,
+      "mask_checks": {
+        "allowed": 219,
+        "blocked": 181
+      },
+      "permutation_evaluations": 900,
+      "fixture_sha256": "89f0b47c8b90118b0f72e9f2fb2c58f925913e9ab5d2713f129e2020d8db2ad1",
+      "local_evidence": {
+        "raw.jsonl": "c67b9aa8e9bde0b457edbcd51f22f0ba7919e6955a18fd4d8254bf2eb756cae0",
+        "summary.json": "f3822fe0671c4d7734737c3bd7f2da9ff8738f83dcaf3891275aaa461ded1537",
+        "stages.jsonl": "a9918f3c2971974b02ba500179e1233a65f4bace673893539033903c81de296a",
+        "worker.log": "29a35599ee4d8095d06225d690ff912a3eb4cb57380b196581c1f1c04c592f9e"
+      }
+    },
+    {
+      "model": "bge-m3",
+      "split": "heldout",
+      "boundary_count": 4,
+      "selected_on_development": {
+        "sense": 2,
+        "binding": 19
+      },
+      "timing": {
+        "started_at": "2026-11-11T04:59:31.043715+00:00",
+        "finished_at": "2026-11-11T05:00:04.494043+00:00",
+        "wall_seconds": 33.45034744590521,
+        "max_rss_kib": 1077856,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T04:59:31.588602+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T04:59:31.157217+00:00",
+          "seconds": 0.4311768673360348,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T04:59:32.684158+00:00",
+          "k": -1,
+          "seconds": 1.089462506,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:59:32.687917+00:00",
+          "k": -1,
+          "seconds": 0.003837601,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T04:59:35.763626+00:00",
+          "k": -1,
+          "seconds": 3.075473071,
+          "stage": "references",
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:04.469126+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T04:59:31.590724+00:00",
+          "seconds": 32.87824882380664,
+          "status": "complete",
+          "model": "bge-m3",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:04.471989+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T05:00:04.469191+00:00",
+          "seconds": 0.0027556810528039932,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:04.472304+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T04:59:31.156767+00:00",
+          "seconds": 33.315472934395075,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 12.129662241,
+      "binding_seconds": 16.346307871,
+      "mask_checks": {
+        "allowed": 37,
+        "blocked": 27
+      },
+      "permutation_evaluations": 144,
+      "fixture_sha256": "f68148491b7a6b2ff63151b674288178fd3e7969e967f71707888ac8127214a6",
+      "local_evidence": {
+        "raw.jsonl": "c8c964b6e48d31eff792eb07de132a313ac6109b398d63aa22430db65befdbe5",
+        "summary.json": "faf6885dc005c4ef444aa8e32f00c9cd6035f8bbf3e08526ee5039a337233489",
+        "stages.jsonl": "b509ba008a920f6847381b11764fa17d60a6bd349952ab84c5e8d5949eed8420",
+        "worker.log": "d51ee2bbdc447f0750764e5778c1d5f608d98b9bbb7d889bad145c1f879338a1"
+      }
+    },
+    {
+      "model": "mbert",
+      "split": "development",
+      "boundary_count": 13,
+      "selected_on_development": null,
+      "timing": {
+        "started_at": "2026-11-11T05:00:04.532330+00:00",
+        "finished_at": "2026-11-11T05:00:33.538075+00:00",
+        "wall_seconds": 29.00574059970677,
+        "max_rss_kib": 308016,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T05:00:04.798783+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T05:00:04.649613+00:00",
+          "seconds": 0.1489593181759119,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:05.099536+00:00",
+          "k": -1,
+          "seconds": 0.295497392,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "mbert",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:05.102013+00:00",
+          "k": -1,
+          "seconds": 0.002480961,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "mbert",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:06.058301+00:00",
+          "k": -1,
+          "seconds": 0.956131673,
+          "stage": "references",
+          "status": "complete",
+          "model": "mbert",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:33.509344+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T05:00:04.800110+00:00",
+          "seconds": 28.709074405953288,
+          "status": "complete",
+          "model": "mbert",
+          "split": "development"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:33.516284+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T05:00:33.509412+00:00",
+          "seconds": 0.006816202774643898,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:33.516681+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T05:00:04.649107+00:00",
+          "seconds": 28.867505446076393,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 12.256845389,
+      "binding_seconds": 15.151493858,
+      "mask_checks": {
+        "allowed": 117,
+        "blocked": 91
+      },
+      "permutation_evaluations": 468,
+      "fixture_sha256": "fa1fb6831084eaaadce6384ed7b6d24a6ee4a3834911247b5a9881a164eb932e",
+      "local_evidence": {
+        "raw.jsonl": "26d7cc2d54c62d19788a4ab6890a3c1e9479e6af294d1b00a8fc8f9909c763c6",
+        "summary.json": "b56fd419dab63160f41dcad69925f036e3acebc2e054c8026af64cb6f831a137",
+        "stages.jsonl": "bd60adc642737aff4d1fcff1a590acbd9644dc04be53209ddcea47847f6eacb9",
+        "worker.log": "f6c2cbf7c8dc6f72156b14fad04fa123efe3b41efc4869a16dae943951807a00"
+      }
+    },
+    {
+      "model": "mbert",
+      "split": "heldout",
+      "boundary_count": 3,
+      "selected_on_development": {
+        "sense": 2,
+        "binding": 12
+      },
+      "timing": {
+        "started_at": "2026-11-11T05:00:33.575322+00:00",
+        "finished_at": "2026-11-11T05:00:41.566969+00:00",
+        "wall_seconds": 7.991646030917764,
+        "max_rss_kib": 308192,
+        "returncode": 0
+      },
+      "stages": [
+        {
+          "recorded_at": "2026-11-11T05:00:33.840760+00:00",
+          "stage": "verify_inputs",
+          "started_at": "2026-11-11T05:00:33.692145+00:00",
+          "seconds": 0.14840247482061386,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:34.153819+00:00",
+          "k": -1,
+          "seconds": 0.307266195,
+          "stage": "model_load",
+          "status": "complete",
+          "model": "mbert",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:34.156334+00:00",
+          "k": -1,
+          "seconds": 0.00255552,
+          "stage": "context_setup",
+          "status": "complete",
+          "model": "mbert",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:35.104473+00:00",
+          "k": -1,
+          "seconds": 0.947885871,
+          "stage": "references",
+          "status": "complete",
+          "model": "mbert",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:41.542671+00:00",
+          "stage": "worker_total",
+          "started_at": "2026-11-11T05:00:33.842591+00:00",
+          "seconds": 7.69997563958168,
+          "status": "complete",
+          "model": "mbert",
+          "split": "heldout"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:41.545096+00:00",
+          "stage": "aggregate",
+          "started_at": "2026-11-11T05:00:41.542730+00:00",
+          "seconds": 0.002304559573531151,
+          "status": "complete"
+        },
+        {
+          "recorded_at": "2026-11-11T05:00:41.545386+00:00",
+          "stage": "run",
+          "started_at": "2026-11-11T05:00:33.691688+00:00",
+          "seconds": 7.853603316470981,
+          "status": "complete"
+        }
+      ],
+      "sense_seconds": 2.727098066,
+      "binding_seconds": 3.678272536,
+      "mask_checks": {
+        "allowed": 31,
+        "blocked": 17
+      },
+      "permutation_evaluations": 108,
+      "fixture_sha256": "d430cf6629320064829a6551140bcde580c9855c93ccb674573b4c674a91166f",
+      "local_evidence": {
+        "raw.jsonl": "ef39cdca845450eaebaf391231a8f3d433afb94a2b7bed2005feb560514f2edc",
+        "summary.json": "80f924745c738b826865db51118cc9edd47ec5fbaef3e69e5a68a1b048089333",
+        "stages.jsonl": "71358c7a333c61831d8ab042e88963ef6017db83c4a3a92b125a0d2a002f1b5b",
+        "worker.log": "3c5533388c5b9ed1ec2e1538ba15251f28725b9050a451d2e132fb1e7c30e3c6"
+      }
+    }
+  ]
+}
