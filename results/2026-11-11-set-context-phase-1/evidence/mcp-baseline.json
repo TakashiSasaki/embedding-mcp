@@ -1,0 +1,83 @@
+{
+  "mcp_version": "0.1.0+local.6a9045a9e9b2",
+  "mcp_catalog_count": 11,
+  "unchanged_catalog_sha256": "05d6dc3ffe28a0bd0046b6f8c0853636e1ab189d071be7cb314f0043fa6de978",
+  "threads": 4,
+  "results": [
+    {
+      "model": "e5",
+      "inputs_a": [
+        "passage: 白い猫",
+        "passage: 黒い犬"
+      ],
+      "inputs_b": [
+        "passage: 白い犬",
+        "passage: 黒い猫"
+      ],
+      "dimension": 384,
+      "same_under_reversal": true,
+      "set_id_a": "ab1bbefa205cb6d6b9bf6ef025f7234a5c8c6ef5cc95a16b1ec1ea40ad9dc58d",
+      "set_id_b": "d4fba867b27e9761697ba94863edb0a88bfdfe3a9b86e473c4eefbd97e835344",
+      "max_abs_delta": 0.003489275462925434,
+      "cosine": 0.9997603665898025,
+      "model_sha256": "6a5b2dfb958f98c851028f8c08424458249359ea921314be378f8b82088dcac1"
+    },
+    {
+      "model": "minilm",
+      "inputs_a": [
+        "白い猫",
+        "黒い犬"
+      ],
+      "inputs_b": [
+        "白い犬",
+        "黒い猫"
+      ],
+      "dimension": 384,
+      "same_under_reversal": true,
+      "set_id_a": "36c989f5a20b6dd9ac583ee59201646b7e71b4526dadfed6e3d53781bafd5a6b",
+      "set_id_b": "220c93abd727dc14acd42ee6721fb0b34a5b0f7a22a538427d457ef1cc105999",
+      "max_abs_delta": 0.02575773559510708,
+      "cosine": 0.985191543602523,
+      "model_sha256": "fa47907f8732d52ba31796d74bc87c4642b76da465d7d1f74df04ca89f3a9aab"
+    },
+    {
+      "model": "qwen3",
+      "inputs_a": [
+        "白い猫",
+        "黒い犬"
+      ],
+      "inputs_b": [
+        "白い犬",
+        "黒い猫"
+      ],
+      "dimension": 1024,
+      "same_under_reversal": true,
+      "set_id_a": "36c989f5a20b6dd9ac583ee59201646b7e71b4526dadfed6e3d53781bafd5a6b",
+      "set_id_b": "220c93abd727dc14acd42ee6721fb0b34a5b0f7a22a538427d457ef1cc105999",
+      "max_abs_delta": 0.011253610253334045,
+      "cosine": 0.9963752590941489,
+      "model_sha256": "06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439"
+    },
+    {
+      "model": "gemma2",
+      "inputs_a": [
+        "白い猫",
+        "黒い犬"
+      ],
+      "inputs_b": [
+        "白い犬",
+        "黒い猫"
+      ],
+      "dimension": 768,
+      "same_under_reversal": true,
+      "set_id_a": "36c989f5a20b6dd9ac583ee59201646b7e71b4526dadfed6e3d53781bafd5a6b",
+      "set_id_b": "220c93abd727dc14acd42ee6721fb0b34a5b0f7a22a538427d457ef1cc105999",
+      "max_abs_delta": 0.004532329738140106,
+      "cosine": 0.9994881728343821,
+      "model_sha256": "2188ac1deca4b77dffefd603c2776a9d76d9d74ec01841392982ebb840b09135"
+    }
+  ],
+  "worker": "6a9045a9e9b2-f0e07667d8513b72",
+  "git_head": "114a43c09159dffe8e8dd21b01e70acaaae225f0",
+  "service_source_sha256": "477ade7340f3b129c0cc043f20ab5c05476abc794a8fd290a6ef27a52bf8ae9c"
+}
