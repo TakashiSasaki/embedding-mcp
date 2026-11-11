@@ -37,12 +37,13 @@ python3 experiments/run.py text e5
 - テキスト実験のモデルIDは `e5`、`minilm`、`labse`、`gemma2`、`qwen3` です。例えば `text minilm qwen3` で2本に絞れます。取得側は `fetch.py runtime minilm qwen3` を指定します。
 - マルチモーダル実験は `ffmpeg` と `ffprobe` を使います。画像・WAV・MP4はスクリプトで生成します。MP4の生成には `libx264` を含むFFmpegが必要です。
 - Transformersと非BERTの実験には `uv` が必要です。`uv sync --locked --python /usr/bin/python3` で、Python 3.12とCPU版PyTorchを含む依存関係を準備できます。MiniLMのマスク変更は `reference minilm`、LaBSEのトークン化とDense＋Tanhの切り分けは `reference labse` で実行します。
-- 全重みを取得する場合は `python3 experiments/fetch.py all` を使います。ダウンロードは約6.1 GBで、展開後のランタイムとPython環境にも空き容量が要ります。
+- 全アセットを取得する場合は `python3 experiments/fetch.py all` を使います。ダウンロードは約8.0 GBで、展開後のランタイムとPython環境にも空き容量が要ります。
 - MiniLM の集合実験では、[日英18例](fixtures/set-context-ja-en-v1.json)について、先頭から要素間の参照を遮断する層数を0〜12で変えます。語義の順位とフレーズの組み替えの距離を別々に記録します。グラフも保存する場合は `uv run --no-project --with matplotlib==3.10.7 python experiments/set_context.py --plot` を使います。[測定結果](results/2026-11-10-minilm-set-context/summary.json)
 
 ## 結果の記録
 
 - [語・句の集合における要素間アテンションの第一段階実験](results/2026-11-11-set-context-phase-1/README.md)に、4モデルの境界比較、予備実験、評価上の制約、再解析・再実行の手順をまとめています。
+- [第二段階の実験計画と準備記録](results/2026-11-11-set-context-phase-2/README.md)に、CPUで実行する8モデル、日英の評価例、境界の選定規則、計測ログの読み方を記載しています。
 - [初回の実測](results/2026-11-08-baseline.json) と [再実行の検証結果](results/2026-11-08-reproduction.json) を保存しています。[日英の入力セット](fixtures/retrieval-ja-en-v1.json) は10トピックの小規模な比較用です。テキスト比較では128トークンの上限を指定しているので、新しい入力も短文から試せます。
 - 実行ごとに `runs/` に新しいディレクトリを作ります。`metadata.json` にGitコミット、作業ツリーの変更有無、実行コマンド、アセットと入力セットのハッシュ、スレッド数を記録します。`summary.json` は比較用、各実験のJSONとログは詳細確認用です。
 - 実験を追加するときは、コード、入力セット、アセットの固定情報と、共有したい計測の `metadata.json` および `summary.json` を `results/<日付>-<実験名>/` に保存してGitにコミットします。入力を変えた比較では、既存の入力セットを残し、同じ形式で別のJSONを作って `EMBED_FIXTURE=fixtures/retrieval-ja-en-v2.json` を指定します。

@@ -1,0 +1,1087 @@
+{
+  "version": 2,
+  "sense": [
+    {
+      "id": "sense-ja-development-01",
+      "language": "ja",
+      "split": "development",
+      "target": "キー",
+      "a": {
+        "companions": [
+          "錠前",
+          "合鍵"
+        ],
+        "reference": "錠を開閉するための小さな器具"
+      },
+      "b": {
+        "companions": [
+          "打鍵",
+          "キーボード"
+        ],
+        "reference": "入力装置の一つ一つの押しボタン"
+      }
+    },
+    {
+      "id": "sense-ja-development-02",
+      "language": "ja",
+      "split": "development",
+      "target": "ポスト",
+      "a": {
+        "companions": [
+          "郵便",
+          "投函"
+        ],
+        "reference": "手紙を入れて集荷を待つ箱"
+      },
+      "b": {
+        "companions": [
+          "役職",
+          "人事"
+        ],
+        "reference": "組織の中で人が就く地位"
+      }
+    },
+    {
+      "id": "sense-ja-development-03",
+      "language": "ja",
+      "split": "development",
+      "target": "ピン",
+      "a": {
+        "companions": [
+          "裁縫",
+          "針"
+        ],
+        "reference": "布などを留める細い金属の針"
+      },
+      "b": {
+        "companions": [
+          "ボウリング",
+          "ストライク"
+        ],
+        "reference": "球を転がして倒す木製の標的"
+      }
+    },
+    {
+      "id": "sense-ja-development-04",
+      "language": "ja",
+      "split": "development",
+      "target": "クラブ",
+      "a": {
+        "companions": [
+          "ゴルフ",
+          "スイング"
+        ],
+        "reference": "競技で球を打つための道具"
+      },
+      "b": {
+        "companions": [
+          "ダンス",
+          "深夜"
+        ],
+        "reference": "音楽を聴き踊るための店"
+      }
+    },
+    {
+      "id": "sense-ja-development-05",
+      "language": "ja",
+      "split": "development",
+      "target": "ラム",
+      "a": {
+        "companions": [
+          "羊肉",
+          "牧場"
+        ],
+        "reference": "生後間もない羊の肉"
+      },
+      "b": {
+        "companions": [
+          "蒸留",
+          "カクテル"
+        ],
+        "reference": "サトウキビを原料とする蒸留酒"
+      }
+    },
+    {
+      "id": "sense-ja-development-06",
+      "language": "ja",
+      "split": "development",
+      "target": "ケース",
+      "a": {
+        "companions": [
+          "容器",
+          "収納"
+        ],
+        "reference": "品物を入れて保護する箱"
+      },
+      "b": {
+        "companions": [
+          "事例",
+          "判例"
+        ],
+        "reference": "個別に検討できる具体的な出来事"
+      }
+    },
+    {
+      "id": "sense-ja-heldout-01",
+      "language": "ja",
+      "split": "heldout",
+      "target": "リング",
+      "a": {
+        "companions": [
+          "宝石",
+          "指輪"
+        ],
+        "reference": "指にはめる円形の装身具"
+      },
+      "b": {
+        "companions": [
+          "ボクシング",
+          "試合"
+        ],
+        "reference": "格闘技を行うロープで囲んだ競技場"
+      }
+    },
+    {
+      "id": "sense-ja-heldout-02",
+      "language": "ja",
+      "split": "heldout",
+      "target": "トーン",
+      "a": {
+        "companions": [
+          "声",
+          "発声"
+        ],
+        "reference": "話し声の響きや調子"
+      },
+      "b": {
+        "companions": [
+          "配色",
+          "明度"
+        ],
+        "reference": "色の明るさと鮮やかさのまとまり"
+      }
+    },
+    {
+      "id": "sense-ja-heldout-03",
+      "language": "ja",
+      "split": "heldout",
+      "target": "ピッチ",
+      "a": {
+        "companions": [
+          "サッカー",
+          "芝生"
+        ],
+        "reference": "球技で選手が競技する区画"
+      },
+      "b": {
+        "companions": [
+          "音程",
+          "周波数"
+        ],
+        "reference": "音の高さを表す性質"
+      }
+    },
+    {
+      "id": "sense-ja-heldout-04",
+      "language": "ja",
+      "split": "heldout",
+      "target": "ボルト",
+      "a": {
+        "companions": [
+          "ネジ",
+          "ナット"
+        ],
+        "reference": "部品を締結するためのおねじ"
+      },
+      "b": {
+        "companions": [
+          "電圧",
+          "電池"
+        ],
+        "reference": "電位差を表す国際単位"
+      }
+    },
+    {
+      "id": "sense-ja-heldout-05",
+      "language": "ja",
+      "split": "heldout",
+      "target": "コード",
+      "a": {
+        "companions": [
+          "コンセント",
+          "配線"
+        ],
+        "reference": "機器を電源につなぐ柔軟な線"
+      },
+      "b": {
+        "companions": [
+          "プログラム",
+          "関数"
+        ],
+        "reference": "計算機の処理を記述する命令の列"
+      }
+    },
+    {
+      "id": "sense-ja-heldout-06",
+      "language": "ja",
+      "split": "heldout",
+      "target": "カード",
+      "a": {
+        "companions": [
+          "決済",
+          "信用"
+        ],
+        "reference": "代金の支払いに使う小型の媒体"
+      },
+      "b": {
+        "companions": [
+          "トランプ",
+          "切り札"
+        ],
+        "reference": "遊戯で配る絵柄入りの札"
+      }
+    },
+    {
+      "id": "sense-en-development-01",
+      "language": "en",
+      "split": "development",
+      "target": "crane",
+      "a": {
+        "companions": [
+          "heron",
+          "wetland"
+        ],
+        "reference": "a tall bird with long legs and a long neck"
+      },
+      "b": {
+        "companions": [
+          "construction",
+          "hoist"
+        ],
+        "reference": "a machine that lifts and moves heavy loads"
+      }
+    },
+    {
+      "id": "sense-en-development-02",
+      "language": "en",
+      "split": "development",
+      "target": "bass",
+      "a": {
+        "companions": [
+          "lake",
+          "angler"
+        ],
+        "reference": "a fish often caught for sport"
+      },
+      "b": {
+        "companions": [
+          "music",
+          "speaker"
+        ],
+        "reference": "the lowest range of musical sound"
+      }
+    },
+    {
+      "id": "sense-en-development-03",
+      "language": "en",
+      "split": "development",
+      "target": "palm",
+      "a": {
+        "companions": [
+          "fingers",
+          "hand"
+        ],
+        "reference": "the inner surface between the wrist and the bases of the fingers"
+      },
+      "b": {
+        "companions": [
+          "coconut",
+          "tropical"
+        ],
+        "reference": "a tree with a crown of large fronds"
+      }
+    },
+    {
+      "id": "sense-en-development-04",
+      "language": "en",
+      "split": "development",
+      "target": "mole",
+      "a": {
+        "companions": [
+          "tunnel",
+          "burrow"
+        ],
+        "reference": "a small mammal that digs underground"
+      },
+      "b": {
+        "companions": [
+          "spy",
+          "infiltration"
+        ],
+        "reference": "a secret agent embedded in an organization"
+      }
+    },
+    {
+      "id": "sense-en-development-05",
+      "language": "en",
+      "split": "development",
+      "target": "pupil",
+      "a": {
+        "companions": [
+          "classroom",
+          "teacher"
+        ],
+        "reference": "a child who is being taught at school"
+      },
+      "b": {
+        "companions": [
+          "iris",
+          "retina"
+        ],
+        "reference": "the opening that admits light into the eye"
+      }
+    },
+    {
+      "id": "sense-en-development-06",
+      "language": "en",
+      "split": "development",
+      "target": "match",
+      "a": {
+        "companions": [
+          "tournament",
+          "referee"
+        ],
+        "reference": "a contest between two sides"
+      },
+      "b": {
+        "companions": [
+          "flame",
+          "kindling"
+        ],
+        "reference": "a small stick used to start a fire"
+      }
+    },
+    {
+      "id": "sense-en-heldout-01",
+      "language": "en",
+      "split": "heldout",
+      "target": "date",
+      "a": {
+        "companions": [
+          "calendar",
+          "appointment"
+        ],
+        "reference": "a specified day of a month or year"
+      },
+      "b": {
+        "companions": [
+          "fruit",
+          "palm"
+        ],
+        "reference": "a sweet edible drupe with a single hard stone"
+      }
+    },
+    {
+      "id": "sense-en-heldout-02",
+      "language": "en",
+      "split": "heldout",
+      "target": "sole",
+      "a": {
+        "companions": [
+          "shoe",
+          "heel"
+        ],
+        "reference": "the underside of footwear that contacts the ground"
+      },
+      "b": {
+        "companions": [
+          "fish",
+          "flounder"
+        ],
+        "reference": "a flattened marine animal with both eyes on one side"
+      }
+    },
+    {
+      "id": "sense-en-heldout-03",
+      "language": "en",
+      "split": "heldout",
+      "target": "fan",
+      "a": {
+        "companions": [
+          "stadium",
+          "supporter"
+        ],
+        "reference": "a person who follows a performer or team with enthusiasm"
+      },
+      "b": {
+        "companions": [
+          "motor",
+          "ventilation"
+        ],
+        "reference": "a device with rotating blades that moves air"
+      }
+    },
+    {
+      "id": "sense-en-heldout-04",
+      "language": "en",
+      "split": "heldout",
+      "target": "pen",
+      "a": {
+        "companions": [
+          "ink",
+          "notebook"
+        ],
+        "reference": "a handheld tool used for writing"
+      },
+      "b": {
+        "companions": [
+          "sheep",
+          "fence"
+        ],
+        "reference": "an enclosure for keeping animals"
+      }
+    },
+    {
+      "id": "sense-en-heldout-05",
+      "language": "en",
+      "split": "heldout",
+      "target": "trunk",
+      "a": {
+        "companions": [
+          "elephant",
+          "tusk"
+        ],
+        "reference": "a long flexible nose that can grasp things"
+      },
+      "b": {
+        "companions": [
+          "luggage",
+          "storage"
+        ],
+        "reference": "a large rigid chest used to store or transport belongings"
+      }
+    },
+    {
+      "id": "sense-en-heldout-06",
+      "language": "en",
+      "split": "heldout",
+      "target": "jam",
+      "a": {
+        "companions": [
+          "toast",
+          "strawberry"
+        ],
+        "reference": "a sweet spread made by cooking fruit with sugar"
+      },
+      "b": {
+        "companions": [
+          "traffic",
+          "congestion"
+        ],
+        "reference": "an obstruction that stops vehicles from moving freely"
+      }
+    }
+  ],
+  "binding": [
+    {
+      "id": "binding-ja-development-01",
+      "language": "ja",
+      "split": "development",
+      "relation": "color",
+      "original": [
+        "紙 : 赤",
+        "布 : 青"
+      ],
+      "reassigned": [
+        "紙 : 青",
+        "布 : 赤"
+      ],
+      "paraphrase": [
+        "赤色の紙",
+        "青色の布"
+      ]
+    },
+    {
+      "id": "binding-ja-development-02",
+      "language": "ja",
+      "split": "development",
+      "relation": "position",
+      "original": [
+        "猫 : 右",
+        "犬 : 左"
+      ],
+      "reassigned": [
+        "猫 : 左",
+        "犬 : 右"
+      ],
+      "paraphrase": [
+        "猫が右側にいる",
+        "犬が左側にいる"
+      ]
+    },
+    {
+      "id": "binding-ja-development-03",
+      "language": "ja",
+      "split": "development",
+      "relation": "action",
+      "original": [
+        "猿 : 跳ぶ",
+        "鳥 : 鳴く"
+      ],
+      "reassigned": [
+        "猿 : 鳴く",
+        "鳥 : 跳ぶ"
+      ],
+      "paraphrase": [
+        "猿がジャンプする",
+        "鳥が声を出す"
+      ]
+    },
+    {
+      "id": "binding-ja-development-04",
+      "language": "ja",
+      "split": "development",
+      "relation": "material",
+      "original": [
+        "箱 : 木",
+        "皿 : 鉄"
+      ],
+      "reassigned": [
+        "箱 : 鉄",
+        "皿 : 木"
+      ],
+      "paraphrase": [
+        "木でできた箱",
+        "鉄でできた皿"
+      ]
+    },
+    {
+      "id": "binding-ja-development-05",
+      "language": "ja",
+      "split": "development",
+      "relation": "size",
+      "original": [
+        "石 : 大",
+        "実 : 小"
+      ],
+      "reassigned": [
+        "石 : 小",
+        "実 : 大"
+      ],
+      "paraphrase": [
+        "大きな石",
+        "小さな実"
+      ]
+    },
+    {
+      "id": "binding-ja-development-06",
+      "language": "ja",
+      "split": "development",
+      "relation": "temperature",
+      "original": [
+        "茶 : 温",
+        "水 : 冷"
+      ],
+      "reassigned": [
+        "茶 : 冷",
+        "水 : 温"
+      ],
+      "paraphrase": [
+        "温かいお茶",
+        "冷たい水"
+      ]
+    },
+    {
+      "id": "binding-ja-development-07",
+      "language": "ja",
+      "split": "development",
+      "relation": "color",
+      "original": [
+        "玉 : 白",
+        "皿 : 黒",
+        "箱 : 赤"
+      ],
+      "reassigned": [
+        "玉 : 黒",
+        "皿 : 赤",
+        "箱 : 白"
+      ],
+      "paraphrase": [
+        "白い玉",
+        "黒い皿",
+        "赤い箱"
+      ]
+    },
+    {
+      "id": "binding-ja-development-08",
+      "language": "ja",
+      "split": "development",
+      "relation": "position",
+      "original": [
+        "鳥 : 上",
+        "魚 : 中",
+        "虫 : 下"
+      ],
+      "reassigned": [
+        "鳥 : 中",
+        "魚 : 下",
+        "虫 : 上"
+      ],
+      "paraphrase": [
+        "鳥は上にいる",
+        "魚は中央にいる",
+        "虫は下にいる"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-01",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "color",
+      "original": [
+        "布 : 青",
+        "靴 : 白"
+      ],
+      "reassigned": [
+        "布 : 白",
+        "靴 : 青"
+      ],
+      "paraphrase": [
+        "青色の布",
+        "白色の靴"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-02",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "position",
+      "original": [
+        "馬 : 左",
+        "羊 : 右"
+      ],
+      "reassigned": [
+        "馬 : 右",
+        "羊 : 左"
+      ],
+      "paraphrase": [
+        "左側にいる馬",
+        "右側にいる羊"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-03",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "action",
+      "original": [
+        "牛 : 食べる",
+        "犬 : 走る"
+      ],
+      "reassigned": [
+        "牛 : 走る",
+        "犬 : 食べる"
+      ],
+      "paraphrase": [
+        "牛が食事する",
+        "犬が駆ける"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-04",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "material",
+      "original": [
+        "鍋 : 鉄",
+        "瓶 : ガラス"
+      ],
+      "reassigned": [
+        "鍋 : ガラス",
+        "瓶 : 鉄"
+      ],
+      "paraphrase": [
+        "鉄製の鍋",
+        "ガラスでできた瓶"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-05",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "size",
+      "original": [
+        "葉 : 小",
+        "花 : 大"
+      ],
+      "reassigned": [
+        "葉 : 大",
+        "花 : 小"
+      ],
+      "paraphrase": [
+        "小さい葉",
+        "大きい花"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-06",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "temperature",
+      "original": [
+        "湯 : 熱",
+        "汁 : 温"
+      ],
+      "reassigned": [
+        "湯 : 温",
+        "汁 : 熱"
+      ],
+      "paraphrase": [
+        "熱い湯",
+        "温かい汁"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-07",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "color",
+      "original": [
+        "石 : 緑",
+        "紙 : 黒",
+        "花 : 黄"
+      ],
+      "reassigned": [
+        "石 : 黒",
+        "紙 : 黄",
+        "花 : 緑"
+      ],
+      "paraphrase": [
+        "緑色の石",
+        "黒い紙",
+        "黄色い花"
+      ]
+    },
+    {
+      "id": "binding-ja-heldout-08",
+      "language": "ja",
+      "split": "heldout",
+      "relation": "position",
+      "original": [
+        "猿 : 上",
+        "鹿 : 下",
+        "狼 : 中"
+      ],
+      "reassigned": [
+        "猿 : 下",
+        "鹿 : 中",
+        "狼 : 上"
+      ],
+      "paraphrase": [
+        "猿は上にいる",
+        "鹿は下にいる",
+        "狼は中央にいる"
+      ]
+    },
+    {
+      "id": "binding-en-development-01",
+      "language": "en",
+      "split": "development",
+      "relation": "color",
+      "original": [
+        "cup : red",
+        "plate : blue"
+      ],
+      "reassigned": [
+        "cup : blue",
+        "plate : red"
+      ],
+      "paraphrase": [
+        "a cup that is red",
+        "a plate that is blue"
+      ]
+    },
+    {
+      "id": "binding-en-development-02",
+      "language": "en",
+      "split": "development",
+      "relation": "position",
+      "original": [
+        "cat : above",
+        "dog : below"
+      ],
+      "reassigned": [
+        "cat : below",
+        "dog : above"
+      ],
+      "paraphrase": [
+        "the cat is up higher",
+        "the dog is down lower"
+      ]
+    },
+    {
+      "id": "binding-en-development-03",
+      "language": "en",
+      "split": "development",
+      "relation": "action",
+      "original": [
+        "bird : flies",
+        "fish : swims"
+      ],
+      "reassigned": [
+        "bird : swims",
+        "fish : flies"
+      ],
+      "paraphrase": [
+        "the bird moves through the air",
+        "the fish moves through water"
+      ]
+    },
+    {
+      "id": "binding-en-development-04",
+      "language": "en",
+      "split": "development",
+      "relation": "material",
+      "original": [
+        "ring : gold",
+        "chain : silver"
+      ],
+      "reassigned": [
+        "ring : silver",
+        "chain : gold"
+      ],
+      "paraphrase": [
+        "a ring made of gold",
+        "a chain made of silver"
+      ]
+    },
+    {
+      "id": "binding-en-development-05",
+      "language": "en",
+      "split": "development",
+      "relation": "size",
+      "original": [
+        "box : large",
+        "bag : small"
+      ],
+      "reassigned": [
+        "box : small",
+        "bag : large"
+      ],
+      "paraphrase": [
+        "a big box",
+        "a little bag"
+      ]
+    },
+    {
+      "id": "binding-en-development-06",
+      "language": "en",
+      "split": "development",
+      "relation": "temperature",
+      "original": [
+        "tea : hot",
+        "water : cold"
+      ],
+      "reassigned": [
+        "tea : cold",
+        "water : hot"
+      ],
+      "paraphrase": [
+        "tea served hot",
+        "water served chilled"
+      ]
+    },
+    {
+      "id": "binding-en-development-07",
+      "language": "en",
+      "split": "development",
+      "relation": "color",
+      "original": [
+        "coat : red",
+        "hat : blue",
+        "shoe : green"
+      ],
+      "reassigned": [
+        "coat : blue",
+        "hat : green",
+        "shoe : red"
+      ],
+      "paraphrase": [
+        "a coat in red",
+        "a hat in blue",
+        "a shoe in green"
+      ]
+    },
+    {
+      "id": "binding-en-development-08",
+      "language": "en",
+      "split": "development",
+      "relation": "position",
+      "original": [
+        "rat : left",
+        "bat : center",
+        "owl : right"
+      ],
+      "reassigned": [
+        "rat : center",
+        "bat : right",
+        "owl : left"
+      ],
+      "paraphrase": [
+        "a rat on the left",
+        "a bat in the middle",
+        "an owl on the right"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-01",
+      "language": "en",
+      "split": "heldout",
+      "relation": "color",
+      "original": [
+        "book : green",
+        "pen : black"
+      ],
+      "reassigned": [
+        "book : black",
+        "pen : green"
+      ],
+      "paraphrase": [
+        "a book in green",
+        "a pen in black"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-02",
+      "language": "en",
+      "split": "heldout",
+      "relation": "position",
+      "original": [
+        "the cow : right",
+        "the goat : left"
+      ],
+      "reassigned": [
+        "the cow : left",
+        "the goat : right"
+      ],
+      "paraphrase": [
+        "the cow is on the right",
+        "the goat is on the left"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-03",
+      "language": "en",
+      "split": "heldout",
+      "relation": "action",
+      "original": [
+        "bee : buzzes",
+        "duck : quacks"
+      ],
+      "reassigned": [
+        "bee : quacks",
+        "duck : buzzes"
+      ],
+      "paraphrase": [
+        "the bee makes a buzzing sound",
+        "the duck makes a quacking sound"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-04",
+      "language": "en",
+      "split": "heldout",
+      "relation": "material",
+      "original": [
+        "the fork : steel",
+        "the spoon : wood"
+      ],
+      "reassigned": [
+        "the fork : wood",
+        "the spoon : steel"
+      ],
+      "paraphrase": [
+        "a fork made of steel",
+        "a spoon made of wood"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-05",
+      "language": "en",
+      "split": "heldout",
+      "relation": "size",
+      "original": [
+        "the bell : small",
+        "the drum : large"
+      ],
+      "reassigned": [
+        "the bell : large",
+        "the drum : small"
+      ],
+      "paraphrase": [
+        "a little bell",
+        "a big drum"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-06",
+      "language": "en",
+      "split": "heldout",
+      "relation": "temperature",
+      "original": [
+        "the soup : hot",
+        "the juice : cold"
+      ],
+      "reassigned": [
+        "the soup : cold",
+        "the juice : hot"
+      ],
+      "paraphrase": [
+        "soup served hot",
+        "juice served chilled"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-07",
+      "language": "en",
+      "split": "heldout",
+      "relation": "color",
+      "original": [
+        "lamp : yellow",
+        "rug : red",
+        "desk : white"
+      ],
+      "reassigned": [
+        "lamp : red",
+        "rug : white",
+        "desk : yellow"
+      ],
+      "paraphrase": [
+        "a lamp in yellow",
+        "a rug in red",
+        "a desk in white"
+      ]
+    },
+    {
+      "id": "binding-en-heldout-08",
+      "language": "en",
+      "split": "heldout",
+      "relation": "position",
+      "original": [
+        "the book : top",
+        "the pen : middle",
+        "the bag : bottom"
+      ],
+      "reassigned": [
+        "the book : middle",
+        "the pen : bottom",
+        "the bag : top"
+      ],
+      "paraphrase": [
+        "the book is in the top position",
+        "the pen is in the middle position",
+        "the bag is in the bottom position"
+      ]
+    }
+  ]
+}

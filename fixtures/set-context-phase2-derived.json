@@ -1,0 +1,17 @@
+{
+  "input_group": "ref-mbert",
+  "model": "google-bert/bert-base-multilingual-cased",
+  "revision": "3f076fdb1ab68d5b2880cb87a0886f315b8146f8",
+  "worker_patch_sha256": "d337a95507f046e31fcdb6d439b06ddd4cb78ba055058d5d1171f7d7a0f59df4",
+  "conversion": {
+    "script": "experiments/convert_phase2_mbert.py",
+    "outtype": "q8_0",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.14.0"
+  },
+  "gguf": {
+    "path": "mbert-base-cased-Q8_0.gguf",
+    "bytes": 192321216,
+    "sha256": "f7cdfac9c2c3554a18d6b3dfa438caa3015a690ba0e6b964e3224f3c04c62292"
+  }
+}

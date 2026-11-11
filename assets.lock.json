@@ -5,6 +5,22 @@
     "commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8"
   },
   "groups": {
+    "e5-base": [
+      {
+        "path": "multilingual-e5-base-F16.gguf",
+        "url": "https://huggingface.co/yixuan-chia/multilingual-e5-base-gguf/resolve/8a6f6cb284d54c798cc364ba497c976fbb8fe6bc/multilingual-e5-base-F16.gguf",
+        "bytes": 562766336,
+        "sha256": "b12a1fde0b247fd3f8c8de6b903d90838c8e1decb9ef6823d92982c4a56c4922"
+      }
+    ],
+    "bge-m3": [
+      {
+        "path": "bge-m3-q8_0.gguf",
+        "url": "https://huggingface.co/ggml-org/bge-m3-Q8_0-GGUF/resolve/9eba04c5d75ba5a1595e45de734d36bef4e5cb98/bge-m3-q8_0.gguf",
+        "bytes": 634553760,
+        "sha256": "aa473d51f451a22f0fcf39ba3330c14bed38a385712b1113440f69df4047a173"
+      }
+    ],
     "runtime": [
       {
         "path": "llama-arm64.tar.gz",
@@ -225,6 +241,38 @@
         "url": "https://raw.githubusercontent.com/facebookresearch/LASER/d7e2544234c1d2a7076280944bdc2637f98ef3c2/laser_encoders/laser_tokenizer.py",
         "bytes": 6400,
         "sha256": "71ccf595a3d7d6a6e58284e86f71a8f6adc35bd0521a72c12f2508bd05257c3a"
+      }
+    ],
+    "ref-mbert": [
+      {
+        "path": "ref-mbert/config.json",
+        "url": "https://huggingface.co/google-bert/bert-base-multilingual-cased/resolve/3f076fdb1ab68d5b2880cb87a0886f315b8146f8/config.json",
+        "bytes": 625,
+        "sha256": "4d10c2021c6b5fbe8b70698abc6ccc6691dc28d1bae9732f7fa1087782feba7e"
+      },
+      {
+        "path": "ref-mbert/tokenizer.json",
+        "url": "https://huggingface.co/google-bert/bert-base-multilingual-cased/resolve/3f076fdb1ab68d5b2880cb87a0886f315b8146f8/tokenizer.json",
+        "bytes": 1961828,
+        "sha256": "f4a4d5bf7301717e261fafbe26e1eb967f6ba4cb3ae0ab7a29f4642ec229f386"
+      },
+      {
+        "path": "ref-mbert/tokenizer_config.json",
+        "url": "https://huggingface.co/google-bert/bert-base-multilingual-cased/resolve/3f076fdb1ab68d5b2880cb87a0886f315b8146f8/tokenizer_config.json",
+        "bytes": 49,
+        "sha256": "0f6d13e6f4da6f9e24f22ada6bc3be571123d858d7c0c05a8a7cd55a9c23c2e8"
+      },
+      {
+        "path": "ref-mbert/vocab.txt",
+        "url": "https://huggingface.co/google-bert/bert-base-multilingual-cased/resolve/3f076fdb1ab68d5b2880cb87a0886f315b8146f8/vocab.txt",
+        "bytes": 995526,
+        "sha256": "fe0fda7c425b48c516fc8f160d594c8022a0808447475c1a7c6d6479763f310c"
+      },
+      {
+        "path": "ref-mbert/model.safetensors",
+        "url": "https://huggingface.co/google-bert/bert-base-multilingual-cased/resolve/3f076fdb1ab68d5b2880cb87a0886f315b8146f8/model.safetensors",
+        "bytes": 714290682,
+        "sha256": "876f584f15ebf14887dec17539c114bb99a032e96b9e72507a51c41e205337fc"
       }
     ]
   }

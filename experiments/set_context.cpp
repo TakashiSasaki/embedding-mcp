@@ -2,6 +2,7 @@
 #include "nlohmann/json.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <fstream>
@@ -17,6 +18,22 @@
 using json = nlohmann::json;
 using Tokens = std::vector<llama_token>;
 using Vector = std::vector<double>;
+using Clock = std::chrono::steady_clock;
+
+void record_time(const char * stage, Clock::time_point start, int boundary = -1) {
+    const double seconds = std::chrono::duration<double>(Clock::now() - start).count();
+    std::cerr << "PHASE2_TIMING " << json{{"stage", stage}, {"k", boundary}, {"seconds", seconds}}.dump() << '\n';
+}
+
+std::string model_metadata(const llama_model * model, const std::string & key) {
+    char value[128]{};
+    if (llama_model_meta_val_str(model, key.c_str(), value, sizeof(value)) < 0) return {};
+    return value;
+}
+
+std::string architecture(const llama_model * model) {
+    return model_metadata(model, "general.architecture");
+}
 
 struct Member {
     std::string text;
@@ -119,9 +136,17 @@ Embeddings evaluate(llama_context * ctx, std::vector<Member> members, int blocke
     if (inspect_mask) {
         const int query = rows.at(0).at(members[0].content_begin);
         const int key = rows.at(1).at(members[1].content_begin);
-        for (int layer = 0; layer < layers; ++layer) probes.push_back({layer, 0, query, key, false, false, 0});
+        const int stride = (layers + 11) / 12;
+        for (int layer = 0; layer < layers; layer += stride) probes.push_back({layer, 0, query, key, false, false, 0});
+        const bool causal = architecture(model) == "qwen3";
         for (int layer : {std::max(0, blocked_layers - 1), std::min(layers - 1, blocked_layers)}) {
-            probes.push_back({layer, 0, key, query, false, false, 0});
+            if (causal) {
+                // Check that opening cross-member attention preserves the future-token ban.
+                const int future = rows[1].at(members[1].content_begin + 1);
+                probes.push_back({layer, 0, query, future, false, false, 0});
+            } else {
+                probes.push_back({layer, 0, key, query, false, false, 0});
+            }
             probes.push_back({layer, 0, query, query, false, false, 0});
         }
     }
@@ -133,14 +158,20 @@ Embeddings evaluate(llama_context * ctx, std::vector<Member> members, int blocke
     }
 
     Embeddings out{{}, Vector(dimension, 0), Vector(dimension, 0)};
+    const bool causal = !probes.empty() && architecture(model) == "qwen3";
     for (const auto & probe : probes) {
-        const bool expected = probe.query == probe.key || probe.layer >= blocked_layers;
+        const bool within_causal_range = !causal || layout[probe.key].first <= layout[probe.query].first;
+        const bool expected = within_causal_range && (probe.query == probe.key || probe.layer >= blocked_layers);
         if (!probe.observed || probe.allowed != expected ||
                 (!expected && probe.probability != 0) || !std::isfinite(probe.probability)) {
             throw std::runtime_error("Unexpected mask at layer " + std::to_string(probe.layer));
         }
         out.mask_checks.push_back({{"layer", probe.layer}, {"within_member", probe.query == probe.key},
                                    {"allowed", probe.allowed}, {"probability", probe.probability}});
+        if (causal) {
+            out.mask_checks.back()["query_position"] = layout[probe.query].first;
+            out.mask_checks.back()["key_position"] = layout[probe.key].first;
+        }
     }
     size_t count = 0;
     for (size_t i = 0; i < members.size(); ++i) {
@@ -211,13 +242,23 @@ Vector definition_anchor(llama_context * ctx, const llama_vocab * vocab, const M
     return evaluate(ctx, {entry}, 0).members.at(entry.text);
 }
 
+Member definition_suffix(const llama_vocab * vocab, const Member & target, const std::string & definition) {
+    auto entry = target;
+    entry.text = definition + " : " + target.text;
+    const auto prefix = tokenize(vocab, definition + " :", false);
+    entry.tokens.insert(entry.tokens.begin() + entry.content_begin, prefix.begin(), prefix.end());
+    entry.content_begin += prefix.size();
+    entry.content_end += prefix.size();
+    return entry;
+}
+
 struct SenseCase {
     std::string id, language, target;
     std::vector<Member> a, b;
     Vector anchor_a, anchor_b, legacy_a, legacy_b;
 };
 
-SenseCase prepare_sense(llama_context * ctx, const llama_vocab * vocab, const json & item) {
+SenseCase prepare_sense(llama_context * ctx, const llama_vocab * vocab, const json & item, bool phase2) {
     SenseCase result{item.at("id"), item.at("language"), item.at("target"), {}, {}, {}, {}, {}, {}};
     const auto target = encode(vocab, result.target);
     const auto companions = [&](const char * side) {
@@ -229,10 +270,18 @@ SenseCase prepare_sense(llama_context * ctx, const llama_vocab * vocab, const js
     const auto definition_b = item.at("b").at("reference").get<std::string>();
     result.a = companions("a");
     result.b = companions("b");
-    result.anchor_a = definition_anchor(ctx, vocab, target, definition_a);
-    result.anchor_b = definition_anchor(ctx, vocab, target, definition_b);
-    result.legacy_a = evaluate(ctx, {target, encode(vocab, definition_a)}, 6).members.at(result.target);
-    result.legacy_b = evaluate(ctx, {target, encode(vocab, definition_b)}, 6).members.at(result.target);
+    if (phase2) {
+        const auto a = definition_suffix(vocab, target, definition_a);
+        const auto b = definition_suffix(vocab, target, definition_b);
+        result.anchor_a = evaluate(ctx, {a}, 0).members.at(a.text);
+        result.anchor_b = evaluate(ctx, {b}, 0).members.at(b.text);
+    } else {
+        result.anchor_a = definition_anchor(ctx, vocab, target, definition_a);
+        result.anchor_b = definition_anchor(ctx, vocab, target, definition_b);
+    }
+    const int half = llama_model_n_layer(llama_get_model(ctx)) / 2;
+    result.legacy_a = evaluate(ctx, {target, encode(vocab, definition_a)}, half).members.at(result.target);
+    result.legacy_b = evaluate(ctx, {target, encode(vocab, definition_b)}, half).members.at(result.target);
     return result;
 }
 
@@ -242,11 +291,11 @@ json anchor_scores(const Vector & a, const Vector & b, const Vector & ref_a, con
     return {{"cosines", {{aa, ab}, {ba, bb}}}, {"margins", {aa - ab, bb - ba}}};
 }
 
-json sense_scores(llama_context * ctx, const SenseCase & item, int k) {
+json sense_scores(llama_context * ctx, const SenseCase & item, int k, bool check_order) {
     const auto a = evaluate(ctx, item.a, k), b = evaluate(ctx, item.b, k);
     const auto & target_a = a.members.at(item.target);
     const auto & target_b = b.members.at(item.target);
-    const int orders = check_permutations(ctx, item.a, k, a) + check_permutations(ctx, item.b, k, b);
+    const int orders = check_order ? check_permutations(ctx, item.a, k, a) + check_permutations(ctx, item.b, k, b) : 0;
     auto reversed = item.a;
     std::reverse(reversed.begin(), reversed.end());
     const auto raw = evaluate(ctx, reversed, k, false);
@@ -259,44 +308,113 @@ json sense_scores(llama_context * ctx, const SenseCase & item, int k) {
             {"raw_reverse_target_max_delta", max_delta(target_a, raw.members.at(item.target))}};
 }
 
-json binding_scores(llama_context * ctx, const llama_vocab * vocab, const json & item, int k, bool inspect_mask) {
+json binding_scores(llama_context * ctx, const llama_vocab * vocab, const json & item, int k, bool inspect_mask,
+                    bool check_order, bool phase2) {
     const auto original = encode_all(vocab, item.at("original"));
     const auto swapped = encode_all(vocab, item.at("reassigned"));
     const auto paraphrase = encode_all(vocab, item.at("paraphrase"));
     if (signature(original) != signature(swapped)) throw std::runtime_error("Token positions differ: " + item.at("id").dump());
     const auto a = evaluate(ctx, original, k, true, inspect_mask);
     const auto b = evaluate(ctx, swapped, k), p = evaluate(ctx, paraphrase, k);
-    const int orders = check_permutations(ctx, original, k, a) + check_permutations(ctx, swapped, k, b) +
-                       check_permutations(ctx, paraphrase, k, p);
+    const int orders = check_order ? check_permutations(ctx, original, k, a) + check_permutations(ctx, swapped, k, b) +
+                                   check_permutations(ctx, paraphrase, k, p) : 0;
     auto reversed = original;
     std::reverse(reversed.begin(), reversed.end());
     const double swapped_cosine = cosine(a.set, b.set);
     const double paraphrase_cosine = cosine(a.set, p.set);
-    return {{"id", item.at("id")}, {"language", item.at("language")}, {"relation", item.at("relation")},
+    json scores = {{"id", item.at("id")}, {"language", item.at("language")}, {"relation", item.at("relation")},
             {"swap_distance", 1 - swapped_cosine}, {"paraphrase_distance", 1 - paraphrase_cosine},
             {"ranking_margin", paraphrase_cosine - swapped_cosine},
             {"token_mean_swap_distance", 1 - cosine(a.token_mean, b.token_mean)}, {"orders_checked", orders},
             {"raw_reverse_set_distance", 1 - cosine(a.set, evaluate(ctx, reversed, k, false).set)},
             {"mask_checks", a.mask_checks}};
+    if (phase2) scores["ranking_margin_reverse"] = paraphrase_cosine - cosine(p.set, b.set);
+    return scores;
+}
+
+size_t token_count(const std::vector<Member> & members) {
+    return std::accumulate(members.begin(), members.end(), size_t{0},
+                           [](size_t sum, const Member & member) { return sum + member.tokens.size(); });
+}
+
+json inspect_fixture(const llama_model * model, const json & fixture) {
+    const auto * vocab = llama_model_get_vocab(model);
+    json sense = json::array(), binding = json::array(), tokenizations = json::object();
+    const auto save_tokens = [&](const Member & member) { tokenizations[member.text] = member.tokens; };
+    for (const auto & item : fixture.at("sense")) {
+        const auto target = encode(vocab, item.at("target"));
+        save_tokens(target);
+        json sides = json::array();
+        for (const char * side : {"a", "b"}) {
+            const auto & input = item.at(side);
+            const auto companions = encode_all(vocab, input.at("companions"));
+            const auto anchor = definition_suffix(vocab, target, input.at("reference"));
+            const auto definition = encode(vocab, input.at("reference"));
+            save_tokens(definition);
+            for (const auto & member : companions) save_tokens(member);
+            const Tokens suffix(anchor.tokens.begin() + anchor.content_begin, anchor.tokens.begin() + anchor.content_end);
+            const Tokens standalone(target.tokens.begin() + target.content_begin, target.tokens.begin() + target.content_end);
+            sides.push_back({{"context_tokens", target.tokens.size() + token_count(companions)},
+                             {"definition_tokens", anchor.tokens.size()},
+                             {"legacy_tokens", target.tokens.size() + definition.tokens.size()},
+                             {"anchor_positions", {anchor.content_begin, anchor.content_end}},
+                             {"anchor_token_ids_match_standalone", suffix == standalone}});
+        }
+        sense.push_back({{"id", item.at("id")}, {"sides", sides}});
+    }
+    for (const auto & item : fixture.at("binding")) {
+        const auto a = encode_all(vocab, item.at("original"));
+        const auto b = encode_all(vocab, item.at("reassigned"));
+        const auto p = encode_all(vocab, item.at("paraphrase"));
+        for (const auto * group : {&a, &b, &p}) {
+            for (const auto & member : *group) save_tokens(member);
+        }
+        binding.push_back({{"id", item.at("id")}, {"matched", signature(a) == signature(b)},
+                           {"token_counts", {token_count(a), token_count(b), token_count(p)}}});
+    }
+    const auto arch = architecture(model);
+    return {{"architecture", arch}, {"layers", std::stoi(model_metadata(model, arch + ".block_count"))},
+            {"sense", sense}, {"binding", binding}, {"tokenizations", tokenizations}};
 }
 
 int main(int argc, char ** argv) {
-    if (argc != 3) {
-        std::cerr << "usage: set-context MINI_LM_GGUF FIXTURE_JSON\n";
+    const bool tokenize_only = argc == 4 && std::string(argv[3]) == "--tokenize-only";
+    if (argc != 3 && !tokenize_only) {
+        std::cerr << "usage: set-context MODEL_GGUF FIXTURE_JSON [--tokenize-only]\n";
         return 2;
     }
     try {
+        std::ifstream input(argv[2]);
+        const auto fixture = json::parse(input);
+        const bool phase2 = fixture.at("version") == 2;
+        auto stage = Clock::now();
         llama_log_set([](ggml_log_level level, const char * message, void *) {
             if (level >= GGML_LOG_LEVEL_WARN) std::fputs(message, stderr);
         }, nullptr);
         llama_backend_init();
         auto model_params = llama_model_default_params();
         model_params.n_gpu_layers = 0;
+        model_params.vocab_only = tokenize_only;
         std::unique_ptr<llama_model, decltype(&llama_model_free)> model(
             llama_model_load_from_file(argv[1], model_params), llama_model_free);
-        if (!model || llama_model_n_layer(model.get()) != 12 || llama_model_n_head(model.get()) != 12) {
+        if (!model) throw std::runtime_error("Model load failed");
+        if (tokenize_only) {
+            std::cout << inspect_fixture(model.get(), fixture).dump() << '\n';
+            return 0;
+        }
+        const int depth = llama_model_n_layer(model.get());
+        const int heads = llama_model_n_head(model.get());
+        if (phase2) {
+            const auto arch = architecture(model.get());
+            if ((arch != "bert" && arch != "qwen3" && arch != "gemma-embedding2") ||
+                    depth <= 0 || depth >= 64 || heads <= 0 || heads >= 64) {
+                throw std::runtime_error("Unsupported phase 2 architecture, layer count, or head count");
+            }
+            record_time("model_load", stage);
+        } else if (depth != 12 || heads != 12) {
             throw std::runtime_error("Expected the 12-layer, 12-head MiniLM model");
         }
+        stage = Clock::now();
         auto params = llama_context_default_params();
         params.n_ctx = params.n_batch = params.n_ubatch = 128;
         params.n_seq_max = 1;
@@ -307,16 +425,30 @@ int main(int argc, char ** argv) {
         std::unique_ptr<llama_context, decltype(&llama_free)> ctx(llama_init_from_model(model.get(), params), llama_free);
         if (!ctx) throw std::runtime_error("Context setup failed");
         const auto * vocab = llama_model_get_vocab(model.get());
-        std::ifstream input(argv[2]);
-        const auto fixture = json::parse(input);
+        if (phase2) record_time("context_setup", stage);
+        stage = Clock::now();
         std::vector<SenseCase> senses;
-        for (const auto & item : fixture.at("sense")) senses.push_back(prepare_sense(ctx.get(), vocab, item));
-        for (int k = 0; k <= 12; ++k) {
+        for (const auto & item : fixture.at("sense")) senses.push_back(prepare_sense(ctx.get(), vocab, item, phase2));
+        if (phase2) record_time("references", stage);
+        std::vector<int> boundaries(depth + 1);
+        std::iota(boundaries.begin(), boundaries.end(), 0);
+        if (phase2) boundaries = fixture.at("boundaries").get<std::vector<int>>();
+        for (int k : boundaries) {
+            if (k < 0 || k > depth) throw std::runtime_error("Boundary is outside model layers");
+            stage = Clock::now();
             json sense = json::array(), binding = json::array();
-            for (const auto & item : senses) sense.push_back(sense_scores(ctx.get(), item, k));
-            for (const auto & item : fixture.at("binding")) {
-                binding.push_back(binding_scores(ctx.get(), vocab, item, k, binding.empty()));
+            std::map<std::string, bool> sense_checked, binding_checked;
+            for (const auto & item : senses) {
+                const bool check_order = !phase2 || sense_checked.emplace(item.language, true).second;
+                sense.push_back(sense_scores(ctx.get(), item, k, check_order));
             }
+            if (phase2) record_time("sense", stage, k);
+            stage = Clock::now();
+            for (const auto & item : fixture.at("binding")) {
+                const bool check_order = !phase2 || binding_checked.emplace(item.at("language").get<std::string>(), true).second;
+                binding.push_back(binding_scores(ctx.get(), vocab, item, k, binding.empty(), check_order, phase2));
+            }
+            if (phase2) record_time("binding", stage, k);
             std::cout << json{{"k", k}, {"sense", sense}, {"binding", binding}}.dump() << std::endl;
             std::cerr << "Finished k=" << k << '\n';
         }

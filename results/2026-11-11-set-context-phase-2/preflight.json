@@ -1,0 +1,424 @@
+{
+  "prepared_at": "2026-11-11T04:41:57.146661+00:00",
+  "inputs": {
+    "fixtures/set-context-ja-en-v2.json": "5b2223d19cfb9c24afafb8f52cbfa3edd0a99f849bfefdf61ecdadcc85d2b85f",
+    "assets.lock.json": "9ad3f159f25ed6a75b4e3fa6ca0275e4a7741eb72972486ef82196da7a71d88f",
+    "experiments/set_context.cpp": "338c5661a1a036e6c1169e6a3aeb447ea3238a17f97ea3da792d0f5384c42f8a",
+    "experiments/set_context_phase2.py": "aa7693065dc3c05ced0beb4993d43ab4ccb3ee3c22d6a80017e00ea3bf46fe66",
+    "experiments/convert_phase2_mbert.py": "83560953a65ce222796c81942be3774553180a257ea90f60eec5ae4dbad8e6d9",
+    "fixtures/set-context-phase2-derived.json": "c165e162bcd57cf4f21be2eece590f6a2eba9d14df6c4fbc4bd969fd096eff5c",
+    "experiments/set_context.py": "bcb13004ca9d50bd58af17f29dd89d76e553530ae5e23e5dc6cdbb880ef03329",
+    "experiments/fetch.py": "16effc52b4eb75b7429c0f9d78d1c9ef43e148c3eb748a24c7c642aed08ea093",
+    "experiments/run.py": "163f195819b6460bffdca707184d0ed5eff81ea87855bc1e4d84241619949859",
+    "experiments/common.py": "a08d33d496b2cb5d60d716a3bd8bc20e140cfb951f666efbced56718910b5daa"
+  },
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "host": "Linux-6.17.0-1011-oracle-aarch64-with-glibc2.39",
+  "threads": 4,
+  "context_tokens": 128,
+  "runtime": {
+    "version": "0.9.0-dev+local.6a9045a9e9b2",
+    "artifact_id": "f0e07667d8513b72d31c90a17327952b60a7f7535f6f8b34df2e42931be82bd4",
+    "upstream_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+    "patch_sha256": "d337a95507f046e31fcdb6d439b06ddd4cb78ba055058d5d1171f7d7a0f59df4"
+  },
+  "models": {
+    "minilm": {
+      "asset": {
+        "path": "paraphrase-multilingual-MiniLM-L12-118M-v2-F16.gguf",
+        "url": "https://huggingface.co/mykor/paraphrase-multilingual-MiniLM-L12-v2.gguf/resolve/a964c09982b6e28b13646d5f9860b8a04f4182c4/paraphrase-multilingual-MiniLM-L12-118M-v2-F16.gguf",
+        "bytes": 242358176,
+        "sha256": "fa47907f8732d52ba31796d74bc87c4642b76da465d7d1f74df04ca89f3a9aab"
+      },
+      "architecture": "bert",
+      "layers": 12,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 5
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 7
+        }
+      },
+      "tokenization_sha256": "a3194fcbdabc8f85d10351b56de08924c99231dd18ece1e937b3fa196545404f"
+    },
+    "e5": {
+      "asset": {
+        "path": "multilingual-e5-small-f16.gguf",
+        "url": "https://huggingface.co/hdrrayan/multilingual-e5-small-gguf/resolve/7cdbf977cc0d1b5091a9dc41cd62405e6d0ca9f8/multilingual-e5-small-f16.gguf",
+        "bytes": 242360000,
+        "sha256": "6a5b2dfb958f98c851028f8c08424458249359ea921314be378f8b82088dcac1"
+      },
+      "architecture": "bert",
+      "layers": 12,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 5
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 7
+        }
+      },
+      "tokenization_sha256": "a3194fcbdabc8f85d10351b56de08924c99231dd18ece1e937b3fa196545404f"
+    },
+    "qwen3": {
+      "asset": {
+        "path": "Qwen3-Embedding-0.6B-Q8_0.gguf",
+        "url": "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF/resolve/370f27d7550e0def9b39c1f16d3fbaa13aa67728/Qwen3-Embedding-0.6B-Q8_0.gguf",
+        "bytes": 639150592,
+        "sha256": "06507c7b42688469c4e7298b0a1e16deff06caf291cf0a5b278c308249c3e439"
+      },
+      "architecture": "qwen3",
+      "layers": 28,
+      "max_input_tokens": 24,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 7
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 8
+        }
+      },
+      "tokenization_sha256": "13af98215bd511ee205c0ec42f2cdb0d40ec918e2d2097d50baa62aeea7e26ca"
+    },
+    "gemma2": {
+      "asset": {
+        "path": "embeddinggemma-2-Q8_0.gguf",
+        "url": "https://huggingface.co/ggml-org/embeddinggemma-2-GGUF/resolve/6ea3e3a309d12a4779cfda98b8c19800d2d5da71/embeddinggemma-2-Q8_0.gguf",
+        "bytes": 309855456,
+        "sha256": "2188ac1deca4b77dffefd603c2776a9d76d9d74ec01841392982ebb840b09135"
+      },
+      "architecture": "gemma-embedding2",
+      "layers": 24,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 8
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 8
+        }
+      },
+      "tokenization_sha256": "39a0ba01d60dc83c1adaee0d9f85f573864563356059a9f4bfe145a21fea8006"
+    },
+    "labse": {
+      "asset": {
+        "path": "labse.Q8_0.gguf",
+        "url": "https://huggingface.co/ChristianAzinn/labse-gguf/resolve/f81be33da2690b2a98960c295c57c7409c9a0e95/labse.Q8_0.gguf",
+        "bytes": 514881920,
+        "sha256": "89ec00269f2d30015194e49f0b6b1a2b9affe6d14c46762c4a0edd425f41a171"
+      },
+      "architecture": "bert",
+      "layers": 12,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 8
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 8
+        }
+      },
+      "tokenization_sha256": "5ddc65c9ae34eb02906b18dfa70dd36f0dd934a6b940518c3ff00ea25d4a1434"
+    },
+    "e5-base": {
+      "asset": {
+        "path": "multilingual-e5-base-F16.gguf",
+        "url": "https://huggingface.co/yixuan-chia/multilingual-e5-base-gguf/resolve/8a6f6cb284d54c798cc364ba497c976fbb8fe6bc/multilingual-e5-base-F16.gguf",
+        "bytes": 562766336,
+        "sha256": "b12a1fde0b247fd3f8c8de6b903d90838c8e1decb9ef6823d92982c4a56c4922"
+      },
+      "architecture": "bert",
+      "layers": 12,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 5
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 7
+        }
+      },
+      "tokenization_sha256": "a3194fcbdabc8f85d10351b56de08924c99231dd18ece1e937b3fa196545404f"
+    },
+    "bge-m3": {
+      "asset": {
+        "path": "bge-m3-q8_0.gguf",
+        "url": "https://huggingface.co/ggml-org/bge-m3-Q8_0-GGUF/resolve/9eba04c5d75ba5a1595e45de734d36bef4e5cb98/bge-m3-q8_0.gguf",
+        "bytes": 634553760,
+        "sha256": "aa473d51f451a22f0fcf39ba3330c14bed38a385712b1113440f69df4047a173"
+      },
+      "architecture": "bert",
+      "layers": 24,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 5
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 7
+        }
+      },
+      "tokenization_sha256": "7f8ff085cf7e5dfa2f8b8a9e6915526d3a8498228b7af69e400a709b9a39be2d"
+    },
+    "mbert": {
+      "asset": {
+        "path": "mbert-base-cased-Q8_0.gguf",
+        "bytes": 192321216,
+        "sha256": "f7cdfac9c2c3554a18d6b3dfa438caa3015a690ba0e6b964e3224f3c04c62292"
+      },
+      "architecture": "bert",
+      "layers": 12,
+      "max_input_tokens": 27,
+      "matched_binding": {
+        "development": {
+          "ja": 8,
+          "en": 6
+        },
+        "heldout": {
+          "ja": 8,
+          "en": 8
+        }
+      },
+      "tokenization_sha256": "94e1a6b110e16828915f87593e6e926b908d3c65a4c18e95aa61fb3e1fce7500",
+      "original_tokenizer_matched_inputs": 381
+    }
+  },
+  "common_binding_ids": [
+    "binding-ja-development-01",
+    "binding-ja-development-02",
+    "binding-ja-development-03",
+    "binding-ja-development-04",
+    "binding-ja-development-05",
+    "binding-ja-development-06",
+    "binding-ja-development-07",
+    "binding-ja-development-08",
+    "binding-ja-heldout-01",
+    "binding-ja-heldout-02",
+    "binding-ja-heldout-03",
+    "binding-ja-heldout-04",
+    "binding-ja-heldout-05",
+    "binding-ja-heldout-06",
+    "binding-ja-heldout-07",
+    "binding-ja-heldout-08",
+    "binding-en-development-01",
+    "binding-en-development-02",
+    "binding-en-development-04",
+    "binding-en-development-05",
+    "binding-en-development-06",
+    "binding-en-heldout-01",
+    "binding-en-heldout-02",
+    "binding-en-heldout-03",
+    "binding-en-heldout-04",
+    "binding-en-heldout-05",
+    "binding-en-heldout-06",
+    "binding-en-heldout-08"
+  ],
+  "counts": {
+    "sense": {
+      "development": {
+        "ja": 6,
+        "en": 6
+      },
+      "heldout": {
+        "ja": 6,
+        "en": 6
+      }
+    },
+    "binding_candidates": {
+      "development": {
+        "ja": 8,
+        "en": 8
+      },
+      "heldout": {
+        "ja": 8,
+        "en": 8
+      }
+    },
+    "common_binding": {
+      "development": {
+        "ja": 8,
+        "en": 5
+      },
+      "heldout": {
+        "ja": 8,
+        "en": 7
+      }
+    }
+  },
+  "stages": [
+    {
+      "recorded_at": "2026-11-11T04:41:16.187526+00:00",
+      "stage": "verify_worker",
+      "started_at": "2026-11-11T04:41:16.160087+00:00",
+      "seconds": 0.027283726260066032,
+      "status": "complete"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:26.982373+00:00",
+      "stage": "compile",
+      "started_at": "2026-11-11T04:41:16.187743+00:00",
+      "seconds": 10.794503271579742,
+      "status": "complete"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:28.886387+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:26.982494+00:00",
+      "seconds": 1.903757369145751,
+      "status": "complete",
+      "model": "minilm"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:29.652453+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:28.886474+00:00",
+      "seconds": 0.7658560741692781,
+      "status": "complete",
+      "model": "minilm"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:33.842062+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:29.653622+00:00",
+      "seconds": 4.18827954493463,
+      "status": "complete",
+      "model": "e5"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:34.608093+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:33.842151+00:00",
+      "seconds": 0.7657844331115484,
+      "status": "complete",
+      "model": "e5"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:35.100693+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:34.609024+00:00",
+      "seconds": 0.49153304658830166,
+      "status": "complete",
+      "model": "qwen3"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:35.415571+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:35.100780+00:00",
+      "seconds": 0.31467231921851635,
+      "status": "complete",
+      "model": "qwen3"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:35.712781+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:35.416472+00:00",
+      "seconds": 0.2961761560291052,
+      "status": "complete",
+      "model": "gemma2"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:36.428680+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:35.712864+00:00",
+      "seconds": 0.7156574223190546,
+      "status": "complete",
+      "model": "gemma2"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:44.502825+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:36.429637+00:00",
+      "seconds": 8.073055978864431,
+      "status": "complete",
+      "model": "labse"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:45.318894+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:44.502911+00:00",
+      "seconds": 0.8158565256744623,
+      "status": "complete",
+      "model": "labse"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:46.627637+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:45.319811+00:00",
+      "seconds": 1.3076826520264149,
+      "status": "complete",
+      "model": "e5-base"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:47.343371+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:46.627723+00:00",
+      "seconds": 0.7155260220170021,
+      "status": "complete",
+      "model": "e5-base"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:55.851661+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:47.344337+00:00",
+      "seconds": 8.507187405601144,
+      "status": "complete",
+      "model": "bge-m3"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:56.617834+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:55.851775+00:00",
+      "seconds": 0.7659362349659204,
+      "status": "complete",
+      "model": "bge-m3"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:56.759826+00:00",
+      "stage": "verify_weights",
+      "started_at": "2026-11-11T04:41:56.618792+00:00",
+      "seconds": 0.14089819602668285,
+      "status": "complete",
+      "model": "mbert"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:56.924479+00:00",
+      "stage": "tokenize_only",
+      "started_at": "2026-11-11T04:41:56.759922+00:00",
+      "seconds": 0.16442004218697548,
+      "status": "complete",
+      "model": "mbert"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:57.146528+00:00",
+      "stage": "verify_reference_tokenizer",
+      "started_at": "2026-11-11T04:41:56.925442+00:00",
+      "seconds": 0.22092017531394958,
+      "status": "complete",
+      "model": "mbert"
+    },
+    {
+      "recorded_at": "2026-11-11T04:41:57.155389+00:00",
+      "stage": "prepare",
+      "started_at": "2026-11-11T04:41:16.159193+00:00",
+      "seconds": 40.99603844806552,
+      "status": "complete"
+    }
+  ]
+}
